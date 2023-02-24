@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:food_delivery_app/src/pages/pages.dart';
-import 'package:food_delivery_app/styles/styles.dart';
+import 'package:food_delivery_app/routing/navigations.dart';
+import 'package:food_delivery_app/routing/router.dart';
+import 'package:food_delivery_app/routing/routes.dart';
+import 'package:food_delivery_app/ui/pages/pages.dart';
+import 'package:food_delivery_app/resources/styles.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,17 +35,9 @@ class MyApp extends StatelessWidget {
           ),
           primarySwatch: Colors.deepOrange,
         ),
-        routes: {
-          "/" : (context) => const SplashScreen(),
-          "/intro" : (context) => const IntroPage(),
-          "/starter" : (context) => const StarterPage(),
-          "/login" : (context) => const LoginScreen(),
-          "/signup" : (context) => const SignUp(),
-          "/reset" : (context) => const ResetPassword(),
-          "/otd" : (context) => const OtdScreen(),
-          "/newpassword" : (context) => const NewPassword(),
-          "/mainpage" : (context) => const MainPage(),
-        },
+        navigatorKey: ServiceNavigation.serviceNavi.navKey,
+        onGenerateRoute: RoutsGenerate.generateRoute,
+        home: const SplashPage(),
       ),
     );
   }
