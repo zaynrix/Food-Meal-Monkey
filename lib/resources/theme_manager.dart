@@ -19,21 +19,20 @@ class ThemeManager {
               size: AppSize.s25,
               color: primaryFontColor,
             ),
-            centerTitle: true,
             // titleSpacing: 30,
             actionsIconTheme: const IconThemeData(
               size: AppSize.s25,
-              color: Color(0xFF151617),
+              color: primaryFontColor,
             ),
             backgroundColor: Colors.transparent,
-            titleTextStyle: TextStyle(fontSize: 24.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.w800, color: primaryFontColor)
+            titleTextStyle: TextStyle(fontSize: 24.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.w600, color: primaryFontColor)
         ),
 
 
 //--------------------------------textTheme-------------------------------------
         textTheme:   TextTheme(
           headline1: TextStyle(fontSize: 30.sp, fontFamily: 'Metropolis',fontWeight: FontWeight.w600, color: primaryFontColor),
-          headline2: TextStyle(fontSize: 28.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.w800, color: blackColor),
+          headline2: TextStyle(fontSize: 28.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.w600, color: blackColor),
           // headline3: TextStyle(fontSize: 17.0.sp,fontFamily: 'Open Sans', fontWeight: FontWeight.w600, color: blackColor),
           // headline4: TextStyle(fontSize: 15.0.sp,fontFamily: 'Open Sans', fontWeight: FontWeight.normal, color: blackColor),
           // headline5: TextStyle(fontSize: 13.0.sp,fontFamily: 'Open Sans', fontWeight: FontWeight.normal, color: blackColor ),

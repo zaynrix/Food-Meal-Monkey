@@ -12,7 +12,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Good morning Akila!"),
+        title: Text("Good morning Akila!" ,style: TextStyle(fontSize: 20.sp),),
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.shopping_cart)),
         ],
@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
                 title: "Most Popular",
               ),
             ),
-            MostPopular(),
+            const MostPopular(),
 
 
             Padding(

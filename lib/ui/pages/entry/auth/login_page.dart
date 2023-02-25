@@ -15,7 +15,6 @@ class _LoginPageState extends State<LoginPage> {
     final TextStyle? mediumStyle = Theme.of(context).textTheme.labelMedium;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: AppPadding.p34),
         child: Column(
@@ -75,7 +74,8 @@ class _LoginPageState extends State<LoginPage> {
               color: const Color(0xFFDD4B39),
             ),
             const Spacer(),
-            FooterAuth(text: "Don't have an Account?", textButton: 'Sign Up', onPressed: (){},),
+            FooterAuth(text: "Don't have an Account?", textButton: 'Sign Up',
+              onPressed: (){ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.signUpPage);},),
           ],
         ),
       ),
