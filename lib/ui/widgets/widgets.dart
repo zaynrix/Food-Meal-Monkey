@@ -11,7 +11,7 @@ import '../../resources/styles.dart';
 part 'splash_logo.dart';
 part 'custom_button.dart';
 part 'text_field.dart';
-part 'auth_widgets/login_header.dart';
+part 'auth_widgets/header_auth.dart';
 part 'homeWidgets/current_location.dart';
 part 'homeWidgets/search_bar.dart';
 part 'homeWidgets/headar-list.dart';

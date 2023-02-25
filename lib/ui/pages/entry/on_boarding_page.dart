@@ -70,11 +70,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
             height: 40.h,
             child: Text(
               data[_activeIndex].title,
-              style: Theme.of(context).textTheme.headline4!.copyWith(
-                    color: primaryFontColor,
-                    fontWeight: FontWeight.bold,
-                    //height: 19.h
-                  ),
+              style: Theme.of(context).textTheme.headline2,
               textAlign: TextAlign.center,
             ),
           ),
@@ -86,11 +82,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
               width: 271.w,
               child: Text(
                 data[_activeIndex].desc,
-                style: Theme.of(context).textTheme.caption!.copyWith(
-                      color: secondaryFontColor,
-                      fontWeight: FontWeight.bold,
-                      //height: 19.h
-                    ),
+                style: Theme.of(context).textTheme.labelMedium,
                 textAlign: TextAlign.center,
               )),
           Padding(

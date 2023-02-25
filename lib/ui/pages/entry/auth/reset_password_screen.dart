@@ -26,7 +26,7 @@ class _ForgotPasswordState extends State<ResetPasswordPage> {
                   ),
                   addVerticalSpace(AppSize.s35.h),
                   CustomButton(text: "Send", onPress: (){
-                    ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.newPasswordPage);
+                    ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.mobileOtpPage);
                   },)
                 ]),
           ),
