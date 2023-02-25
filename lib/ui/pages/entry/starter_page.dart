@@ -12,7 +12,7 @@ class _StarterPageState extends State<StarterPage> {
 
   @override
   Widget build(BuildContext context) {
-    var h;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -39,17 +39,14 @@ class _StarterPageState extends State<StarterPage> {
              width: 271.w,
              child: Text(
                "Discover the best foods from over 1,000 restaurants and fast delivery to your doorstep",
-               style: Theme.of(context).textTheme.caption!.copyWith(
-                 color: secondaryFontColor,
-                 fontWeight: FontWeight.bold,
-               ),
+               style: Theme.of(context).textTheme.labelMedium,
                textAlign: TextAlign.center,
              ),
            ),
            Padding(
                padding: EdgeInsets.only(
                    right: 34.w, left: 34.w,  bottom: 20.h),
-               child: ButtonMain(text: "Login", onPress: (){
+               child: CustomButton(text: "Login", onPress: (){
                  ServiceNavigation.serviceNavi.pushNamedReplacement(RouteGenerator.loginPage);
                })),
            OutlinedButton(

@@ -21,20 +21,7 @@ class MyApp extends StatelessWidget {
       builder: (context ,child) => MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Meal Monkey Demo',
-        theme: ThemeData(
-
-          scaffoldBackgroundColor: Colors.white,
-          appBarTheme: AppBarTheme(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            titleTextStyle: Theme.of(context).textTheme.bodyText2!.copyWith(
-              color: primaryFontColor,
-              fontSize: 20
-            ),
-            actionsIconTheme: const IconThemeData(color: primaryFontColor),
-          ),
-          primarySwatch: Colors.deepOrange,
-        ),
+        theme: ThemeManager.lightTheme,
         navigatorKey: ServiceNavigation.serviceNavi.navKey,
         onGenerateRoute: RoutsGenerate.generateRoute,
         home: const SplashPage(),

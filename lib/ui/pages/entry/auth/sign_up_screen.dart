@@ -15,7 +15,7 @@ class _SignUpPageState extends State<SignUpPage> {
         body: SingleChildScrollView(
             child: Column(crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const LoginHeader(title: "Sign Up", caption: "Add your details to sign up",),
+                  const AuthHeader(title: "Sign Up", caption: "Add your details to sign up",),
               const MainTextField(
                 text: "Name",
                 type: TextInputType.name,
@@ -47,7 +47,7 @@ class _SignUpPageState extends State<SignUpPage> {
               const MainTextField(
                 text: "Password",
                 type: TextInputType.visiblePassword,
-                obs: true,
+                obscure: true,
               ),
               SizedBox(
                 height: 28.h,
@@ -55,12 +55,12 @@ class _SignUpPageState extends State<SignUpPage> {
               const MainTextField(
                 text: "Confirm Password",
                 type: TextInputType.visiblePassword,
-                obs: true,
+                obscure: true,
               ),
                   SizedBox(
                     height: 28.h,
                   ),
-                  ButtonMain(text: 'Sign Up',onPress: (){},),
+                  CustomButton(text: 'Sign Up',onPress: (){},),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

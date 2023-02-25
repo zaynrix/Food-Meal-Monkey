@@ -96,7 +96,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           Padding(
             padding: EdgeInsets.only(
                 right: 34.w, left: 34.w, top: 36.h, bottom: 111.h),
-            child: ButtonMain(
+            child: CustomButton(
               text: "Next",
               onPress: () {
                 if (_activeIndex + 1 >= data.length) {
