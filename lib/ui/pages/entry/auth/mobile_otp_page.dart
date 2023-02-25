@@ -16,7 +16,7 @@ class _MobileOtpPageState extends State<MobileOtpPage> {
           child: Column(crossAxisAlignment: CrossAxisAlignment.center,
               // mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const LoginHeader(title: "We have sent an OTP toyour Mobile", caption: "Please check your mobile number 071*****12 continue to reset your password"),
+                const AuthHeader(title: "We have sent an OTP toyour Mobile", caption: "Please check your mobile number 071*****12 continue to reset your password"),
                 buildPinPut(),
                 // MainTextField(
                 //   text: "Your Email",
@@ -25,7 +25,7 @@ class _MobileOtpPageState extends State<MobileOtpPage> {
                 SizedBox(
                   height: 36.h,
                 ),
-                ButtonMain(text: "Next", onPress: (){
+                CustomButton(text: "Next", onPress: (){
                   setState(() {
                     Navigator.pushReplacementNamed(context, '/newpassword');
                   });
