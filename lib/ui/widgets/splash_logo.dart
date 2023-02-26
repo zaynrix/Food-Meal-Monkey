@@ -14,7 +14,7 @@ class _SplashLogoState extends State<SplashLogo> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Image.asset(
-          "assets/imags/Monkey face.png",
+          "assets/images/Monkey face.png",
           fit: BoxFit.fill,
           width: 103.11.w,
         ),

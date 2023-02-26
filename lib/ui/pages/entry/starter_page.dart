@@ -25,7 +25,7 @@ class _StarterPageState extends State<StarterPage> {
             decoration: const BoxDecoration(
 
               image: DecorationImage(
-                image:  AssetImage("assets/imags/Organe top shape.png",
+                image:  AssetImage("assets/images/Organe top shape.png",
                  ),
                 fit: BoxFit.cover
               )

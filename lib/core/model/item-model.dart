@@ -14,36 +14,31 @@ class ItemModel {
   final int? ratingCount;
 
 
-  static List<ItemModel> popular = [
-    ItemModel(imagePath: "assets/imags/a.png",
+  static List<ItemModel> popularRestaurents = [
+    ItemModel(imagePath: "assets/images/a.png",
         name: "Minute by tuk tuk",
         label: "Western Food",
         rating: 4.9,
         ratingCount: 124),
-    ItemModel(imagePath: "assets/imags/s.png",
-        name: "Minute by tuk tuk",
+    ItemModel(imagePath: "assets/images/s.png",
+        name: "Café de Noir",
         label: "Western Food",
         rating: 4.9,
         ratingCount: 124),
-    ItemModel(imagePath: "assets/imags/d.png",
-        name: "Minute by tuk tuk",
+    ItemModel(imagePath: "assets/images/d.png",
+        name: "Bakes by Tella",
         label: "Western Food",
         rating: 4.9,
         ratingCount: 124),
   ];
 
   static List<ItemModel> mostPopular = [
-    ItemModel(imagePath: "assets/imags/a.png",
-        name: "Minute by tuk tuk",
+    ItemModel(imagePath: ImageAssets.bambaaMostPopular,
+        name: "Café De Bambaa",
         label: "Western Food",
         rating: 4.9,
        ),
-    ItemModel(imagePath: "assets/imags/s.png",
-        name: "Minute by tuk tuk",
-        label: "Western Food",
-        rating: 4.9,
-        ),
-    ItemModel(imagePath: "assets/imags/d.png",
+    ItemModel(imagePath: ImageAssets.burgarMostPopular,
         name: "Minute by tuk tuk",
         label: "Western Food",
         rating: 4.9,
@@ -52,19 +47,19 @@ class ItemModel {
 
 
   static List<ItemModel> recentItem = [
-    ItemModel(imagePath: "assets/imags/a.png",
-        name: "Minute by tuk tuk",
+    ItemModel(imagePath: ImageAssets.mulberryResentItem,
+        name: "Mulberry Pizza by Josh",
         label: "Western Food",
         rating: 4.9,
         ratingCount: 124),
-    ItemModel(imagePath: "assets/imags/s.png",
-        name: "Minute by tuk tuk",
-        label: "Western Food",
+    ItemModel(imagePath: ImageAssets.baritaResentItem,
+        name: "Barita",
+        label: "Coffee",
         rating: 4.9,
         ratingCount: 124),
-    ItemModel(imagePath: "assets/imags/d.png",
-        name: "Minute by tuk tuk",
-        label: "Western Food",
+    ItemModel(imagePath: ImageAssets.pizzaRushResentItem,
+        name: "Pizza Rush Hour",
+        label: "Italian Food",
         rating: 4.9,
         ratingCount: 124),
   ];

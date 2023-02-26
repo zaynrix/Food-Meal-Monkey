@@ -24,7 +24,7 @@ class _SplashPageState extends State<SplashPage> {
         fit: StackFit.expand,
         children: [
           Image.asset(
-            "assets/imags/background_splash.png",
+            "assets/images/background_splash.png",
             fit: BoxFit.fill,
           ),
           const SplashLogo()
