@@ -6,9 +6,9 @@ class CategoryModel{
   final String label;
 
  static List<CategoryModel> lits = [
-   CategoryModel(imagePath: "assets/imags/offers.png", label: "Offers"),
-   CategoryModel(imagePath: "assets/imags/Sri Lankan.png", label: "Sri Lankan"),
-   CategoryModel(imagePath: "assets/imags/Italian.png", label: "Italian"),
-   CategoryModel(imagePath: "assets/imags/indian.png", label: "Indian"),
+   CategoryModel(imagePath: "assets/images/offers.png", label: "Offers"),
+   CategoryModel(imagePath: "assets/images/Sri Lankan.png", label: "Sri Lankan"),
+   CategoryModel(imagePath: "assets/images/Italian.png", label: "Italian"),
+   CategoryModel(imagePath: "assets/images/indian.png", label: "Indian"),
   ];
 }

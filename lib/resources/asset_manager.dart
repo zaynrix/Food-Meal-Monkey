@@ -1,25 +1,5 @@
 part of styles;
-const String imagePaht = "assets/images";
 
-class ImageAssets {
-  static const String mainImage = "$imagePaht/mainimage.png";
-  static const String successImage = "$imagePaht/success.png";
-  static const String emailImage = "$imagePaht/email.png";
-  static const String mobileSuccessImage = "$imagePaht/mobile_success.png";
-  static const String idVerificationImage = "$imagePaht/id_verification.png";
-  static const String addressVerificationImage =
-      "$imagePaht/adress_verification.png";
-  static const String homeBottomBarImage =
-      "$imagePaht/bottomNavigationBar/home.png";
-  static const String cashBottomBarImage =
-      "$imagePaht/bottomNavigationBar/cash.png";
-  static const String invoiceBottomBarImage =
-      "$imagePaht/bottomNavigationBar/invoice.png";
-  static const String analyticsBottomBarImage =
-      "$imagePaht/bottomNavigationBar/google-analytics.png";
-  static const String userBottomBarImage =
-      "$imagePaht/bottomNavigationBar/user.png";
-}
 
 const String iconPath = 'assets/icons';
 
@@ -35,28 +15,16 @@ const String svgPath = 'assets/svg';
 
 class SvgAssets {
   static const String splashSvg = '$svgPath/logos_jquery-mobile.svg';
-  static const String onBoardingSvg1 = '$svgPath/onboarding/onboarding_1.svg';
-  static const String onBoardingSvg2 = '$svgPath/onboarding/onboarding_2.svg';
-  static const String onBoardingSvg3 = '$svgPath/onboarding/onboarding_3.svg';
-  static const String groupSvg = '$svgPath/Group.svg';
-  static const String headPhoneCategory =
-      '$svgPath/category/headphonesCategory.svg';
-  static const String smartphoneCategory =
-      '$svgPath/category/smartphoneCategory.svg';
-  static const String batteryCategory = '$svgPath/category/batteryCategory.svg';
-  static const String chargerCategory = '$svgPath/category/chargerCategory.svg';
-  static const String backCoverCategory = '$svgPath/category/backCover.svg';
-  static const String protectorCategory =
-      '$svgPath/category/protectorsCategory.svg';
-  static const String searchSvg = '$svgPath/searchIconSvg.svg';
-  static const String notificationSvg = '$svgPath/notificationIconSvg.svg';
-  static const String categoryIconSvg = '$svgPath/CategoryIconSvg.svg';
-  static const String notificationIconSvg = '$svgPath/notificationIconSvg.svg';
+
 }
 
-const String imagePath = 'assets/image';
+const String imagePath = 'assets/images';
 
-class ImageAssets2 {
-  static const List imageAD = [ImageAssets2.adImage1,ImageAssets2.adImage1,ImageAssets2.adImage1];
-  static const String adImage1 = '$imagePath/AD_Image/Adphotos.png';
+class ImageAssets {
+  static const String bambaaMostPopular = '$imagePath/most_popular/bambaa_most_popular.png';
+  static const String burgarMostPopular = '$imagePath/most_popular/burgar_most_popular.png';
+  static const String baritaResentItem = '$imagePath/resent_items/barita.png';
+  static const String mulberryResentItem = '$imagePath/resent_items/mulberry_pizza.png';
+  static const String pizzaRushResentItem = '$imagePath/resent_items/pizza_rush.png';
 }
+// assets/imags/most_popular/bambaa_most_popular.png

@@ -29,9 +29,7 @@ class _HomePageState extends State<HomePage> {
               height: 115.h,
               child: const HomeCategory(),
             ),
-            SizedBox(
-              height: 51.h,
-            ),
+            addVerticalSpace(AppSize.s50.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 13.w, vertical: 13.h),
               child: const HeaderList(
@@ -49,7 +47,9 @@ class _HomePageState extends State<HomePage> {
                 title: "Most Popular",
               ),
             ),
-            const MostPopular(),
+            SizedBox(
+              height: 185.h,
+                child: const MostPopular()),
 
 
             Padding(
@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
 
-            const RecentItems(),
+            Expanded(child: RecentItems()),
           ]),
     );
   }
