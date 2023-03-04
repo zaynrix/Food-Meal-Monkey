@@ -26,5 +26,8 @@ class ImageAssets {
   static const String baritaResentItem = '$imagePath/resent_items/barita.png';
   static const String mulberryResentItem = '$imagePath/resent_items/mulberry_pizza.png';
   static const String pizzaRushResentItem = '$imagePath/resent_items/pizza_rush.png';
+  static const String foodMenu = '$imagePath/menu/food_menu.png';
+  static const String beveragesMenu = '$imagePath/menu/beverages_menu.png';
+  static const String dessertsMenu = '$imagePath/menu/desserts_menu.png';
+  static const String promotionsMenu = '$imagePath/menu/promotions_menu.png';
 }
-// assets/imags/most_popular/bambaa_most_popular.png

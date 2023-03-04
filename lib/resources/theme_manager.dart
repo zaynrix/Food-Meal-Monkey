@@ -25,7 +25,7 @@ class ThemeManager {
               color: primaryFontColor,
             ),
             backgroundColor: Colors.transparent,
-            titleTextStyle: TextStyle(fontSize: 24.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.w600, color: primaryFontColor)
+            titleTextStyle: TextStyle(fontSize: 24.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.w500, color: primaryFontColor)
         ),
 
 
@@ -33,10 +33,10 @@ class ThemeManager {
         textTheme:   TextTheme(
           headline1: TextStyle(fontSize: 30.sp, fontFamily: 'Metropolis',fontWeight: FontWeight.w600, color: primaryFontColor),
           headline2: TextStyle(fontSize: 28.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.w600, color: blackColor),
-          // headline3: TextStyle(fontSize: 17.0.sp,fontFamily: 'Open Sans', fontWeight: FontWeight.w600, color: blackColor),
-          // headline4: TextStyle(fontSize: 15.0.sp,fontFamily: 'Open Sans', fontWeight: FontWeight.normal, color: blackColor),
+          headline3: TextStyle(fontSize: 24.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.w600, color: blackColor),
+          headline4: TextStyle(fontSize: 22.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.bold, color: blackColor),
           // headline5: TextStyle(fontSize: 13.0.sp,fontFamily: 'Open Sans', fontWeight: FontWeight.normal, color: blackColor ),
-          // headline6: TextStyle(fontSize: 13.0.sp,fontFamily: 'Open Sans', fontWeight: FontWeight.normal, color: ColorManager.thirdFontColor),
+          headline6: TextStyle(fontSize: 11.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.normal, color: secondaryFontColor),
           // subtitle2: TextStyle(fontSize: 24.sp,fontFamily: 'Open Sans', fontWeight: FontWeight.normal, color: blackColor),
           // bodyText1: TextStyle(fontSize: 11.0.sp,fontFamily: 'Open Sans', fontWeight: FontWeight.normal, color: blackColor ),
           // bodyText2: TextStyle(fontSize: 12.0.sp,fontFamily: 'Open Sans', fontWeight: FontWeight.normal, color: blackColor ),
