@@ -8,7 +8,7 @@ class OnBoardingPage extends StatefulWidget {
 }
 
 class _OnBoardingPageState extends State<OnBoardingPage> {
-  final List<IntroModle> data = IntroModle.data;
+  final List<InBoardingModel> data = InBoardingModel.data;
   late PageController _controller;
   int _activeIndex = 0;
 
