@@ -13,13 +13,13 @@ class ItemRating extends StatelessWidget {
             rating: rating,
             itemSize: 15.r,
             itemBuilder: (context, index){
-              return Icon(Icons.star, color: orangeColor,);
+              return const Icon(Icons.star, color: orangeColor,);
             }),
         SizedBox(
           width: 5.w,
         ),
         Text(
-          '${rating}',
+          '$rating',
           style: Theme.of(context).textTheme.caption!.copyWith(
               color: orangeColor
           ),)

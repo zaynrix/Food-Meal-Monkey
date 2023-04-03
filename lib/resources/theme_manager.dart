@@ -40,7 +40,7 @@ class ThemeManager {
           // subtitle2: TextStyle(fontSize: 24.sp,fontFamily: 'Open Sans', fontWeight: FontWeight.normal, color: blackColor),
           // bodyText1: TextStyle(fontSize: 11.0.sp,fontFamily: 'Open Sans', fontWeight: FontWeight.normal, color: blackColor ),
           // bodyText2: TextStyle(fontSize: 12.0.sp,fontFamily: 'Open Sans', fontWeight: FontWeight.normal, color: blackColor ),
-          // subtitle1: TextStyle(fontSize: 13.sp,fontFamily: 'Open Sans', fontWeight: FontWeight.normal, color: ColorManager.blackColor),
+          subtitle1: TextStyle(fontSize: 16.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.bold, color: whiteColor),
 
           labelMedium: TextStyle(fontSize: 14.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.normal, color: secondaryFontColor )
         ),

@@ -19,32 +19,34 @@ class _MenuPageState extends State<MenuPage> {
           IconButton(onPressed: () {}, icon: const Icon(Icons.shopping_cart)),
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const SearchBar(),
-          Stack(
-            children: [
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: ContainerSide(),
-              ),
-              SizedBox(
-                height: 500.h,
-                child: ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                    itemCount: menuItem.length,
-                    itemBuilder: (context, index) => TileMenu(
-                          title: menuItem[index].title,
-                          supTitle: menuItem[index].supTitle,
-                          imagePath: menuItem[index].imagePath,
-                          onPressed: () {},
-                        )),
-              )
-            ],
-          )
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SearchBar(),
+            Stack(
+              children: [
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: ContainerSide(),
+                ),
+                SizedBox(
+                  height: 500.h,
+                  child: ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                      itemCount: menuItem.length,
+                      itemBuilder: (context, index) => TileMenu(
+                            title: menuItem[index].title,
+                            supTitle: menuItem[index].supTitle,
+                            imagePath: menuItem[index].imagePath,
+                            onPressed: () {},
+                          )),
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

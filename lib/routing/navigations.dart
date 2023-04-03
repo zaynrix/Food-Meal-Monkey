@@ -13,7 +13,7 @@ class ServiceNavigation{
     navKey.currentState?.pushReplacementNamed(name);
   }
 
-  popFunction() {
+  back() {
     navKey.currentState?.pop();
   }
 
