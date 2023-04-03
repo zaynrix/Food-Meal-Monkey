@@ -69,7 +69,7 @@ class _OffersPageState extends State<OffersPage> {
                                 ItemRating(
                                   rating: data.rating,
                                 ),
-                                addHorizantelSpace(AppSize.s5.w),
+                                addHorizontalSpace(AppSize.s5.w),
                                 Text(
                                   '(${data.ratingCount} rating)',
                                   style: Theme.of(context).textTheme.caption!.copyWith(

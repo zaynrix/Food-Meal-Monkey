@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeManager.lightTheme,
         navigatorKey: ServiceNavigation.serviceNavi.navKey,
         onGenerateRoute: RoutsGenerate.generateRoute,
-        home: const SplashPage(),
+        home: const DesertsPage(),
       ),
     );
   }
