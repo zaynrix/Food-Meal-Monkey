@@ -42,8 +42,8 @@ class DesertsPage extends StatelessWidget {
                         Text("French Apple Pie", style: Theme.of(context).textTheme.subtitle1,),
                         vSpace5,
                         Row(
-                          children: [
-                            const ItemRating(
+                          children: const [
+                             ItemRating(
                               rating: 4,
                             ),
                           ],
