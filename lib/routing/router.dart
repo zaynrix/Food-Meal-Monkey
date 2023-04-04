@@ -11,6 +11,7 @@ class RouteGenerator {
   static const String starterPage = '/starterPage';
   static const String newPasswordPage = '/newPasswordPage';
   static const String mainPage = '/mainPage';
+  static const String dessertsPage = '/dessertsPage';
 
 
   RouteGenerator._();

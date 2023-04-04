@@ -40,7 +40,7 @@ class _MenuPageState extends State<MenuPage> {
                             title: menuItem[index].title,
                             supTitle: menuItem[index].supTitle,
                             imagePath: menuItem[index].imagePath,
-                            onPressed: () {},
+                            onPressed: () {ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.dessertsPage);},
                           )),
                 )
               ],

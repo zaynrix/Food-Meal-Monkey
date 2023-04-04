@@ -14,11 +14,12 @@ class SearchBar extends StatelessWidget {
             color: const Color(0xFFF2F2F2),
             borderRadius: BorderRadius.circular(28)
         ),
-        child: const TextField(
+        child: TextFormField(
           decoration: InputDecoration(
             border: InputBorder.none,
-            prefixIcon: Icon(Icons.search),
+            prefixIcon: const Icon(Icons.search),
             hintText: "search food",
+            hintStyle: Theme.of(context).textTheme.titleMedium!.copyWith(color: unSelectedIconColor)
           ),
         ),
       ),

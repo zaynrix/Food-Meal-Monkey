@@ -31,4 +31,7 @@ class ImageAssets {
   static const String dessertsMenu = '$imagePath/menu/desserts_menu.png';
   static const String promotionsMenu = '$imagePath/menu/promotions_menu.png';
   static const String applePie = '$imagePath/desserts/apple_pie.png';
+  static const String darkChocolate = '$imagePath/desserts/dark_chocolate_cake.png';
+  static const String fudgyChewy = '$imagePath/desserts/fudgy_chewy_brownies.png';
+  static const String streetShake = '$imagePath/desserts/street_shake.png';
 }

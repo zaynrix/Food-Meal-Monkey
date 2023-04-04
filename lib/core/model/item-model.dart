@@ -32,6 +32,8 @@ class ItemModel {
         ratingCount: 124),
   ];
 
+  //----------------------------------------------------------------------------
+
   static List<ItemModel> mostPopular = [
     ItemModel(imagePath: ImageAssets.bambaaMostPopular,
         name: "Café De Bambaa",
@@ -45,6 +47,7 @@ class ItemModel {
         ),
   ];
 
+//------------------------------------------------------------------------------
 
   static List<ItemModel> recentItem = [
     ItemModel(imagePath: ImageAssets.mulberryResentItem,
@@ -62,5 +65,31 @@ class ItemModel {
         label: "Italian Food",
         rating: 4.9,
         ratingCount: 124),
+  ];
+
+
+//------------------------------------------------------------------------------
+
+  static List<ItemModel> desserts = [
+    ItemModel(imagePath: ImageAssets.applePie,
+        name: "French Apple Pie",
+        label: "Minute by tuk tuk",
+        rating: 4.9,
+        ),
+    ItemModel(imagePath: ImageAssets.darkChocolate,
+        name: "Dark Chocolate Cake",
+        label: "Cakes by Tella",
+        rating: 4.9,
+        ),
+    ItemModel(imagePath: ImageAssets.fudgyChewy,
+        name: "Street Shake",
+        label: "Café Racer",
+        rating: 4.9,
+        ),
+    ItemModel(imagePath: ImageAssets.streetShake,
+        name: "Fudgy Chewy Brownies",
+        label: "Minute by tuk tuk",
+        rating: 4.9,
+        ),
   ];
 }
