@@ -72,6 +72,7 @@ flutter:
     - assets/images/resent_items/
     - assets/images/menu/
     - assets/images/desserts/
+    - assets/icons/more/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

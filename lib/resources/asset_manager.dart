@@ -4,18 +4,18 @@ part of styles;
 const String iconPath = 'assets/icons';
 
 class IconAssets {
-  static const String person = '$iconPath/Profile.svg';
-  static const String lock = '$iconPath/Lock.svg';
-  static const String email = '$iconPath/email.svg';
-  static const String category = '$iconPath/Category.svg';
-  static const String heart = '$iconPath/Heart.svg';
+
+  static const String aboutAsIcon = '$iconPath/more/about_us.svg';
+  static const String inboxIcon = '$iconPath/more/inbox.svg';
+  static const String myOrderIcon = '$iconPath/more/my_orders.svg';
+  static const String notificationIcon = '$iconPath/more/notification.svg';
+  static const String paymentIcon = '$iconPath/more/payment_details.svg';
 }
 
 const String svgPath = 'assets/svg';
 
 class SvgAssets {
   static const String splashSvg = '$svgPath/logos_jquery-mobile.svg';
-
 }
 
 const String imagePath = 'assets/images';
