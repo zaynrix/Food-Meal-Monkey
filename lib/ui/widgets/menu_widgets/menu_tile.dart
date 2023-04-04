@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../resources/styles.dart';
-import '../../resources/values_manager.dart';
+import '../../../resources/styles.dart';
+import '../../../resources/values_manager.dart';
 
 class TileMenu extends StatelessWidget {
   const TileMenu({

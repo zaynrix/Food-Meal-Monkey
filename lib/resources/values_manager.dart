@@ -92,3 +92,4 @@ class AppSize {
 
 final vSpace5 = SizedBox(height: AppSize.s5.h,);
 final hSpace14 = SizedBox(width: AppSize.s14.w,);
+final hSpace20 = SizedBox(width: AppSize.s20.w,);
