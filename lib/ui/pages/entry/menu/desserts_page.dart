@@ -1,13 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:food_delivery_app/routing/navigations.dart';
+part of pages;
 
-import '../../../../resources/styles.dart';
-import '../../../../resources/values_manager.dart';
-import '../../../widgets/widgets.dart';
 
-class DesertsPage extends StatelessWidget {
-  const DesertsPage({Key? key}) : super(key: key);
+
+class DessertsPage extends StatelessWidget {
+  DessertsPage({Key? key}) : super(key: key);
+
+  final List<ItemModel> dessertsItem = ItemModel.desserts;
 
   @override
   Widget build(BuildContext context) {
@@ -16,45 +14,28 @@ class DesertsPage extends StatelessWidget {
         title: const Text("Desserts"),
         leading: IconButton(onPressed: (){ServiceNavigation.serviceNavi.back();}, icon: const Icon(Icons.arrow_back_ios_new_outlined)),
         actions: [
-          IconButton(onPressed: (){}, icon: const Icon(Icons.shopping_cart))
+          IconButton(onPressed: (){ServiceNavigation.serviceNavi.back();}, icon: const Icon(Icons.shopping_cart))
         ],
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              // padding: EdgeInsetsDirectional.only(start: AppPadding.p20.w),
-              height: AppSize.s200.h,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(ImageAssets.applePie,),
-                  fit: BoxFit.fill
-                )
-              ),
-              child:  Align(
-                alignment: Alignment.bottomLeft,
-                child: Padding(
-                  padding: EdgeInsetsDirectional.only(bottom: AppPadding.p25.h, start: AppPadding.p20.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text("French Apple Pie", style: Theme.of(context).textTheme.subtitle1,),
-                        vSpace5,
-                        Row(
-                          children: const [
-                             ItemRating(
-                              rating: 4,
-                            ),
-                          ],
-                        )
-                      ],
-                    )),
-              ),
-            )
+            const SearchBar(),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: dessertsItem.length,
+                itemBuilder: (context, index) {
+                final dessert = dessertsItem[index];
+                  return
+                      DessertsWidget(title: dessert.name, imagePath: dessert.imagePath, label: dessert.label, rate: dessert.rating,);
+                }
+            ),
+            // DessertsWidget()
           ],
         ),
       )
     );
   }
 }
+

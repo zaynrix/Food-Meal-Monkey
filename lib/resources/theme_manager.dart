@@ -38,7 +38,7 @@ class ThemeManager {
           // headline5: TextStyle(fontSize: 13.0.sp,fontFamily: 'Open Sans', fontWeight: FontWeight.normal, color: blackColor ),
           headline6: TextStyle(fontSize: 11.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.normal, color: secondaryFontColor),
           // subtitle2: TextStyle(fontSize: 24.sp,fontFamily: 'Open Sans', fontWeight: FontWeight.normal, color: blackColor),
-          // bodyText1: TextStyle(fontSize: 11.0.sp,fontFamily: 'Open Sans', fontWeight: FontWeight.normal, color: blackColor ),
+          bodyText1: TextStyle(fontSize: 12.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.normal, color: whiteColor ),
           // bodyText2: TextStyle(fontSize: 12.0.sp,fontFamily: 'Open Sans', fontWeight: FontWeight.normal, color: blackColor ),
           subtitle1: TextStyle(fontSize: 16.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.bold, color: whiteColor),
 

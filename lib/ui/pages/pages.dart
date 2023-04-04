@@ -32,3 +32,4 @@ part 'entry/menu/menu_page.dart';
 part 'entry/offers_page.dart';
 part 'entry/profile_page.dart';
 part 'entry/more/main_more_page.dart';
+part 'entry/menu/desserts_page.dart';

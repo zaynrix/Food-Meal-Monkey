@@ -21,3 +21,4 @@ part 'homeWidgets/most_popular.dart';
 part 'homeWidgets/popular_restaurents.dart';
 part 'homeWidgets/recent_items.dart';
 part 'auth_widgets/footer_auth.dart';
+part 'menu/dessert_widget.dart';
