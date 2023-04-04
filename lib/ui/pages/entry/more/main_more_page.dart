@@ -17,7 +17,15 @@ class _MorePageState extends State<MorePage> {
           IconButton(onPressed: () {}, icon: const Icon(Icons.shopping_cart)),
         ],
       ),
-
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: AppPadding.p20.w),
+        child: Column(
+          children: [
+            MoreTile()
+          ],
+        ),
+      ),
     );
   }
 }
+
