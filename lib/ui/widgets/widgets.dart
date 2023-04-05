@@ -24,3 +24,5 @@ part 'homeWidgets/recent_items.dart';
 part 'auth_widgets/footer_auth.dart';
 part 'menu_widgets//dessert_widget.dart';
 part 'more_widgets/more_tile.dart';
+part 'custom_circle_avatar.dart';
+part 'more_widgets/inbox_tile.dart';

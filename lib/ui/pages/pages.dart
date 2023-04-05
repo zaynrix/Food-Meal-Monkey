@@ -34,3 +34,4 @@ part 'entry/profile_page.dart';
 part 'entry/more_pages//main_more_page.dart';
 part 'entry/menu_pages//desserts_page.dart';
 part 'entry/more_pages/about_as_page.dart';
+part 'entry/more_pages/inbox_page.dart';

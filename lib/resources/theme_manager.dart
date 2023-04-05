@@ -37,7 +37,7 @@ class ThemeManager {
           headline4: TextStyle(fontSize: 22.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.bold, color: blackColor),
           headline5: TextStyle(fontSize: 14.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.w600, color: primaryFontColor ),
           headline6: TextStyle(fontSize: 11.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.normal, color: secondaryFontColor),
-          // subtitle2: TextStyle(fontSize: 24.sp,fontFamily: 'Open Sans', fontWeight: FontWeight.normal, color: blackColor),
+          subtitle2: TextStyle(fontSize: 14.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.w500, color: unSelectedIconColor),
           bodyText1: TextStyle(fontSize: 12.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.normal, color: whiteColor ),
           // bodyText2: TextStyle(fontSize: 12.0.sp,fontFamily: 'Open Sans', fontWeight: FontWeight.normal, color: blackColor ),
           subtitle1: TextStyle(fontSize: 16.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.bold, color: whiteColor),
