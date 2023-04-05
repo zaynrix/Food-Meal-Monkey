@@ -29,7 +29,7 @@ class _MorePageState extends State<MorePage> {
             vSpace20,
             MoreTile(title: 'Inbox', iconPath: IconAssets.inboxIcon, onTap: () {},),
             vSpace20,
-            MoreTile(title: 'About Us', iconPath: IconAssets.aboutAsIcon, onTap: () {},),
+            MoreTile(title: 'About Us', iconPath: IconAssets.aboutAsIcon, onTap: () {ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.aboutAsPage);},),
           ],
         ),
       ),
