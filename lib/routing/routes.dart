@@ -29,7 +29,8 @@ class RoutsGenerate{
         return MaterialPageRoute(builder: (_) => const MainPage());
       case RouteGenerator.dessertsPage:
         return MaterialPageRoute(builder: (_) => DessertsPage());
-
+      case RouteGenerator.aboutAsPage:
+        return MaterialPageRoute(builder: (_) => const AboutAsPage());
         default:
         throw const FormatException("Route not found");
     }
