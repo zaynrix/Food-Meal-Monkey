@@ -13,6 +13,7 @@ class RouteGenerator {
   static const String mainPage = '/mainPage';
   static const String dessertsPage = '/dessertsPage';
   static const String aboutAsPage = '/aboutAsPage';
+  static const String inboxPage = '/inboxPage';
 
 
   RouteGenerator._();

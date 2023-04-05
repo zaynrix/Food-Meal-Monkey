@@ -82,6 +82,8 @@ class AppSize {
   static const double s85 = 85.0;
   static const double s87 = 87.0;
   static const double s100 = 100.0;
+  static const double s110 = 110.0;
+  static const double s125  = 125.0;
   static const double s130 = 130.0;
   static const double s150 = 150.0;
   static const double s155 = 155.0;
@@ -92,5 +94,8 @@ class AppSize {
 
 final vSpace5 = SizedBox(height: AppSize.s5.h,);
 final vSpace20 = SizedBox(height: AppSize.s20.h,);
+final vSpace10 = SizedBox(height: AppSize.s10.h,);
+final vSpace15 = SizedBox(height: AppSize.s15.h,);
 final hSpace14 = SizedBox(width: AppSize.s14.w,);
 final hSpace20 = SizedBox(width: AppSize.s20.w,);
+final hSpace5 = SizedBox(width: AppSize.s5.w,);

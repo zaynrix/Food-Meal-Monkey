@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/routing/router.dart';
-
 import '../ui/pages/pages.dart';
 
 
@@ -31,6 +30,8 @@ class RoutsGenerate{
         return MaterialPageRoute(builder: (_) => DessertsPage());
       case RouteGenerator.aboutAsPage:
         return MaterialPageRoute(builder: (_) => const AboutAsPage());
+      case RouteGenerator.inboxPage:
+        return MaterialPageRoute(builder: (_) => InboxPage());
         default:
         throw const FormatException("Route not found");
     }
