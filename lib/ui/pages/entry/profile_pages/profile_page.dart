@@ -119,10 +119,10 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         child: Column(
           children: [
-            const CircleAvatar(
+            CircleAvatar(
               maxRadius: 45,
               backgroundImage: NetworkImage(
-                'assets/images/user.png',
+                "${currentUser?.photoURL}",
               ),
             ),
             const SizedBox(height: 16),

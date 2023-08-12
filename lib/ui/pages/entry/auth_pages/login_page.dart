@@ -10,17 +10,126 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   Future<void> _signInWithEmailAndPassword() async {
     try {
-      final FirebaseAuth auth = FirebaseAuth.instance;
-
       await auth.signInWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
       ServiceNavigation.serviceNavi
           .pushNamedAndRemoveUtils(RouteGenerator.mainPage);
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  // Future<void> _signInWithGoogle() async {
+  //   try {
+  //     final GoogleSignInAccount? googleSignInAccount =
+  //         await _googleSignIn.signIn();
+  //     if (googleSignInAccount != null) {
+  //       final GoogleSignInAuthentication googleSignInAuth =
+  //           await googleSignInAccount.authentication;
+  //       final AuthCredential credential = GoogleAuthProvider.credential(
+  //         accessToken: googleSignInAuth.accessToken,
+  //         idToken: googleSignInAuth.idToken,
+  //       );
+  //
+  //       final UserCredential userCredential =
+  //           await auth.signInWithCredential(credential);
+  //
+  //       if (userCredential.user != null) {
+  //         // Successfully signed in with Google, navigate to the main page.
+  //         ServiceNavigation.serviceNavi
+  //             .pushNamedAndRemoveUtils(RouteGenerator.mainPage);
+  //       }
+  //     }
+  //   } catch (e) {
+  //     print('Error: $e');
+  //   }
+  // }
+  // Future<void> _signInWithGoogle() async {
+  //   try {
+  //     final GoogleSignInAccount? googleSignInAccount =
+  //         await _googleSignIn.signIn();
+  //     if (googleSignInAccount != null) {
+  //       final GoogleSignInAuthentication googleSignInAuth =
+  //           await googleSignInAccount.authentication;
+  //       final AuthCredential credential = GoogleAuthProvider.credential(
+  //         accessToken: googleSignInAuth.accessToken,
+  //         idToken: googleSignInAuth.idToken,
+  //       );
+  //
+  //       final UserCredential userCredential =
+  //           await auth.signInWithCredential(credential);
+  //
+  //       if (userCredential.user != null) {
+  //         // Successfully signed in with Google, navigate to the main page.
+  //
+  //         // Get the user's ID and email from the authentication result
+  //         final String userId = userCredential.user!.uid;
+  //         final String userEmail = userCredential.user!.email ?? '';
+  //
+  //         // Define the data you want to store in Firestore
+  //         final userData = {
+  //           'email': userEmail,
+  //           // Add more fields as needed
+  //         };
+  //
+  //         // Store or update user data in Firestore
+  //         await FirebaseFirestore.instance
+  //             .collection('users')
+  //             .doc(userId)
+  //             .set(userData, SetOptions(merge: true));
+  //
+  //         ServiceNavigation.serviceNavi
+  //             .pushNamedAndRemoveUtils(RouteGenerator.mainPage);
+  //       }
+  //     }
+  //   } catch (e) {
+  //     print('Error: $e');
+  //   }
+  // }
+  Future<void> _signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleSignInAccount =
+          await _googleSignIn.signIn();
+      if (googleSignInAccount != null) {
+        final GoogleSignInAuthentication googleSignInAuth =
+            await googleSignInAccount.authentication;
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleSignInAuth.accessToken,
+          idToken: googleSignInAuth.idToken,
+        );
+
+        final UserCredential userCredential =
+            await auth.signInWithCredential(credential);
+
+        if (userCredential.user != null) {
+          final String userId = userCredential.user!.uid;
+          final String userEmail = userCredential.user!.email ?? '';
+          final String userName = userCredential.user!.displayName ?? '';
+          final String userMobile =
+              ''; // You can retrieve this from user input or other sources
+
+          final userData = {
+            'email': userEmail,
+            'name': userName,
+            'mobile': userMobile,
+          };
+
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .set(userData, SetOptions(merge: true));
+
+          ServiceNavigation.serviceNavi
+              .pushNamedAndRemoveUtils(RouteGenerator.mainPage);
+        }
+      }
     } catch (e) {
       print('Error: $e');
     }
@@ -84,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
             addVerticalSpace(AppSize.s28.h),
             CustomButton(
               text: 'Login with Google',
-              onPress: () {},
+              onPress: _signInWithGoogle,
               icon: Icons.facebook,
               color: const Color(0xFFDD4B39),
             ),

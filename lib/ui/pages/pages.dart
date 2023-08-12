@@ -12,6 +12,7 @@ import 'package:food_delivery_app/routing/navigations.dart';
 import 'package:food_delivery_app/routing/router.dart';
 import 'package:food_delivery_app/ui/pages/entry/profile_pages/profile_page.dart';
 import 'package:food_delivery_app/utils/app_config.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 import '../../resources/styles.dart';

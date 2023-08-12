@@ -27,34 +27,24 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
     compileSdkVersion 33
-    ndkVersion flutter.ndkVersion
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-    }
-
     defaultConfig {
         applicationId "com.example.food_delivery_app"
         minSdkVersion 19
         targetSdkVersion 33
-        versionCode 1 // Update this value
-        versionName "1.0" // Update this value
-        multiDexEnabled true // Make sure this line is added
+        versionCode flutterVersionCode.toInteger() // Convert to integer
+        versionName flutterVersionName
+        multiDexEnabled true
     }
-
     buildTypes {
         release {
             signingConfig signingConfigs.debug
         }
+    }
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
     }
 }
 
@@ -63,7 +53,11 @@ flutter {
 }
 
 dependencies {
-    implementation 'androidx.multidex:multidex:2.0.1' // Add this line
-
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'com.google.android.gms:play-services-auth:20.6.0'
+    implementation 'com.google.firebase:firebase-auth:22.1.1'
+    implementation 'com.google.firebase:firebase-core:21.1.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
+
+apply plugin: 'com.google.gms.google-services' // Add this line at the end
