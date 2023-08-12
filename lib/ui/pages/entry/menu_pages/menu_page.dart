@@ -9,6 +9,7 @@ class MenuPage extends StatefulWidget {
 
 class _MenuPageState extends State<MenuPage> {
   final List<MenuModel> menuItem = MenuModel.menuList;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class _MenuPageState extends State<MenuPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SearchBar(),
+            // SearchBar(),
             Stack(
               children: [
                 const Align(
@@ -33,15 +34,34 @@ class _MenuPageState extends State<MenuPage> {
                 ),
                 SizedBox(
                   height: 500.h,
-                  child: ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                      itemCount: menuItem.length,
-                      itemBuilder: (context, index) => TileMenu(
-                            title: menuItem[index].title,
-                            supTitle: menuItem[index].supTitle,
-                            imagePath: menuItem[index].imagePath,
-                            onPressed: () {ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.dessertsPage);},
-                          )),
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: _firestore.collection('menu').snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      }
+                      if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                        return Text('No menu items available');
+                      }
+                      return ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          final menuData = snapshot.data!.docs[index].data()
+                              as Map<String, dynamic>;
+                          return TileMenu(
+                            title: menuData['name'],
+                            supTitle: menuData['itemsCount'],
+                            imagePath: menuData['imagePath'],
+                            onPressed: () {
+                              ServiceNavigation.serviceNavi
+                                  .pushNamedWidget(RouteGenerator.dessertsPage);
+                            },
+                          );
+                        },
+                      );
+                    },
+                  ),
                 )
               ],
             )

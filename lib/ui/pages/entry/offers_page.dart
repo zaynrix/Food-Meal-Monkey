@@ -23,8 +23,8 @@ class _OffersPageState extends State<OffersPage> {
           children: [
             Padding(
               padding: EdgeInsetsDirectional.only(start: AppPadding.p20.w),
-              child:
-                  const Text("Find discounts, Offers special\n meals and more!"),
+              child: const Text(
+                  "Find discounts, Offers special\n meals and more!"),
             ),
             addVerticalSpace(AppSize.s24.h),
             Container(
@@ -55,33 +55,40 @@ class _OffersPageState extends State<OffersPage> {
                       ),
                       addVerticalSpace(AppSize.s10.h),
                       Container(
-                        margin: EdgeInsetsDirectional.only(start: AppPadding.p20.w),
+                        margin:
+                            EdgeInsetsDirectional.only(start: AppPadding.p20.w),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               data.name,
-                              style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                                  color: primaryFontColor, fontWeight: FontWeight.bold),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1!
+                                  .copyWith(
+                                      color: primaryFontColor,
+                                      fontWeight: FontWeight.bold),
                             ),
                             Row(
                               children: [
                                 ItemRating(
-                                  rating: data.rating,
+                                  rating: data.rating.toString(),
                                 ),
                                 addHorizontalSpace(AppSize.s5.w),
                                 Text(
                                   '(${data.ratingCount} rating)',
-                                  style: Theme.of(context).textTheme.caption!.copyWith(
-                                      color: secondaryFontColor,
-                                      fontWeight: FontWeight.bold),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .caption!
+                                      .copyWith(
+                                          color: secondaryFontColor,
+                                          fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
                           ],
                         ),
                       ),
-
                       addVerticalSpace(AppSize.s30.h)
                     ],
                   );

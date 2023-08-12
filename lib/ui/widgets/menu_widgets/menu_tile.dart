@@ -25,8 +25,8 @@ class TileMenu extends StatelessWidget {
       child: Container(
         width: AppSize.s280.w,
         height: AppSize.s87.h,
-        margin: EdgeInsetsDirectional.only(start: AppMargin.m50.w, end: AppMargin.m50.w,
-        top:  AppMargin.m24.w),
+        margin: EdgeInsetsDirectional.only(
+            start: AppMargin.m50.w, end: AppMargin.m50.w, top: AppMargin.m24.w),
         decoration: BoxDecoration(
             color: whiteColor,
             borderRadius: BorderRadius.only(
@@ -34,24 +34,28 @@ class TileMenu extends StatelessWidget {
                 bottomLeft: Radius.circular(AppSize.s30.r),
                 topRight: Radius.circular(AppSize.s10.r),
                 bottomRight: Radius.circular(AppSize.s10.r)),
-            boxShadow:  [
+            boxShadow: [
               BoxShadow(blurRadius: AppSize.s10.r, color: placeholderBg)
             ]),
         child: Row(
           children: [
             Transform.translate(
-
-                offset:  Offset(-40.w, 0),
-                child: Image.asset(imagePath)),
-
+                offset: Offset(-40.w, 0),
+                child: ClipOval(child: Image.network(imagePath))),
             Transform.translate(
               offset: Offset(-30.w, 0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children:  [
-                  Text(title, style: Theme.of(context).textTheme.headline4,),
-                  Text(supTitle, style: Theme.of(context).textTheme.headline6,),
+                children: [
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                  Text(
+                    "$supTitle items",
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
                 ],
               ),
             ),
@@ -60,7 +64,6 @@ class TileMenu extends StatelessWidget {
               offset: Offset(AppSize.s25.w, 0),
               child: Container(
                 height: 40.h,
-
                 decoration: BoxDecoration(
                     color: whiteColor,
                     shape: BoxShape.circle,

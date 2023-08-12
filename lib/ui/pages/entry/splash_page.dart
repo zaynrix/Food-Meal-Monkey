@@ -12,10 +12,9 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Timer(const Duration(seconds: 3), (){
-      ServiceNavigation.serviceNavi.pushNamedReplacement(RouteGenerator.onBoarding);
-    });
+    Provider.of<AppConfig>(context, listen: false).onBordingStatue();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
