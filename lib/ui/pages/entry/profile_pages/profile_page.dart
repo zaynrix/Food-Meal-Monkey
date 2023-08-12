@@ -121,12 +121,11 @@ class _ProfilePageState extends State<ProfilePage> {
           children: [
             const CircleAvatar(
               maxRadius: 45,
-              backgroundImage: AssetImage(
+              backgroundImage: NetworkImage(
                 'assets/images/user.png',
               ),
             ),
-            const SizedBox(height: 8),
-            const SizedBox(height: 8),
+            const SizedBox(height: 16),
             Text(
               'Hi there ${currentUser?.displayName ?? 'User'}!',
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
