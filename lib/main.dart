@@ -5,7 +5,6 @@ import 'package:food_delivery_app/resources/styles.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
 import 'package:food_delivery_app/routing/router.dart';
 import 'package:food_delivery_app/routing/routes.dart';
-import 'package:food_delivery_app/ui/pages/pages.dart';
 import 'package:food_delivery_app/utils/app_config.dart';
 import 'package:provider/provider.dart';
 
@@ -40,9 +39,15 @@ class MyApp extends StatelessWidget {
           navigatorKey: ServiceNavigation.serviceNavi.navKey,
           onGenerateRoute: RoutsGenerate.generateRoute,
           initialRoute: RouteGenerator.splashPage,
-          home: const SplashPage(),
+          scaffoldMessengerKey: ServiceNavigation.scaffoldKey,
+          // home: const SplashPage(),
         ),
       ),
     );
   }
 }
+
+// yahya@gmail.com
+// yahya123
+//111111
+//mmMM112233$
