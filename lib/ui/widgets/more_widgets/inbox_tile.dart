@@ -13,15 +13,13 @@ class InboxTile extends StatelessWidget {
   final String supTitle;
   final String date;
 
-
   @override
   Widget build(BuildContext context) {
-    final TextTheme textTheme= Theme.of(context).textTheme;
+    final TextTheme textTheme = Theme.of(context).textTheme;
     return Container(
       color: isRead == true ? whiteColor : moreCardColor,
-      padding: EdgeInsets.symmetric(horizontal: AppPadding.p20.w, vertical: AppPadding.p12.h),
-      // margin: EdgeInsetsDirectional.only(bottom: AppSize.s10.h),
-      height: AppSize.s125.h,
+      padding: EdgeInsets.symmetric(
+          horizontal: AppPadding.p20.w, vertical: AppPadding.p12.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -29,7 +27,10 @@ class InboxTile extends StatelessWidget {
             children: [
               const CustomCircleAvatar(),
               hSpace5,
-              Text(title, style: textTheme.headline5,),
+              Text(
+                title,
+                style: textTheme.headline5,
+              ),
               const Spacer(),
               Text(date),
             ],
@@ -38,12 +39,21 @@ class InboxTile extends StatelessWidget {
           Row(
             children: [
               hSpace14,
-              Text(supTitle, style: textTheme.subtitle2,),
+              Text(
+                supTitle,
+                style: textTheme.subtitle2,
+              ),
             ],
           ),
           Align(
             alignment: Alignment.centerRight,
-            child: IconButton(onPressed: (){}, icon: const Icon(Icons.star_border, color: orangeColor,),),
+            child: IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.star_border,
+                color: orangeColor,
+              ),
+            ),
           )
         ],
       ),

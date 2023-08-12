@@ -18,19 +18,29 @@ class _MobileOtpPageState extends State<MobileOtpPage> {
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const AuthHeader(title: "We have sent an OTP toyour Mobile", caption: "Please check your mobile number 071*****12 continue to reset your password"),
+                  const AuthHeader(
+                      title: "We have sent an OTP toyour Mobile",
+                      caption:
+                          "Please check your mobile number 071*****12 continue to reset your password"),
                   addVerticalSpace(AppSize.s40.h),
-                  buildPinPut(),
+                  // buildPinPut(),
                   SizedBox(
                     height: 36.h,
                   ),
-                  CustomButton(text: "Next", onPress: (){
-                   ServiceNavigation.serviceNavi.pushNamedReplacement(RouteGenerator.newPasswordPage);
-                  },),
+                  CustomButton(
+                    text: "Next",
+                    onPress: () {
+                      ServiceNavigation.serviceNavi
+                          .pushNamedReplacement(RouteGenerator.newPasswordPage);
+                    },
+                  ),
                   addVerticalSpace(AppSize.s35.h),
-                  FooterAuth(text: "Didn't Receive?", textButton: "Click Here",
-                      onPressed: (){
-                    ServiceNavigation.serviceNavi.pushNamedReplacement(RouteGenerator.resetPasswordPage);
+                  FooterAuth(
+                      text: "Didn't Receive?",
+                      textButton: "Click Here",
+                      onPressed: () {
+                        ServiceNavigation.serviceNavi.pushNamedReplacement(
+                            RouteGenerator.resetPasswordPage);
                       })
                 ]),
           ),
@@ -38,16 +48,10 @@ class _MobileOtpPageState extends State<MobileOtpPage> {
   }
 }
 
-
-
-
-
-Widget buildPinPut() {
-  return Pinput(
-      obscureText: true,
-    obscuringCharacter: '*',
-    onCompleted: (pin) => debugPrint(pin),
-  );
-}
-
-
+// Widget buildPinPut() {
+//   return Pinput(
+//       obscureText: true,
+//     obscuringCharacter: '*',
+//     onCompleted: (pin) => debugPrint(pin),
+//   );
+// }

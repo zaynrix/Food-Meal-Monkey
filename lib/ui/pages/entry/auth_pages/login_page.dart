@@ -8,7 +8,23 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final emailController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  Future<void> _signInWithEmailAndPassword() async {
+    try {
+      final FirebaseAuth auth = FirebaseAuth.instance;
+
+      await auth.signInWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+      ServiceNavigation.serviceNavi
+          .pushNamedAndRemoveUtils(RouteGenerator.mainPage);
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,25 +41,24 @@ class _LoginPageState extends State<LoginPage> {
               caption: "Add your details to login",
             ),
             addVerticalSpace(AppSize.s35.h),
-            const MainTextField(
-              text: "Your Email",
+            MainTextField(
+              text: 'Your Email',
               type: TextInputType.emailAddress,
+              controller: emailController,
             ),
             addVerticalSpace(AppSize.s28.h),
-            const MainTextField(
-              text: "Password",
+            MainTextField(
+              text: 'Password',
               type: TextInputType.visiblePassword,
               obscure: true,
+              controller: passwordController,
             ),
             addVerticalSpace(AppSize.s28.h),
             CustomButton(
               text: 'Login',
-              onPress: () {
-                ServiceNavigation.serviceNavi
-                    .pushNamedReplacement(RouteGenerator.mainPage);
-              },
+              onPress: _signInWithEmailAndPassword,
             ),
-          addVerticalSpace(AppSize.s28.h),
+            addVerticalSpace(AppSize.s28.h),
             TextButton(
               onPressed: () {
                 ServiceNavigation.serviceNavi
@@ -74,11 +89,20 @@ class _LoginPageState extends State<LoginPage> {
               color: const Color(0xFFDD4B39),
             ),
             const Spacer(),
-            FooterAuth(text: "Don't have an Account?", textButton: 'Sign Up',
-              onPressed: (){ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.signUpPage);},),
+            FooterAuth(
+              text: "Don't have an Account?",
+              textButton: 'Sign Up',
+              onPressed: () {
+                ServiceNavigation.serviceNavi
+                    .pushNamedWidget(RouteGenerator.signUpPage);
+              },
+            ),
           ],
         ),
       ),
     );
   }
 }
+
+// yahya@gmail.com
+// mmMM112233$
