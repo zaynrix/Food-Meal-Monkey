@@ -13,11 +13,11 @@ class HomeCategory extends StatelessWidget {
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         }
 
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-          return Text('No data available');
+          return const Text('No data available');
         }
 
         return ListView.builder(
@@ -44,7 +44,7 @@ class HomeCategory extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 9),
+                  const SizedBox(height: 9),
                   Text(
                     name,
                     style: Theme.of(context).textTheme.bodyText1!.copyWith(
