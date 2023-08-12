@@ -138,6 +138,7 @@ import 'package:food_delivery_app/resources/values_manager.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
 import 'package:food_delivery_app/routing/router.dart';
 import 'package:food_delivery_app/ui/widgets/widgets.dart';
+import 'package:food_delivery_app/utils/helper.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -259,6 +260,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       // Navigate to the next screen or perform other actions
                     }
                   } catch (e) {
+                    Helpers.showSnackBar(message: "$e", isSuccess: false);
                     // Handle sign-up error
                     print('Error during sign-up: $e');
                   }

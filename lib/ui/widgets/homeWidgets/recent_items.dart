@@ -96,7 +96,9 @@ class RecentItems extends StatelessWidget {
       stream: FirebaseFirestore.instance.collection('recent_items').snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator(); // Loading indicator while data is fetched
+          return Center(
+              child:
+                  const CircularProgressIndicator()); // Loading indicator while data is fetched
         }
         if (!snapshot.hasData || snapshot.data?.docs.isEmpty == true) {
           return const Text(
