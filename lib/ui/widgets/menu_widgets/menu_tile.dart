@@ -40,8 +40,18 @@ class TileMenu extends StatelessWidget {
         child: Row(
           children: [
             Transform.translate(
-                offset: Offset(-40.w, 0),
-                child: ClipOval(child: Image.network(imagePath))),
+              offset: Offset(-40.w, 0),
+              child: ClipOval(
+                child: Image.network(
+                  imagePath,
+                  errorBuilder: (context, error, stackTrace) => Container(
+                    height: 100,
+                    width: 100,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+            ),
             Transform.translate(
               offset: Offset(-30.w, 0),
               child: Column(
