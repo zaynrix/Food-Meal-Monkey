@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/routing/router.dart';
+import 'package:food_delivery_app/ui/pages/entry/auth_pages/sign_up_screen.dart';
+
 import '../ui/pages/pages.dart';
 
-
-class RoutsGenerate{
-  static Route<dynamic> generateRoute(RouteSettings settings){
-    switch(settings.name){
+class RoutsGenerate {
+  static Route<dynamic> generateRoute(RouteSettings settings) {
+    switch (settings.name) {
       case RouteGenerator.newPasswordPage:
         return MaterialPageRoute(builder: (_) => const NewPasswordPage());
       case RouteGenerator.onBoarding:
@@ -32,7 +33,7 @@ class RoutsGenerate{
         return MaterialPageRoute(builder: (_) => const AboutAsPage());
       case RouteGenerator.inboxPage:
         return MaterialPageRoute(builder: (_) => InboxPage());
-        default:
+      default:
         throw const FormatException("Route not found");
     }
   }
