@@ -23,7 +23,6 @@ part 'entry/auth_pages//login_page.dart';
 part 'entry/auth_pages//mobile_otp_page.dart';
 part 'entry/auth_pages//new_password_page.dart';
 part 'entry/auth_pages//reset_password_screen.dart';
-part 'entry/auth_pages//sign_up_screen.dart';
 part 'entry/home_pages//home_page.dart';
 part 'entry/home_pages//main_page.dart';
 part 'entry/menu_pages//desserts_page.dart';
