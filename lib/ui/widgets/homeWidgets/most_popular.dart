@@ -32,7 +32,7 @@ class MostPopular extends StatelessWidget {
 
             return GestureDetector(
               onTap: () {
-                homeController.navigateToDetailsPage(context);
+                homeController.navigateToDetailsPage(context, doc);
               },
               child: Container(
                 padding: EdgeInsetsDirectional.only(start: AppPadding.p20.w),

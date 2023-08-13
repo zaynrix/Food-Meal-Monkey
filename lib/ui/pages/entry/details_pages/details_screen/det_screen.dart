@@ -8,9 +8,12 @@ import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/wi
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/image_det.dart';
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/num_of_portions.dart';
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/total_price.dart';
+import 'package:food_delivery_app/ui/pages/entry/home_pages/home_Controllers/home_controller.dart';
 
 class DetailsScreen extends StatefulWidget {
-  const DetailsScreen({Key? key}) : super(key: key);
+  final DetailsScreenArguments arguments;
+
+  const DetailsScreen({required this.arguments, Key? key}) : super(key: key);
 
   @override
   State<DetailsScreen> createState() => _DetailsScreenState();
@@ -25,12 +28,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
         alignment: Alignment.center,
         children: [
           ListView(
-            children: const [
-              ImageDet(),
-              RatingPos(),
+            children: [
+              ImageDet(image: widget.arguments.imagePath),
+              RatingPos(
+                  rating: widget.arguments.rating,
+                  title: widget.arguments.title),
               SizedBox(height: 15),
               HeadTex(str: 'Descriptions'),
-              DescriptionDet(),
+              DescriptionDet(description: widget.arguments.description),
               DevLine(),
               SizedBox(height: 15),
               HeadTex(str: 'Customize your Order'),
