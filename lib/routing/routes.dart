@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/routing/router.dart';
 import 'package:food_delivery_app/ui/pages/entry/auth_pages/sign_up_screen.dart';
+import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/det_screen.dart';
 
 import '../ui/pages/pages.dart';
 
@@ -31,6 +32,8 @@ class RoutsGenerate {
         return MaterialPageRoute(builder: (_) => DessertsPage());
       case RouteGenerator.aboutAsPage:
         return MaterialPageRoute(builder: (_) => const AboutAsPage());
+      case RouteGenerator.detailsPage:
+        return MaterialPageRoute(builder: (_) => const DetailsScreen());
       case RouteGenerator.inboxPage:
         return MaterialPageRoute(builder: (_) => InboxPage());
       default:

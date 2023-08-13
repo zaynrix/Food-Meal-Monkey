@@ -21,15 +21,10 @@ class _MainPageState extends State<MainPage> {
             currentIndex = -1;
           });
         },
-
-
         backgroundColor: currentIndex == -1 ? orangeColor : secondaryFontColor,
         child: const Icon(Icons.home),
       ),
-
-
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         notchMargin: 10,
@@ -50,8 +45,8 @@ class _MainPageState extends State<MainPage> {
                         });
                       },
                       child: Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 27.w, vertical: 15.h),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 27.w, vertical: 15.h),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [

@@ -8,6 +8,9 @@ class OffersPage extends StatefulWidget {
 }
 
 class _OffersPageState extends State<OffersPage> {
+  final CollectionReference offersCollection =
+      FirebaseFirestore.instance.collection('latest_offers');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +27,8 @@ class _OffersPageState extends State<OffersPage> {
             Padding(
               padding: EdgeInsetsDirectional.only(start: AppPadding.p20.w),
               child: const Text(
-                  "Find discounts, Offers special\n meals and more!"),
+                "Find discounts, Offers special\nmeals and more!",
+              ),
             ),
             addVerticalSpace(AppSize.s24.h),
             Container(
@@ -37,62 +41,89 @@ class _OffersPageState extends State<OffersPage> {
               ),
             ),
             addVerticalSpace(AppSize.s22.h),
-            ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: ItemModel.popularRestaurents.length,
-                itemBuilder: (context, index) {
-                  ItemModel data = ItemModel.popularRestaurents[index];
-                  return Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Image.asset(
-                        data.imagePath,
-                        fit: BoxFit.fitWidth,
-                        width: double.infinity,
-                      ),
-                      addVerticalSpace(AppSize.s10.h),
-                      Container(
-                        margin:
-                            EdgeInsetsDirectional.only(start: AppPadding.p20.w),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              data.name,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .copyWith(
-                                      color: primaryFontColor,
-                                      fontWeight: FontWeight.bold),
-                            ),
-                            Row(
-                              children: [
-                                ItemRating(
-                                  rating: data.rating.toString(),
-                                ),
-                                addHorizontalSpace(AppSize.s5.w),
-                                Text(
-                                  '(${data.ratingCount} rating)',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .caption!
-                                      .copyWith(
-                                          color: secondaryFontColor,
-                                          fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      addVerticalSpace(AppSize.s30.h)
-                    ],
+            StreamBuilder<QuerySnapshot>(
+              stream: offersCollection.snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                }
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                final offers = snapshot.data!.docs.map((doc) {
+                  Map<String, dynamic> data =
+                      doc.data() as Map<String, dynamic>;
+                  return ItemModel(
+                    rating: double.parse(data['rating']),
+                    imagePath: data['imagePath'],
+                    name: data['name'],
+                    label: data['rating'],
+                    ratingCount: int.parse(data['ratingCount']),
                   );
-                })
+                }).toList();
+
+                return ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: offers.length,
+                  itemBuilder: (context, index) {
+                    ItemModel data = offers[index];
+                    return Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Image.network(
+                          data.imagePath,
+                          fit: BoxFit.fitWidth,
+                          width: double.infinity,
+                        ),
+                        addVerticalSpace(AppSize.s10.h),
+                        Container(
+                          margin: EdgeInsetsDirectional.only(
+                            start: AppPadding.p20.w,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                data.name,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .copyWith(
+                                      color: primaryFontColor,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                              Row(
+                                children: [
+                                  ItemRating(rating: data.rating.toString()),
+                                  addHorizontalSpace(AppSize.s5.w),
+                                  Text(
+                                    '(${data.ratingCount} rating)',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall!
+                                        .copyWith(
+                                          color: secondaryFontColor,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        addVerticalSpace(AppSize.s30.h),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
           ],
         ),
       ),

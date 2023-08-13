@@ -14,8 +14,7 @@ class RouteGenerator {
   static const String dessertsPage = '/dessertsPage';
   static const String aboutAsPage = '/aboutAsPage';
   static const String inboxPage = '/inboxPage';
-
+  static const String detailsPage = '/detailsPage';
 
   RouteGenerator._();
-
 }

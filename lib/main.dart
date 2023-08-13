@@ -5,6 +5,8 @@ import 'package:food_delivery_app/resources/styles.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
 import 'package:food_delivery_app/routing/router.dart';
 import 'package:food_delivery_app/routing/routes.dart';
+import 'package:food_delivery_app/ui/pages/entry/auth_pages/controllers/auth_controller.dart';
+import 'package:food_delivery_app/ui/pages/entry/profile_pages/profile_controllers/profile_controller.dart';
 import 'package:food_delivery_app/utils/app_config.dart';
 import 'package:provider/provider.dart';
 
@@ -20,15 +22,19 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
           create: (context) => AppConfig(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AuthController(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProfileController(),
+        ),
       ],
       child: ScreenUtilInit(
         designSize: const Size(375, 812),
