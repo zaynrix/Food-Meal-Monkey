@@ -5,10 +5,10 @@ class MostPopular extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final homeController = Provider.of<HomeController>(context, listen: false);
+
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection('most_popular_food')
-          .snapshots(),
+      stream: homeController.getMostPopularFoodStream(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -17,24 +17,22 @@ class MostPopular extends StatelessWidget {
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
           return const Text('No data available');
         }
-        //DetailsScreen
+
         return ListView.builder(
           shrinkWrap: true,
           scrollDirection: Axis.horizontal,
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
             DocumentSnapshot doc = snapshot.data!.docs[index];
-            String title = doc['name'];
-            String rating = doc['rating'];
-            String description = doc['description'];
-            String imagePath = doc['imagePath'];
-            String ratingCount = doc['ratingCount'];
+            String title = homeController.getTitle(doc);
+            String rating = homeController.getRating(doc);
+            String description = homeController.getDescription(doc);
+            String imagePath = homeController.getImagePath(doc);
+            String ratingCount = homeController.getRatingCount(doc);
 
             return GestureDetector(
               onTap: () {
-                ServiceNavigation.serviceNavi.pushNamedWidget(
-                  RouteGenerator.detailsPage,
-                );
+                homeController.navigateToDetailsPage(context);
               },
               child: Container(
                 padding: EdgeInsetsDirectional.only(start: AppPadding.p20.w),
@@ -53,7 +51,7 @@ class MostPopular extends StatelessWidget {
                     Text(
                       title,
                       style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                            color: Colors.black, // Customize text color
+                            color: Colors.black,
                             fontWeight: FontWeight.bold,
                           ),
                     ),
@@ -66,7 +64,7 @@ class MostPopular extends StatelessWidget {
                         Text(
                           ratingCount,
                           style: const TextStyle(
-                            color: Colors.grey, // Customize text color
+                            color: Colors.grey,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
