@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/utils/constant.dart';
 
 class ImageDet extends StatelessWidget {
-  const ImageDet({
-    Key? key,
-  }) : super(key: key);
+  final String? image;
+
+  const ImageDet({this.image});
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +20,8 @@ class ImageDet extends StatelessWidget {
                 borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(50),
                     bottomRight: Radius.circular(50)),
-                child: Image.asset(
-                  'assets/images/pizzat.png',
+                child: Image.network(
+                  image!,
                   color: Colors.black.withOpacity(0.2),
                   colorBlendMode: BlendMode.darken,
                   fit: BoxFit.cover,

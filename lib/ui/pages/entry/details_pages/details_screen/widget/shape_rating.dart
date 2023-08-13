@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ShapeRating extends StatelessWidget {
+  final String rating;
   const ShapeRating({
+    required this.rating,
     Key? key,
   }) : super(key: key);
 
@@ -10,7 +12,7 @@ class ShapeRating extends StatelessWidget {
   Widget build(BuildContext context) {
     return RatingBar.builder(
       itemSize: 28,
-      initialRating: 3,
+      initialRating: double.parse(rating),
       minRating: 1,
       direction: Axis.horizontal,
       allowHalfRating: true,
