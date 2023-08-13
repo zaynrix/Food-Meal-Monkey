@@ -1,7 +1,6 @@
 library pages;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slider_indicator/flutter_slider_indicator.dart';
@@ -10,9 +9,9 @@ import 'package:food_delivery_app/core/model/models.dart';
 import 'package:food_delivery_app/resources/values_manager.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
 import 'package:food_delivery_app/routing/router.dart';
+import 'package:food_delivery_app/ui/pages/entry/auth_pages/controllers/auth_controller.dart';
 import 'package:food_delivery_app/ui/pages/entry/profile_pages/profile_page.dart';
 import 'package:food_delivery_app/utils/app_config.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 import '../../resources/styles.dart';
