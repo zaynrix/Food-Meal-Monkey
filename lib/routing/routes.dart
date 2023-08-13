@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/routing/router.dart';
 import 'package:food_delivery_app/ui/pages/entry/auth_pages/sign_up_screen.dart';
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/det_screen.dart';
+import 'package:food_delivery_app/ui/pages/entry/home_pages/home_Controllers/home_controller.dart';
 
 import '../ui/pages/pages.dart';
 
 class RoutsGenerate {
   static Route<dynamic> generateRoute(RouteSettings settings) {
+    final args = settings.arguments as DetailsScreenArguments;
+
     switch (settings.name) {
       case RouteGenerator.newPasswordPage:
         return MaterialPageRoute(builder: (_) => const NewPasswordPage());
@@ -33,7 +36,9 @@ class RoutsGenerate {
       case RouteGenerator.aboutAsPage:
         return MaterialPageRoute(builder: (_) => const AboutAsPage());
       case RouteGenerator.detailsPage:
-        return MaterialPageRoute(builder: (_) => const DetailsScreen());
+        return MaterialPageRoute(
+            builder: (_) => DetailsScreen(arguments: args));
+
       case RouteGenerator.inboxPage:
         return MaterialPageRoute(builder: (_) => InboxPage());
       default:
