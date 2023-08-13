@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/routing/router.dart';
+import 'package:food_delivery_app/utils/helper.dart';
 
 class ProfileController extends ChangeNotifier {
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -38,31 +39,17 @@ class ProfileController extends ChangeNotifier {
           'mobile': mobileController.text,
           'address': addressController.text,
         });
-
+        Helpers.showSnackBar(
+            message: "Profile updated successfully", isSuccess: true);
         // Show a success message or navigate to another screen
         print('Profile updated successfully');
       }
     } catch (e) {
       // Handle error
+      Helpers.showSnackBar(
+          message: "Error updating profile, try later $e", isSuccess: false);
+
       print('Error updating profile: $e');
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Error'),
-            content: Text(
-                'An error occurred while updating your profile. Please try again later.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
     } finally {
       isSaving = false; // End saving state
       notifyListeners();

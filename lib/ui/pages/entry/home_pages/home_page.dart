@@ -12,9 +12,15 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Good morning Akila!",
-          style: TextStyle(fontSize: 20.sp),
+        title: Consumer<ProfileController>(
+          builder: (context, value, child) {
+            String? currentUser =
+                value.auth.currentUser?.displayName?.split(' ')[0];
+            return Text(
+              "Good morning ${currentUser}!",
+              style: TextStyle(fontSize: 20.sp),
+            );
+          },
         ),
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.shopping_cart)),
