@@ -8,7 +8,7 @@ import '../ui/pages/pages.dart';
 
 class RoutsGenerate {
   static Route<dynamic> generateRoute(RouteSettings settings) {
-    final args = settings.arguments as DetailsScreenArguments;
+
 
     switch (settings.name) {
       case RouteGenerator.newPasswordPage:
@@ -37,7 +37,10 @@ class RoutsGenerate {
         return MaterialPageRoute(builder: (_) => const AboutAsPage());
       case RouteGenerator.detailsPage:
         return MaterialPageRoute(
-            builder: (_) => DetailsScreen(arguments: args));
+            builder: (_) {
+              final args = settings.arguments as DetailsScreenArguments;
+              return DetailsScreen(arguments: args);}
+    );
 
       case RouteGenerator.inboxPage:
         return MaterialPageRoute(builder: (_) => InboxPage());

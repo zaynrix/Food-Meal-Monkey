@@ -31,9 +31,6 @@ class MainTextField extends StatelessWidget {
       onFieldSubmitted: (value) {
         debugPrint(value);
       },
-      onChanged: (value) {
-        debugPrint(value);
-      },
     );
   }
 }
