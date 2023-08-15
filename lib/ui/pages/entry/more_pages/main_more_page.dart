@@ -8,8 +8,11 @@ class MorePage extends StatefulWidget {
 }
 
 class _MorePageState extends State<MorePage> {
+
+
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<AuthController>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("More"),
@@ -21,19 +24,52 @@ class _MorePageState extends State<MorePage> {
         padding: EdgeInsets.symmetric(horizontal: AppPadding.p20.w),
         child: Column(
           children: [
-            MoreTile(title: 'Payment Details', iconPath: IconAssets.paymentIcon, onTap: () {},),
+            MoreTile(
+              title: 'Payment Details',
+              iconPath: IconAssets.paymentIcon,
+              onTap: () {},
+            ),
             vSpace20,
-            MoreTile(title: 'My Orders', iconPath: IconAssets.myOrderIcon, onTap: () {},),
+            MoreTile(
+              title: 'My Orders',
+              iconPath: IconAssets.myOrderIcon,
+              onTap: () {},
+            ),
             vSpace20,
-            MoreTile(title: 'Notifications', iconPath: IconAssets.notificationIcon, onTap: () {},),
+            MoreTile(
+              title: 'Notifications',
+              iconPath: IconAssets.notificationIcon,
+              onTap: () {},
+            ),
             vSpace20,
-            MoreTile(title: 'Inbox', iconPath: IconAssets.inboxIcon, onTap: () {ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.inboxPage);},),
+            MoreTile(
+              title: 'Inbox',
+              iconPath: IconAssets.inboxIcon,
+              onTap: () {
+                ServiceNavigation.serviceNavi
+                    .pushNamedWidget(RouteGenerator.inboxPage);
+              },
+            ),
             vSpace20,
-            MoreTile(title: 'About Us', iconPath: IconAssets.aboutAsIcon, onTap: () {ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.aboutAsPage);},),
+            MoreTile(
+              title: 'About Us',
+              iconPath: IconAssets.aboutAsIcon,
+              onTap: () {
+                ServiceNavigation.serviceNavi
+                    .pushNamedWidget(RouteGenerator.aboutAsPage);
+              },
+            ),
+            vSpace20,
+            MoreTile(
+              title: 'Logout',
+              iconPath: IconAssets.logoutIcon,
+              onTap: () {
+                provider.logout();
+              },
+            ),
           ],
         ),
       ),
     );
   }
 }
-
