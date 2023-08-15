@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/ui/pages/entry/profile_pages/profile_controllers/profile_controller.dart';
+import 'package:food_delivery_app/core/controllers/profile_controllers/profile_controller.dart';
 import 'package:food_delivery_app/ui/widgets/widgets.dart';
 import 'package:food_delivery_app/utils/constant.dart';
 import 'package:food_delivery_app/utils/extension/validate_extension.dart';

@@ -26,6 +26,7 @@ class _HomePageState extends State<HomePage> {
           IconButton(onPressed: () {}, icon: const Icon(Icons.shopping_cart)),
         ],
       ),
+
       body: ListView(
           //scrollDirection: Axis.vertical,
           children: [
@@ -33,12 +34,12 @@ class _HomePageState extends State<HomePage> {
               padding: EdgeInsets.only(right: 13.w, left: 13.w, top: 13.h),
               child: const CurrentLocation(),
             ),
-            // const SearchBar(),
+            const CustomSearchBar(),
             SizedBox(
-              height: 115.h,
+              height: 100.h,
               child: const HomeCategory(),
             ),
-            addVerticalSpace(AppSize.s50.h),
+            // addVerticalSpace(AppSize.s10.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 13.w, vertical: 13.h),
               child: const HeaderList(

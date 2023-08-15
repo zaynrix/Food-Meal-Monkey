@@ -26,7 +26,6 @@ class MostPopular extends StatelessWidget {
             DocumentSnapshot doc = snapshot.data!.docs[index];
             String title = homeController.getTitle(doc);
             String rating = homeController.getRating(doc);
-            String description = homeController.getDescription(doc);
             String imagePath = homeController.getImagePath(doc);
             String ratingCount = homeController.getRatingCount(doc);
 
@@ -50,7 +49,7 @@ class MostPopular extends StatelessWidget {
                     addVerticalSpace(AppSize.s12.h),
                     Text(
                       title,
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                           ),

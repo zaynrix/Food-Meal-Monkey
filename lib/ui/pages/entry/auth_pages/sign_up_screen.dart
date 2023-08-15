@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_delivery_app/resources/values_manager.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
 import 'package:food_delivery_app/routing/router.dart';
-import 'package:food_delivery_app/core/controllers/auth_controller.dart';
+import 'package:food_delivery_app/core/controllers/auth_controller/auth_controller.dart';
 import 'package:food_delivery_app/ui/widgets/widgets.dart';
 import 'package:food_delivery_app/utils/extension/validate_extension.dart';
 import 'package:provider/provider.dart';
