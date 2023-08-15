@@ -51,6 +51,7 @@ class _ForgotPasswordState extends State<ResetPasswordPage> {
                           provider.resetPassword(email: emailController.text);
                         }
                       },
+                      isLoading: provider.isLoading,
                     )
                   ]),
             ),

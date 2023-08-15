@@ -113,6 +113,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           address: addressController.text);
                     }
                   },
+                  isLoading: provider.isLoading,
                 ),
                 FooterAuth(
                   text: "Already have an Account?",

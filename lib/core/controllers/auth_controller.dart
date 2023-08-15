@@ -28,16 +28,30 @@ class AuthController extends ChangeNotifier {
     confirmPasswordController.clear();
   }
 
+  bool isLoading = false;
+  startLoading(){
+    isLoading = true;
+    notifyListeners();
+  }
+
+  stopLoading(){
+    isLoading = false;
+    notifyListeners();
+  }
+
   Future signInWithEmailAndPassword(
       {required String email, required String password}) async {
     try {
+      startLoading();
       await auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
+      stopLoading();
       ServiceNavigation.serviceNavi
           .pushNamedAndRemoveUtils(RouteGenerator.mainPage);
     } catch (e) {
+      stopLoading();
       print('Error: $e');
       AuthExceptionHandler.handleException(e);
     }
@@ -92,6 +106,7 @@ class AuthController extends ChangeNotifier {
       required String address,
       required String password}) async {
     try {
+      startLoading();
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
@@ -109,12 +124,14 @@ class AuthController extends ChangeNotifier {
           'mobile': mobile,
           'address': address,
         });
+        stopLoading();
 
         ServiceNavigation.serviceNavi
             .pushNamedReplacement(RouteGenerator.mainPage);
         // Navigate to the next screen or perform other actions
       }
     } catch (e) {
+      stopLoading();
       print('Error during sign-up: $e');
       AuthExceptionHandler.handleException(e);
     }
@@ -127,12 +144,15 @@ class AuthController extends ChangeNotifier {
 
   Future resetPassword({required String email}) async {
     try {
+      startLoading();
       await auth.sendPasswordResetEmail(email: email);
+      stopLoading();
       ServiceNavigation.serviceNavi.pushNamedReplacement(RouteGenerator.loginPage);
       Helpers.showSnackBar(
           message: "Password reset link sent: Check your email",
           isSuccess: true);
     } catch (e) {
+      stopLoading();
       AuthExceptionHandler.handleException(e);
     }
   }
