@@ -1,11 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:food_delivery_app/core/controllers/auth_controller.dart';
 import 'package:food_delivery_app/resources/styles.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
-import 'package:food_delivery_app/routing/router.dart';
 import 'package:food_delivery_app/routing/routes.dart';
-import 'package:food_delivery_app/core/controllers/auth_controller.dart';
 import 'package:food_delivery_app/ui/pages/entry/home_pages/home_Controllers/home_controller.dart';
 import 'package:food_delivery_app/ui/pages/entry/profile_pages/profile_controllers/profile_controller.dart';
 import 'package:food_delivery_app/ui/pages/pages.dart';
