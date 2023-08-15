@@ -58,6 +58,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               addVerticalSpace(AppSize.s28.h),
               CustomButton(
+                isLoading: provider.isLoading,
                 text: 'Login',
                 onPress: (){
                   if (formKye.currentState!.validate()) {

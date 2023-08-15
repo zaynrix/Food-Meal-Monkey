@@ -1,49 +1,14 @@
 part of widgets;
-//
-// class CustomButton extends StatelessWidget {
-//   final String text;
-//   Function() onPress;
-//   final IconData? icon;
-//   final Color color;
-//
-//   CustomButton(
-//       {Key? key,
-//       required this.text,
-//       required this.onPress,
-//       this.icon,
-//       this.color = orangeColor})
-//       : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return ElevatedButton(
-//       onPressed: onPress,
-//       style: ButtonStyle(
-//         backgroundColor: MaterialStateProperty.all<Color>(color),
-//       ),
-//       child: icon == null
-//           ? Text(text)
-//           : Row(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: [
-//                 Icon(icon),
-//                 SizedBox(
-//                   width: 20.w,
-//                 ),
-//                 Text(text)
-//               ],
-//             ),
-//     );
-//   }
-// }
 
-class CustomButton extends StatefulWidget {
+class CustomButton extends StatelessWidget {
   final String text;
   final Function() onPress;
   final IconData? icon;
   final Color color;
+  final bool isLoading;
 
   CustomButton({
+    this.isLoading = false,
     Key? key,
     required this.text,
     required this.onPress,
@@ -52,22 +17,15 @@ class CustomButton extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CustomButtonState createState() => _CustomButtonState();
-}
-
-class _CustomButtonState extends State<CustomButton> {
-  bool _isLoading = false;
-
-  @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: _isLoading ? null : _onButtonPress,
+      onPressed: isLoading ? null : onPress,
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all<Color>(
-          _isLoading ? Colors.grey : widget.color,
+          isLoading ? Colors.grey : color,
         ),
       ),
-      child: _isLoading
+      child: isLoading
           ? SizedBox(
               width: 20,
               height: 20,
@@ -75,30 +33,18 @@ class _CustomButtonState extends State<CustomButton> {
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
               ),
             )
-          : (widget.icon == null
-              ? Text(widget.text)
+          : (icon == null
+              ? Text(text)
               : Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(widget.icon),
+                    Icon(icon),
                     SizedBox(
                       width: 20,
                     ),
-                    Text(widget.text),
+                    Text(text),
                   ],
                 )),
     );
-  }
-
-  void _onButtonPress() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    await widget.onPress();
-
-    setState(() {
-      _isLoading = false;
-    });
   }
 }
