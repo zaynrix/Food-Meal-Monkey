@@ -10,11 +10,11 @@ class DetailsScreenArguments {
   final String ratingCount;
 
   DetailsScreenArguments({
-    required this.title,
-    required this.rating,
-    required this.description,
-    required this.imagePath,
-    required this.ratingCount,
+    this.title = "",
+    this.rating = "",
+    this.description = "",
+    this.imagePath = "",
+    this.ratingCount = "",
   });
 }
 

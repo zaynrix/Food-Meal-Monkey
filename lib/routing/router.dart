@@ -1,5 +1,5 @@
 class RouteGenerator {
-  static const String splashPage = '/';
+  static const String splashPage = '/splashScreen';
   static const String onBoarding = '/onBoarding';
   static const String loginPage = '/loginPage';
   static const String signUpPage = '/signUpPage';
