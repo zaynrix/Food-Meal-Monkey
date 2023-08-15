@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/ui/pages/entry/profile_pages/profile_controllers/profile_controller.dart';
 import 'package:food_delivery_app/ui/widgets/widgets.dart';
 import 'package:food_delivery_app/utils/constant.dart';
+import 'package:food_delivery_app/utils/extension/validate_extension.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -66,32 +67,40 @@ class _ProfilePageState extends State<ProfilePage> {
                   text: 'Name',
                   type: TextInputType.text,
                   controller: value.nameController,
+                  validator: (String? value) => value!.validateUserName(),
                 ),
                 const SizedBox(height: 12),
                 MainTextField(
+                  validator: (value) => value!.validateEmail(),
                   text: 'Email',
                   type: TextInputType.emailAddress,
                   controller: value.emailController,
                 ),
                 const SizedBox(height: 12),
                 MainTextField(
+                  validator: (value) => value!.validatePhoneNumber(),
                   text: 'Mobile',
                   type: TextInputType.phone,
                   controller: value.mobileController,
                 ),
                 const SizedBox(height: 12),
                 MainTextField(
+                  validator: (value) => value!.validateUserName(),
                   text: 'Address',
                   type: TextInputType.phone,
                   controller: value.addressController,
                 ),
                 const SizedBox(height: 12),
-                const MainTextField(
+                 MainTextField(
+                  validator: (value) => value!.validatePassword(),
                   text: 'Password',
                   type: TextInputType.emailAddress,
                 ),
                 const SizedBox(height: 12),
-                const MainTextField(
+                MainTextField(
+                  validator: (text) {
+                    return null;
+                  },
                   text: 'Confirm Password',
                   type: TextInputType.emailAddress,
                 ),

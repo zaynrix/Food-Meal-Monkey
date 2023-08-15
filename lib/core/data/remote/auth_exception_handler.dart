@@ -15,14 +15,14 @@ enum AuthResultStatus {
 
 class AuthExceptionHandler {
   static handleException(e) {
-    print("This is error code >>>>> ${e.code}");
+    debugPrint("This is error code >>>>> ${e.code}");
     String errorMessage = "";
     switch (e.code) {
       case "email-already-in-use":
         errorMessage = "The email address is already used";
         showErrorSnackBarAbdDebug(errorMessage);
         break;
-      case "ERROR_INVALID_EMAIL":
+      case "invalid_email":
         errorMessage = "Your email address appears to be malformed.";
         showErrorSnackBarAbdDebug(errorMessage);
         break;

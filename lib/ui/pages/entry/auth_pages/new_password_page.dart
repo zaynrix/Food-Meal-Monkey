@@ -8,6 +8,8 @@ class NewPasswordPage extends StatefulWidget {
 }
 
 class _NewPasswordPageState extends State<NewPasswordPage> {
+  final GlobalKey<FormState> formKye = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,12 +25,14 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                       caption:
                           "Please enter your email to receive alink to  create a new password via email"),
                   addVerticalSpace(AppSize.s40.h),
-                  const MainTextField(
+                   MainTextField(
                     text: "New Password",
                     type: TextInputType.emailAddress,
+                     validator: (value) => value!.validatePassword(),
                   ),
                   addVerticalSpace(AppSize.s28.h),
-                  const MainTextField(
+                   MainTextField(
+                    validator: (value) => value!.validatePassword(),
                     text: "Confirm Password",
                     type: TextInputType.emailAddress,
                   ),
