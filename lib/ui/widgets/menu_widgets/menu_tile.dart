@@ -44,9 +44,11 @@ class TileMenu extends StatelessWidget {
               child: ClipOval(
                 child: Image.network(
                   imagePath,
+                  height: 70.h,
+                  // width: 70.w,
                   errorBuilder: (context, error, stackTrace) => Container(
-                    height: 100,
-                    width: 100,
+                    height: 100.h,
+                    width: 100.w,
                     color: Colors.grey,
                   ),
                 ),
@@ -60,11 +62,11 @@ class TileMenu extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: Theme.of(context).textTheme.headline4,
+                    style: Theme.of(context).textTheme.headlineMedium,
                   ),
                   Text(
                     "$supTitle items",
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ],
               ),

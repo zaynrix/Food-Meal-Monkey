@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/core/controllers/home_Controllers/home_controller.dart';
 import 'package:food_delivery_app/routing/router.dart';
 import 'package:food_delivery_app/ui/pages/entry/auth_pages/sign_up_screen.dart';
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/det_screen.dart';
-import 'package:food_delivery_app/ui/pages/entry/home_pages/home_Controllers/home_controller.dart';
 
 import '../ui/pages/pages.dart';
 
