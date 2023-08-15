@@ -28,11 +28,12 @@ class AuthController extends ChangeNotifier {
     confirmPasswordController.clear();
   }
 
-  Future<void> signInWithEmailAndPassword() async {
+  Future signInWithEmailAndPassword(
+      {required String email, required String password}) async {
     try {
       await auth.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
+        email: email,
+        password: password,
       );
       ServiceNavigation.serviceNavi
           .pushNamedAndRemoveUtils(RouteGenerator.mainPage);
@@ -84,14 +85,13 @@ class AuthController extends ChangeNotifier {
     }
   }
 
-  Future<void> signUp() async {
+  Future<void> signUp(
+      {required String name,
+      required String email,
+      required String mobile,
+      required String address,
+      required String password}) async {
     try {
-      final String name = nameController.text;
-      final String email = emailController.text;
-      final String mobile = mobileController.text;
-      final String address = addressController.text;
-      final String password = passwordController.text;
-
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
@@ -123,5 +123,17 @@ class AuthController extends ChangeNotifier {
   Future logout() async {
     await auth.signOut();
     ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.loginPage);
+  }
+
+  Future resetPassword({required String email}) async {
+    try {
+      await auth.sendPasswordResetEmail(email: email);
+      ServiceNavigation.serviceNavi.pushNamedReplacement(RouteGenerator.loginPage);
+      Helpers.showSnackBar(
+          message: "Password reset link sent: Check your email",
+          isSuccess: true);
+    } catch (e) {
+      AuthExceptionHandler.handleException(e);
+    }
   }
 }

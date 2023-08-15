@@ -43,6 +43,13 @@ extension ExtendedString on String {
     return null;
   }
 
+  String? validateRePassword( String password){
+    if(this != password){
+      return 'password does not match';
+    }
+    return null;
+  }
+
   String? validateAccountNumber() {
     if (trim().isEmpty) {
       return 'Please enter your Account Number';

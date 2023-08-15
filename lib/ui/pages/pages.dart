@@ -10,10 +10,11 @@ import 'package:food_delivery_app/core/model/models.dart';
 import 'package:food_delivery_app/resources/values_manager.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
 import 'package:food_delivery_app/routing/router.dart';
-import 'package:food_delivery_app/ui/pages/entry/auth_pages/controllers/auth_controller.dart';
+import 'package:food_delivery_app/core/controllers/auth_controller.dart';
 import 'package:food_delivery_app/ui/pages/entry/profile_pages/profile_controllers/profile_controller.dart';
 import 'package:food_delivery_app/ui/pages/entry/profile_pages/profile_page.dart';
 import 'package:food_delivery_app/utils/app_config.dart';
+import 'package:food_delivery_app/utils/extension/validate_extension.dart';
 import 'package:provider/provider.dart';
 
 import '../../resources/styles.dart';
