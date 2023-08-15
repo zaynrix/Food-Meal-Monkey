@@ -49,6 +49,7 @@ flutter:
     - assets/images/menu/
     - assets/images/desserts/
     - assets/icons/more/
+    - assets/icons/
   fonts:
     - family: Metropolis
       fonts:

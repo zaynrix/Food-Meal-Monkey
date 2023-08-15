@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/core/data/remote/auth_exception_handler.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
 import 'package:food_delivery_app/routing/router.dart';
 import 'package:food_delivery_app/utils/helper.dart';
@@ -37,6 +38,7 @@ class AuthController extends ChangeNotifier {
           .pushNamedAndRemoveUtils(RouteGenerator.mainPage);
     } catch (e) {
       print('Error: $e');
+      AuthExceptionHandler.handleException(e);
     }
   }
 
@@ -90,11 +92,6 @@ class AuthController extends ChangeNotifier {
       final String address = addressController.text;
       final String password = passwordController.text;
 
-      if (password != confirmPasswordController.text) {
-        // Handle password mismatch
-        return;
-      }
-
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
@@ -118,9 +115,13 @@ class AuthController extends ChangeNotifier {
         // Navigate to the next screen or perform other actions
       }
     } catch (e) {
-      // Handle sign-up error
-      Helpers.showSnackBar(message: "$e", isSuccess: false);
       print('Error during sign-up: $e');
+      AuthExceptionHandler.handleException(e);
     }
+  }
+
+  Future logout() async {
+    await auth.signOut();
+    ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.loginPage);
   }
 }

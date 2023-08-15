@@ -30,7 +30,9 @@ class MoreTile extends StatelessWidget {
             CircleAvatar(
               backgroundColor: circleAvatarColor,
               radius: AppSize.s28.r,
-              child: SvgPicture.asset(iconPath),
+              child: SvgPicture.asset(iconPath
+              ,
+              height: AppSize.s20,),
             ),
             hSpace20,
             Text(title, style: Theme.of(context).textTheme.headline5,),

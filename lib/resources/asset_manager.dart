@@ -10,6 +10,7 @@ class IconAssets {
   static const String myOrderIcon = '$iconPath/more/my_orders.svg';
   static const String notificationIcon = '$iconPath/more/notification.svg';
   static const String paymentIcon = '$iconPath/more/payment_details.svg';
+  static const String logoutIcon = '$iconPath/logout_icon.svg';
 }
 
 const String svgPath = 'assets/svg';
