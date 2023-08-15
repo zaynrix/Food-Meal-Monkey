@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/core/controllers/home_Controllers/home_controller.dart';
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/DivLine.dart';
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/Rating_pos.dart';
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/box_options.dart';
@@ -8,7 +9,6 @@ import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/wi
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/image_det.dart';
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/num_of_portions.dart';
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/total_price.dart';
-import 'package:food_delivery_app/ui/pages/entry/home_pages/home_Controllers/home_controller.dart';
 
 class DetailsScreen extends StatefulWidget {
   final DetailsScreenArguments arguments;

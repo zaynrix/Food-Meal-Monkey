@@ -9,7 +9,7 @@ class MenuPage extends StatefulWidget {
 
 class _MenuPageState extends State<MenuPage> {
   final List<MenuModel> menuItem = MenuModel.menuList;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class _MenuPageState extends State<MenuPage> {
                 SizedBox(
                   height: 500.h,
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: _firestore.collection('menu').snapshots(),
+                    stream: _fireStore.collection('menu').snapshots(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Center(child: CircularProgressIndicator());

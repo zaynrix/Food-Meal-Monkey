@@ -124,9 +124,14 @@ class RecentItems extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: SizedBox(
-                    width: 80,
-                    height: 80,
-                    child: Image.network(image), // Load image from network
+                    width: 80.w,
+                    height: 80.h,
+                    child: Image.network(
+                      image,
+                      height: 80.h,
+                      width: 80.w,
+                      fit: BoxFit.cover,
+                    ), // Load image from network
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -140,7 +145,7 @@ class RecentItems extends StatelessWidget {
                           name,
                           style: Theme.of(context)
                               .textTheme
-                              .headline4!
+                              .headlineMedium!
                               .copyWith(color: Colors.black),
                         ),
                         Row(
@@ -180,7 +185,7 @@ class RecentItems extends StatelessWidget {
                               '($ratingCount rating)',
                               style: Theme.of(context)
                                   .textTheme
-                                  .caption!
+                                  .bodySmall!
                                   .copyWith(
                                       color: secondaryFontColor,
                                       fontWeight: FontWeight.bold),

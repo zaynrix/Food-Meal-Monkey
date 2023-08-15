@@ -6,7 +6,7 @@ import 'package:food_delivery_app/utils/helper.dart';
 
 class ProfileController extends ChangeNotifier {
   final FirebaseAuth auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -33,7 +33,7 @@ class ProfileController extends ChangeNotifier {
         await currentUser.updateDisplayName(nameController.text);
         await currentUser.updateEmail(emailController.text);
         // Update user information in Firestore
-        await _firestore.collection('users').doc(currentUser.uid).update({
+        await _fireStore.collection('users').doc(currentUser.uid).update({
           'name': nameController.text,
           'email': emailController.text,
           'mobile': mobileController.text,
@@ -63,7 +63,7 @@ class ProfileController extends ChangeNotifier {
       print("User UID: ${currentUser.uid}");
       print("User Phone Number: ${currentUser.phoneNumber}");
 
-      _firestore
+      _fireStore
           .collection('users')
           .doc(currentUser.uid)
           .get()
