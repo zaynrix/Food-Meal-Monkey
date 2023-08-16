@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
                 value.auth.currentUser?.displayName?.split(' ')[0];
             return Text(
               "Good morning ${currentUser}!",
-              style: TextStyle(fontSize: 20.sp),
+              style: TextStyle(fontSize: 20),
             );
           },
         ),

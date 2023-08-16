@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/core/controllers/profile_controllers/profile_controller.dart';
 import 'package:food_delivery_app/ui/widgets/widgets.dart';
-import 'package:food_delivery_app/utils/constant.dart';
 import 'package:food_delivery_app/utils/extension/validate_extension.dart';
 import 'package:provider/provider.dart';
 
@@ -52,16 +51,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   style: const TextStyle(
                       fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 16),
-                GestureDetector(
-                  onTap: () {
-                    value.signOut(context);
-                  },
-                  child: const Text(
-                    'Sign Out',
-                    style: TextStyle(color: Color(secondaryTextColor)),
-                  ),
-                ),
                 const SizedBox(height: 20),
                 MainTextField(
                   text: 'Name',
@@ -91,7 +80,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   controller: value.addressController,
                 ),
                 const SizedBox(height: 12),
-                 MainTextField(
+                MainTextField(
                   validator: (value) => value!.validatePassword(),
                   text: 'Password',
                   type: TextInputType.emailAddress,
