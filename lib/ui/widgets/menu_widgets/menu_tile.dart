@@ -132,10 +132,10 @@ class TileMenu extends StatelessWidget {
         onTap: onPressed,
         child: Container(
           width: AppSize.s280.w,
-          height: AppSize.s77.h,
+          height: AppSize.s87.h,
           decoration: BoxDecoration(
             color: whiteColor,
-            borderRadius: BorderRadius.circular(AppSize.s30.r),
+            borderRadius: BorderRadius.circular(AppSize.s85.r),
             boxShadow: [
               BoxShadow(blurRadius: AppSize.s10.r, color: Colors.grey.shade200),
             ],
@@ -161,13 +161,6 @@ class TileMenu extends StatelessWidget {
                             child: Image.asset(ImageAssets.app_icon))),
                     errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
-                  // Image.network(
-                  //
-                  //
-                  //   errorBuilder: (context, error, stackTrace) => Container(
-                  //     color: Colors.grey,
-                  //   ),
-                  // ),
                 ),
               ),
               SizedBox(
