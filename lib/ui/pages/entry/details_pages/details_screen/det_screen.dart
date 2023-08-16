@@ -10,6 +10,8 @@ import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/wi
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/num_of_portions.dart';
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/total_price.dart';
 
+import '../../../../../routing/navigations.dart';
+
 class DetailsScreen extends StatefulWidget {
   final DetailsScreenArguments arguments;
 
@@ -26,8 +28,25 @@ class _DetailsScreenState extends State<DetailsScreen> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            leading: IconButton(
+              onPressed: () {
+                ServiceNavigation.serviceNavi.back();
+              },
+              icon: const Icon(
+                Icons.arrow_back_ios_new_outlined,
+                color: Colors.white,
+              ),
+            ),
+            actions: [
+              IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.shopping_cart,
+                    color: Colors.white,
+                  )),
+            ],
             expandedHeight: 300.h,
-            pinned: true,
+            pinned: false,
             flexibleSpace: FlexibleSpaceBar(
               background: Hero(
                   tag: widget.arguments.imagePath,
@@ -37,6 +56,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
           SliverList(
             delegate: SliverChildListDelegate([
               RatingPos(
+                prices: "${widget.arguments.prices}",
                 rating: widget.arguments.rating,
                 title: widget.arguments.title,
               ),

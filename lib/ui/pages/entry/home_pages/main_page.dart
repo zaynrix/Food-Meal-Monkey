@@ -7,8 +7,17 @@ class MainPage extends StatefulWidget {
   State<MainPage> createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   int currentIndex = -1;
+  late final AnimationController _controller = AnimationController(
+      duration: const Duration(milliseconds: 50), vsync: this, value: 0.5);
+  late final AnimationController _controller2 = AnimationController(
+      duration: const Duration(milliseconds: 50), vsync: this, value: 1.0);
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,38 +47,49 @@ class _MainPageState extends State<MainPage> {
                   ? SizedBox(
                       width: 0.w,
                     )
-                  : InkWell(
+                  : GestureDetector(
                       onTap: () {
                         setState(() {
+                          _controller
+                              .reverse()
+                              .then((value) => _controller.forward());
                           currentIndex = data.index;
                         });
                       },
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 27.w, vertical: 15.h),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              data.icon,
-                              color: currentIndex == data.index
-                                  ? orangeColor
-                                  : unSelectedIconColor,
-                            ),
-                            SizedBox(
-                              height: 5.h,
-                            ),
-                            Text(
-                              data.label!,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .copyWith(
-                                      color: currentIndex == data.index
-                                          ? orangeColor
-                                          : secondaryFontColor),
-                            )
-                          ],
+                      child: ScaleTransition(
+                        scale: Tween(begin: 0.3, end: 1.0).animate(
+                            CurvedAnimation(
+                                parent: currentIndex == data.index
+                                    ? _controller
+                                    : _controller2,
+                                curve: Curves.easeOut)),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 27.w, vertical: 15.h),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                data.icon,
+                                color: currentIndex == data.index
+                                    ? orangeColor
+                                    : unSelectedIconColor,
+                              ),
+                              SizedBox(
+                                height: 5.h,
+                              ),
+                              Text(
+                                data.label!,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .copyWith(
+                                        color: currentIndex == data.index
+                                            ? orangeColor
+                                            : secondaryFontColor),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     );

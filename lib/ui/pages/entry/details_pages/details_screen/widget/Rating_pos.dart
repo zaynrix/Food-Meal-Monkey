@@ -6,9 +6,11 @@ import 'package:food_delivery_app/utils/extension/responsive_extension.dart';
 class RatingPos extends StatelessWidget {
   final String rating;
   final String title;
+  final String prices;
   const RatingPos({
     required this.title,
     required this.rating,
+    required this.prices,
     Key? key,
   }) : super(key: key);
 
@@ -60,7 +62,7 @@ class RatingPos extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    'Rs. 750',
+                    'Rs. $prices',
                     style: TextStyle(
                         fontSize: 31,
                         fontWeight: FontWeight.bold,

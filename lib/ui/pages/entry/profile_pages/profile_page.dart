@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/core/controllers/profile_controllers/profile_controller.dart';
+import 'package:food_delivery_app/resources/styles.dart';
 import 'package:food_delivery_app/ui/widgets/widgets.dart';
 import 'package:food_delivery_app/utils/extension/validate_extension.dart';
 import 'package:provider/provider.dart';
@@ -34,15 +36,21 @@ class _ProfilePageState extends State<ProfilePage> {
         return SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(
-              vertical: 20,
+              vertical: 10,
               horizontal: 34,
             ),
             child: Column(
               children: [
-                CircleAvatar(
-                  maxRadius: 45,
-                  backgroundImage: NetworkImage(
-                    "${currentUser?.photoURL}",
+                CachedNetworkImage(
+                  placeholder: (context, url) => Center(
+                      child: Image.asset(
+                    ImageAssets.app_icon,
+                    width: 45,
+                  )),
+                  imageUrl: currentUser?.photoURL ?? "",
+                  imageBuilder: (context, imageProvider) => CircleAvatar(
+                    maxRadius: 45,
+                    backgroundImage: imageProvider,
                   ),
                 ),
                 const SizedBox(height: 22),
