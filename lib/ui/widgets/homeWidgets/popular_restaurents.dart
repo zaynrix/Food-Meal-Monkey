@@ -1,6 +1,5 @@
 part of widgets;
 
-
 class PupularResturent extends StatelessWidget {
   const PupularResturent({Key? key}) : super(key: key);
 
@@ -32,30 +31,39 @@ class PupularResturent extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.network(
-                  restaurantData['imagePath'],
+                CachedNetworkImage(
+                  imageUrl: restaurantData['imagePath'],
                   fit: BoxFit.fitWidth,
                   width: double.infinity,
+                  placeholder: (context, url) =>
+                      Center(child: Center(child: CircularProgressIndicator())),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
                 addVerticalSpace(AppSize.s10.h),
-                Text(
-                  restaurantData['name'],
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: primaryFontColor, fontWeight: FontWeight.bold),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: Text(
+                    restaurantData['name'],
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        color: primaryFontColor, fontWeight: FontWeight.bold),
+                  ),
                 ),
-                Row(
-                  children: [
-                    ItemRating(
-                      rating: restaurantData['rating'],
-                    ),
-                    addHorizontalSpace(AppSize.s5.w),
-                    Text(
-                      '(${restaurantData['ratingCount']} rating)',
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                          color: secondaryFontColor,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: Row(
+                    children: [
+                      ItemRating(
+                        rating: restaurantData['rating'],
+                      ),
+                      addHorizontalSpace(AppSize.s5.w),
+                      Text(
+                        '(${restaurantData['ratingCount']} rating)',
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            color: secondaryFontColor,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
                 ),
                 addVerticalSpace(AppSize.s30.h)
               ],
