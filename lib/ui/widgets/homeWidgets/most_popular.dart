@@ -48,15 +48,22 @@ class _MostPopularState extends State<MostPopular> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Hero(
-                        tag: imagePath,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: Image.network(
-                            imagePath,
+                      tag: imagePath,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: Center(
+                          child: CachedNetworkImage(
+                            imageUrl: imagePath,
                             height: 135.h,
                             fit: BoxFit.cover,
+                            placeholder: (context, url) =>
+                                CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
                           ),
-                        )),
+                        ),
+                      ),
+                    ),
                     addVerticalSpace(AppSize.s12.h),
                     Text(
                       title,

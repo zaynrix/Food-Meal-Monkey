@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/resources/styles.dart';
@@ -36,11 +37,15 @@ class HomeCategory extends StatelessWidget {
                   Container(
                     height: 70,
                     width: 70,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(200),
-                      image: DecorationImage(
-                        image: NetworkImage(imagePath),
+                    child: ClipOval(
+                      child: CachedNetworkImage(
+                        imageUrl: imagePath,
                         fit: BoxFit.cover,
+                        width: 70,
+                        height: 70,
+                        placeholder: (context, url) =>
+                            Center(child: CircularProgressIndicator()),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
                       ),
                     ),
                   ),
