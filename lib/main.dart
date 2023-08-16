@@ -1,12 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:food_delivery_app/core/controllers/auth_controller/auth_controller.dart';
 import 'package:food_delivery_app/core/controllers/home_Controllers/home_controller.dart';
 import 'package:food_delivery_app/core/controllers/profile_controllers/profile_controller.dart';
 import 'package:food_delivery_app/resources/styles.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
 import 'package:food_delivery_app/routing/routes.dart';
-import 'package:food_delivery_app/core/controllers/auth_controller/auth_controller.dart';
 import 'package:food_delivery_app/ui/pages/pages.dart';
 import 'package:food_delivery_app/utils/app_config.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +28,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
+          create: (context) => HomeController(),
+        ),
+        ChangeNotifierProvider(
           create: (context) => AppConfig(),
         ),
         ChangeNotifierProvider(
@@ -35,9 +38,6 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => ProfileController(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => HomeController(),
         ),
       ],
       child: ScreenUtilInit(

@@ -1,5 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
+
+extension TimestampExtension on Timestamp {
+  String toFormattedString() {
+    // Convert the Timestamp to a DateTime
+    final dateTime = this.toDate();
+
+    // Format the DateTime as a string
+    return DateFormat('yyyy-MM-dd HH:mm').format(dateTime);
+    // You can customize the format string to match your preferred date and time format
+  }
+}
 
 extension TimeExtension on String {
   String? convertToTime12() {

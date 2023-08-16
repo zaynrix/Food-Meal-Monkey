@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/shape_rating.dart';
+import 'package:food_delivery_app/utils/constant.dart';
+import 'package:food_delivery_app/utils/extension/responsive_extension.dart';
 
 class RatingPos extends StatelessWidget {
   final String rating;
@@ -17,11 +19,37 @@ class RatingPos extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          30.addVerticalSpace,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              ),
+              Container(
+                width: 50,
+                height: 50,
+                decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(color: Colors.black12, offset: Offset(1, 1)),
+                      BoxShadow(color: Colors.black12, offset: Offset(-1, -1)),
+                    ]),
+                // child: SvgPicture.asset(''),
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.favorite,
+                    color: Color(primaryColor),
+                    size: 25,
+                  ),
+                ),
+              ),
+            ],
           ),
-          SizedBox(height: 5),
+          10.addVerticalSpace,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

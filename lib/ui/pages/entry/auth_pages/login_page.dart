@@ -18,15 +18,12 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
     emailController.dispose();
     passwordController.dispose();
-
   }
 
   @override
   Widget build(BuildContext context) {
     final TextStyle? mediumStyle = Theme.of(context).textTheme.labelMedium;
     final provider = Provider.of<AuthController>(context);
-
-
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -60,13 +57,15 @@ class _LoginPageState extends State<LoginPage> {
               CustomButton(
                 isLoading: provider.isLoading,
                 text: 'Login',
-                onPress: (){
+                onPress: () {
                   if (formKye.currentState!.validate()) {
-                    provider.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text);
+                    provider.signInWithEmailAndPassword(
+                        email: emailController.text,
+                        password: passwordController.text);
                   }
                 },
               ),
-              addVerticalSpace(AppSize.s28.h),
+              20.addVerticalSpace,
               TextButton(
                 onPressed: () {
                   ServiceNavigation.serviceNavi
@@ -77,19 +76,19 @@ class _LoginPageState extends State<LoginPage> {
                   style: mediumStyle,
                 ),
               ),
-              addVerticalSpace(AppSize.s45.h),
+              30.addVerticalSpace,
               Text(
                 "or Login With",
                 style: mediumStyle,
               ),
-              addVerticalSpace(AppSize.s28.h),
+              20.addVerticalSpace,
               CustomButton(
                 text: 'Login with Facebook',
                 onPress: () {},
                 icon: Icons.facebook,
                 color: const Color(0xFF367FC0),
               ),
-              addVerticalSpace(AppSize.s28.h),
+              20.addVerticalSpace,
               CustomButton(
                 text: 'Login with Google',
                 onPress: provider.signInWithGoogle,

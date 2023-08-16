@@ -8,8 +8,6 @@ class MorePage extends StatefulWidget {
 }
 
 class _MorePageState extends State<MorePage> {
-
-
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<AuthController>(context);
@@ -64,6 +62,8 @@ class _MorePageState extends State<MorePage> {
               title: 'Logout',
               iconPath: IconAssets.logoutIcon,
               onTap: () {
+                // value.signOut(context);
+
                 provider.logout();
               },
             ),

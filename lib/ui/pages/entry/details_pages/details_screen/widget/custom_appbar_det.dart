@@ -26,7 +26,7 @@ class CusAppBarDet extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
-              Navigator.pushReplacementNamed(context, 'my_cart');
+              // Navigator.pushReplacementNamed(context, 'my_cart');
             },
             icon: const Icon(
               Icons.shopping_cart_outlined,

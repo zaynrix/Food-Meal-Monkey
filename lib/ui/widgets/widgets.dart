@@ -1,12 +1,14 @@
 library widgets;
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:food_delivery_app/core/controllers/home_Controllers/home_controller.dart';
+import 'package:food_delivery_app/core/controllers/profile_controllers/profile_controller.dart';
 import 'package:food_delivery_app/resources/values_manager.dart';
+import 'package:food_delivery_app/utils/extension/time_extension.dart';
 import 'package:provider/provider.dart';
 
 import '../../resources/styles.dart';

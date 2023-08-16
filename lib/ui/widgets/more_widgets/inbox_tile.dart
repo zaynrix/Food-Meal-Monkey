@@ -2,61 +2,131 @@ part of widgets;
 
 class InboxTile extends StatelessWidget {
   const InboxTile({
-    required this.title,
-    required this.supTitle,
-    required this.date,
-    required this.isRead,
+    required this.chatDoc,
     Key? key,
   }) : super(key: key);
-  final bool isRead;
-  final String title;
-  final String supTitle;
-  final String date;
+
+  final DocumentSnapshot chatDoc;
+
+  Future<List<String>> fetchParticipantNames(
+      List<dynamic> participantUids, String currentUserUid) async {
+    try {
+      final List<String> participantNames = [];
+
+      for (final uid in participantUids) {
+        if (uid != currentUserUid) {
+          // Exclude the current user's UID
+          final userDoc = await FirebaseFirestore.instance
+              .collection('users')
+              .doc(uid)
+              .get();
+          if (userDoc.exists) {
+            final userData = userDoc.data() as Map<String, dynamic>;
+            final userName = userData['name'] as String;
+            participantNames.add(userName);
+          }
+        }
+      }
+
+      return participantNames;
+    } catch (error) {
+      throw error;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final chatData = chatDoc.data() as Map<String, dynamic>;
+    final participants = chatData['participants'] as List<dynamic>;
+
     final TextTheme textTheme = Theme.of(context).textTheme;
-    return Container(
-      color: isRead == true ? whiteColor : moreCardColor,
-      padding: EdgeInsets.symmetric(
-          horizontal: AppPadding.p20.w, vertical: AppPadding.p12.h),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+    return StreamBuilder(
+      stream: chatDoc.reference
+          .collection('messages')
+          .orderBy('timestamp', descending: true)
+          .limit(1)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        }
+
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return Text('No messages');
+        }
+
+        final messageData = snapshot.data!.docs.first.data();
+        final lastMessage = messageData['content'] as String;
+        final Timestamp lastMessageDate = messageData['timestamp'];
+        // User? currentUser = value.auth.currentUser;
+        return Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: AppPadding.p20.w,
+            vertical: AppPadding.p12.h,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const CustomCircleAvatar(),
-              hSpace5,
-              Text(
-                title,
-                style: textTheme.headline5,
+              Row(
+                children: [
+                  const CustomCircleAvatar(),
+                  hSpace5,
+                  FutureBuilder<List<String>>(
+                    future: fetchParticipantNames(
+                        participants,
+                        Provider.of<ProfileController>(context)
+                            .auth
+                            .currentUser!
+                            .uid),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        final participantNames = snapshot.data;
+                        final participantNamesString =
+                            participantNames?.join(', ') ?? '';
+
+                        return Text(
+                          participantNamesString, // Display participant names
+                          style: textTheme.headline5,
+                        );
+                      }
+                    },
+                  ),
+                  Spacer(),
+                  Text(
+                    lastMessageDate
+                        .toFormattedString(), // Assuming you have the timestamp extension
+                    style: TextStyle(color: Colors.blue),
+                  ),
+                ],
               ),
-              const Spacer(),
-              Text(date),
+              vSpace15,
+              Row(
+                children: [
+                  hSpace14,
+                  Text(
+                    lastMessage,
+                    style: textTheme.subtitle2,
+                  ),
+                ],
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.star_border,
+                    color: orangeColor,
+                  ),
+                ),
+              )
             ],
           ),
-          vSpace15,
-          Row(
-            children: [
-              hSpace14,
-              Text(
-                supTitle,
-                style: textTheme.subtitle2,
-              ),
-            ],
-          ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.star_border,
-                color: orangeColor,
-              ),
-            ),
-          )
-        ],
-      ),
+        );
+      },
     );
   }
 }

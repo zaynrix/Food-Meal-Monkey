@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/routing/router.dart';
 import 'package:food_delivery_app/utils/helper.dart';
 
 class ProfileController extends ChangeNotifier {
@@ -13,16 +12,6 @@ class ProfileController extends ChangeNotifier {
   TextEditingController mobileController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   bool isSaving = false; // Variable to track the saving state
-
-  Future<void> signOut(BuildContext context) async {
-    try {
-      await auth.signOut();
-      Navigator.pushNamedAndRemoveUntil(
-          context, RouteGenerator.loginPage, (route) => false);
-    } catch (e) {
-      print('Error signing out: $e');
-    }
-  }
 
   Future<void> updateProfile(BuildContext context) async {
     isSaving = true; // Start saving state
