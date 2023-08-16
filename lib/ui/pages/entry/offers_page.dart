@@ -70,59 +70,67 @@ class _OffersPageState extends State<OffersPage> {
                   itemCount: offers.length,
                   itemBuilder: (context, index) {
                     ItemModel data = offers[index];
-                    return Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CachedNetworkImage(
-                          imageUrl: data.imagePath,
-                          fit: BoxFit.fitWidth,
-                          width: double.infinity,
-                          placeholder: (context, url) =>
-                              Center(child: Image.asset(ImageAssets.app_icon)),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
-                        ),
-                        addVerticalSpace(AppSize.s10.h),
-                        Container(
-                          margin: EdgeInsetsDirectional.only(
-                            start: AppPadding.p20.w,
+                    DocumentSnapshot doc = snapshot.data!.docs[index];
+
+                    return GestureDetector(
+                      onTap: () {
+                        Provider.of<HomeController>(context, listen: false)
+                            .navigateToDetailsPage(context, doc);
+                      },
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CachedNetworkImage(
+                            imageUrl: data.imagePath,
+                            fit: BoxFit.fitWidth,
+                            width: double.infinity,
+                            placeholder: (context, url) => Center(
+                                child: Image.asset(ImageAssets.app_icon)),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                data.name,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .copyWith(
-                                      color: primaryFontColor,
-                                      fontWeight: FontWeight.bold,
+                          addVerticalSpace(AppSize.s10.h),
+                          Container(
+                            margin: EdgeInsetsDirectional.only(
+                              start: AppPadding.p20.w,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  data.name,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .copyWith(
+                                        color: primaryFontColor,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                                Row(
+                                  children: [
+                                    ItemRating(rating: data.rating.toString()),
+                                    addHorizontalSpace(AppSize.s5.w),
+                                    Text(
+                                      '(${data.ratingCount} rating)',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall!
+                                          .copyWith(
+                                            color: secondaryFontColor,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                     ),
-                              ),
-                              Row(
-                                children: [
-                                  ItemRating(rating: data.rating.toString()),
-                                  addHorizontalSpace(AppSize.s5.w),
-                                  Text(
-                                    '(${data.ratingCount} rating)',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall!
-                                        .copyWith(
-                                          color: secondaryFontColor,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        addVerticalSpace(AppSize.s30.h),
-                      ],
+                          addVerticalSpace(AppSize.s30.h),
+                        ],
+                      ),
                     );
                   },
                 );
