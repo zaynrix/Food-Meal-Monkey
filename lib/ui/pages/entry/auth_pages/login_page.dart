@@ -94,6 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                 text: 'Login with Google',
                 onPress: provider.signInWithGoogle,
                 icon: Icons.facebook,
+                isLoading: provider.isLoading,
                 color: const Color(0xFFDD4B39),
               ),
               const Spacer(),
