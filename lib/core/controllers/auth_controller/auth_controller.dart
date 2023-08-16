@@ -29,12 +29,12 @@ class AuthController extends ChangeNotifier {
   }
 
   bool isLoading = false;
-  startLoading(){
+  startLoading() {
     isLoading = true;
     notifyListeners();
   }
 
-  stopLoading(){
+  stopLoading() {
     isLoading = false;
     notifyListeners();
   }
@@ -138,8 +138,13 @@ class AuthController extends ChangeNotifier {
   }
 
   Future logout() async {
+    try {
+      await auth.signOut();
+      ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.loginPage);
+    } catch (e) {
+      print('Error signing out: $e');
+    }
     await auth.signOut();
-    ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.loginPage);
   }
 
   Future resetPassword({required String email}) async {
@@ -147,7 +152,8 @@ class AuthController extends ChangeNotifier {
       startLoading();
       await auth.sendPasswordResetEmail(email: email);
       stopLoading();
-      ServiceNavigation.serviceNavi.pushNamedReplacement(RouteGenerator.loginPage);
+      ServiceNavigation.serviceNavi
+          .pushNamedReplacement(RouteGenerator.loginPage);
       Helpers.showSnackBar(
           message: "Password reset link sent: Check your email",
           isSuccess: true);

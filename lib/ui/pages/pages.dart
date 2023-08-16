@@ -13,6 +13,7 @@ import 'package:food_delivery_app/routing/navigations.dart';
 import 'package:food_delivery_app/routing/router.dart';
 import 'package:food_delivery_app/ui/pages/entry/profile_pages/profile_page.dart';
 import 'package:food_delivery_app/utils/app_config.dart';
+import 'package:food_delivery_app/utils/extension/responsive_extension.dart';
 import 'package:food_delivery_app/utils/extension/validate_extension.dart';
 import 'package:provider/provider.dart';
 

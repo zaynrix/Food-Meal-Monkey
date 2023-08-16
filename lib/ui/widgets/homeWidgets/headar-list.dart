@@ -21,7 +21,7 @@ class HeaderList extends StatelessWidget {
           onPressed: () {},
           child: const Text(
             "View all",
-            style: TextStyle(),
+            style: TextStyle(color: Colors.grey),
           ),
         )
       ],

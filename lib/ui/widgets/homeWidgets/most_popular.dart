@@ -49,10 +49,19 @@ class _MostPopularState extends State<MostPopular> {
                   children: [
                     Hero(
                       tag: imagePath,
-                      child: Image.network(
-                        imagePath,
-                        height: 135.h,
-                        fit: BoxFit.cover,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: Center(
+                          child: CachedNetworkImage(
+                            imageUrl: imagePath,
+                            height: 135.h,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) =>
+                                CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                          ),
+                        ),
                       ),
                     ),
                     addVerticalSpace(AppSize.s12.h),

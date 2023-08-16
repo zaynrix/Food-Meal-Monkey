@@ -31,10 +31,13 @@ class PupularResturent extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.network(
-                  restaurantData['imagePath'],
+                CachedNetworkImage(
+                  imageUrl: restaurantData['imagePath'],
                   fit: BoxFit.fitWidth,
                   width: double.infinity,
+                  placeholder: (context, url) =>
+                      Center(child: Center(child: CircularProgressIndicator())),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
                 addVerticalSpace(AppSize.s10.h),
                 Padding(

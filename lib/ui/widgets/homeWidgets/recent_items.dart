@@ -40,11 +40,14 @@ class RecentItems extends StatelessWidget {
                   child: SizedBox(
                     width: 80.w,
                     height: 80.h,
-                    child: Image.network(
-                      image,
+                    child: CachedNetworkImage(
+                      imageUrl: image,
                       height: 80.h,
                       width: 80.w,
                       fit: BoxFit.cover,
+                      placeholder: (context, url) =>
+                          Center(child: CircularProgressIndicator()),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
                     ), // Load image from network
                   ),
                 ),
