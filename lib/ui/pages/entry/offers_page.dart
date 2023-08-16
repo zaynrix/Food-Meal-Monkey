@@ -75,10 +75,14 @@ class _OffersPageState extends State<OffersPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Image.network(
-                          data.imagePath,
+                        CachedNetworkImage(
+                          imageUrl: data.imagePath,
                           fit: BoxFit.fitWidth,
                           width: double.infinity,
+                          placeholder: (context, url) =>
+                              Center(child: Image.asset(ImageAssets.app_icon)),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
                         ),
                         addVerticalSpace(AppSize.s10.h),
                         Container(

@@ -8,6 +8,7 @@ class DetailsScreenArguments {
   final String description;
   final String imagePath;
   final String ratingCount;
+  final String prices;
 
   DetailsScreenArguments({
     this.title = "",
@@ -15,6 +16,7 @@ class DetailsScreenArguments {
     this.description = "",
     this.imagePath = "",
     this.ratingCount = "",
+    required this.prices,
   });
 }
 
@@ -24,12 +26,12 @@ class HomeController extends ChangeNotifier {
       context,
       RouteGenerator.detailsPage,
       arguments: DetailsScreenArguments(
-        title: getTitle(doc),
-        rating: getRating(doc),
-        description: getDescription(doc),
-        imagePath: getImagePath(doc),
-        ratingCount: getRatingCount(doc),
-      ),
+          title: getTitle(doc),
+          rating: getRating(doc),
+          description: getDescription(doc),
+          imagePath: getImagePath(doc),
+          ratingCount: getRatingCount(doc),
+          prices: getPrice(doc)),
     );
   }
 
@@ -57,5 +59,9 @@ class HomeController extends ChangeNotifier {
 
   String getRatingCount(DocumentSnapshot doc) {
     return doc['ratingCount'];
+  }
+
+  String getPrice(DocumentSnapshot doc) {
+    return doc['price'];
   }
 }

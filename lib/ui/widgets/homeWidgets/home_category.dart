@@ -44,7 +44,7 @@ class HomeCategory extends StatelessWidget {
                         width: 70,
                         height: 70,
                         placeholder: (context, url) =>
-                            Center(child: CircularProgressIndicator()),
+                            Center(child: Image.asset(ImageAssets.app_icon)),
                         errorWidget: (context, url, error) => Icon(Icons.error),
                       ),
                     ),

@@ -33,6 +33,7 @@ class _MostPopularState extends State<MostPopular> {
             String rating = widget.homeController.getRating(doc);
             String imagePath = widget.homeController.getImagePath(doc);
             String ratingCount = widget.homeController.getRatingCount(doc);
+            String price = widget.homeController.getPrice(doc);
 
             return GestureDetector(
               onTap: () {
@@ -56,8 +57,8 @@ class _MostPopularState extends State<MostPopular> {
                             imageUrl: imagePath,
                             height: 135.h,
                             fit: BoxFit.cover,
-                            placeholder: (context, url) =>
-                                CircularProgressIndicator(),
+                            placeholder: (context, url) => Center(
+                                child: Image.asset(ImageAssets.app_icon)),
                             errorWidget: (context, url, error) =>
                                 Icon(Icons.error),
                           ),
