@@ -1,14 +1,19 @@
 part of widgets;
 
-class MostPopular extends StatelessWidget {
-  const MostPopular({Key? key}) : super(key: key);
+class MostPopular extends StatefulWidget {
+  final homeController;
+
+  const MostPopular({Key? key, required this.homeController}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final homeController = Provider.of<HomeController>(context, listen: false);
+  State<MostPopular> createState() => _MostPopularState();
+}
 
+class _MostPopularState extends State<MostPopular> {
+  @override
+  Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: homeController.getMostPopularFoodStream(),
+      stream: widget.homeController.getMostPopularFoodStream(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -24,27 +29,31 @@ class MostPopular extends StatelessWidget {
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
             DocumentSnapshot doc = snapshot.data!.docs[index];
-            String title = homeController.getTitle(doc);
-            String rating = homeController.getRating(doc);
-            String imagePath = homeController.getImagePath(doc);
-            String ratingCount = homeController.getRatingCount(doc);
+            String title = widget.homeController.getTitle(doc);
+            String rating = widget.homeController.getRating(doc);
+            String imagePath = widget.homeController.getImagePath(doc);
+            String ratingCount = widget.homeController.getRatingCount(doc);
 
             return GestureDetector(
               onTap: () {
-                homeController.navigateToDetailsPage(context, doc);
+                widget.homeController.navigateToDetailsPage(context, doc);
               },
               child: Container(
                 padding: EdgeInsetsDirectional.only(start: AppPadding.p20.w),
-                width: 228.w,
+                // width: 200.w,
                 height: 185.h,
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Image.network(
-                      imagePath,
-                      height: 135.h,
+                    Hero(
+                      tag: imagePath,
+                      child: Image.network(
+                        imagePath,
+                        height: 135.h,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                     addVerticalSpace(AppSize.s12.h),
                     Text(

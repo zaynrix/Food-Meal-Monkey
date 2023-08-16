@@ -28,6 +28,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
+          create: (context) => HomeController(),
+        ),
+        ChangeNotifierProvider(
           create: (context) => AppConfig(),
         ),
         ChangeNotifierProvider(
@@ -35,9 +38,6 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => ProfileController(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => HomeController(),
         ),
       ],
       child: ScreenUtilInit(

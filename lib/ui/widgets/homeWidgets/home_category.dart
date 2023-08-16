@@ -35,7 +35,7 @@ class HomeCategory extends StatelessWidget {
                 children: [
                   Container(
                     height: 70,
-                    width: 88,
+                    width: 70,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(200),
                       image: DecorationImage(
@@ -45,11 +45,13 @@ class HomeCategory extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 9),
-                  Text(
-                    name,
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                          color: primaryFontColor,
-                        ),
+                  FittedBox(
+                    child: Text(
+                      name,
+                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                            color: primaryFontColor,
+                          ),
+                    ),
                   ),
                 ],
               ),
