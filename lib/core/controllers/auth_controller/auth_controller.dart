@@ -59,6 +59,7 @@ class AuthController extends ChangeNotifier {
 
   Future<void> signInWithGoogle() async {
     try {
+      startLoading();
       final GoogleSignInAccount? googleSignInAccount =
           await _googleSignIn.signIn();
       if (googleSignInAccount != null) {
@@ -89,12 +90,13 @@ class AuthController extends ChangeNotifier {
               .collection('users')
               .doc(userId)
               .set(userData, SetOptions(merge: true));
-
+          stopLoading();
           ServiceNavigation.serviceNavi
               .pushNamedAndRemoveUtils(RouteGenerator.mainPage);
         }
       }
     } catch (e) {
+      stopLoading();
       print('Error: $e');
     }
   }
