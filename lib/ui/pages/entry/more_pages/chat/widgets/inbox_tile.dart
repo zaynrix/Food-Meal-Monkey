@@ -1,4 +1,10 @@
-part of widgets;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:food_delivery_app/resources/styles.dart';
+import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/ui/chat_screen.dart';
+import 'package:food_delivery_app/utils/extension/responsive_extension.dart';
+import 'package:food_delivery_app/utils/extension/time_extension.dart';
 
 @immutable
 class InboxTile extends StatelessWidget {

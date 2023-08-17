@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/core/controllers/auth_controller/auth_controller.dart';
+import 'package:food_delivery_app/resources/styles.dart';
 import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/chat_controllers/chat_controller.dart';
+import 'package:food_delivery_app/utils/extension/time_extension.dart';
 import 'package:provider/provider.dart';
 
 class ChatPage extends StatefulWidget {
@@ -61,43 +63,64 @@ class _ChatPageState extends State<ChatPage> {
                       final message = messages[index];
                       final isSender = message['senderId'] == widget.userId;
                       chatController.setMessageSender(message['senderId']);
-                      return Container(
-                        margin:
-                            EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                        alignment: isSender
-                            ? Alignment.centerRight
-                            : Alignment.centerLeft,
-                        child: Container(
-                          padding: EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color:
-                                isSender ? Colors.deepOrange : Colors.grey[300],
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: isSender
-                                ? CrossAxisAlignment.end
-                                : CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                message['text'],
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color:
-                                        isSender ? Colors.white : Colors.black),
+                      Timestamp valueTime =
+                          message['timestamp'] ?? Timestamp.now();
+                      return Row(
+                        mainAxisAlignment: !isSender
+                            ? MainAxisAlignment.start
+                            : MainAxisAlignment.end,
+                        children: [
+                          !isSender
+                              ? messages[index] != 0
+                                  ? CircleAvatar(
+                                      backgroundImage:
+                                          AssetImage(ImageAssets.app_icon),
+                                      backgroundColor: Colors.transparent,
+                                    )
+                                  : SizedBox.shrink()
+                              : SizedBox(),
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 16),
+                            alignment: isSender
+                                ? Alignment.centerRight
+                                : Alignment.centerLeft,
+                            child: Container(
+                              padding: EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: isSender
+                                    ? Colors.deepOrange
+                                    : Colors.grey[300],
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                              SizedBox(height: 4),
-                              Text(
-                                message['timestamp']?.toDate()?.toString() ??
-                                    '',
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color:
-                                        isSender ? Colors.white : Colors.black),
+                              child: Column(
+                                crossAxisAlignment: isSender
+                                    ? CrossAxisAlignment.end
+                                    : CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    message["text"],
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: isSender
+                                            ? Colors.white
+                                            : Colors.black),
+                                    overflow: TextOverflow.visible,
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    valueTime.toFormattedString(),
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color: isSender
+                                            ? Colors.white
+                                            : Colors.black),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
-                        ),
+                        ],
                       );
                     },
                   );
@@ -171,18 +194,18 @@ class _ChatPageState extends State<ChatPage> {
         children: [
           Expanded(
             child: TextField(
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.normal),
               controller: _messageController,
               onChanged: (value) {
                 print("This changeting $value");
                 setState(() {
                   if (sender == authID) {
-                    // _updateTypingStatus(true);
                     _updateTypingStatusReciver(true);
                   }
                   if (sender != authID) {
                     _updateTypingStatusSender(true);
                   }
-                  // _updateTypingStatus(true);
 
                   if (_typingTimer != null && _typingTimer!.isActive) {
                     _typingTimer!.cancel(); // Cancel the previous timer
@@ -190,13 +213,14 @@ class _ChatPageState extends State<ChatPage> {
 
                   // Set a new timer to update typing status after delay
                   _typingTimer = Timer(Duration(seconds: 2), () {
-                    _updateTypingStatus(false);
                     _updateTypingStatusSender(false);
                     _updateTypingStatusReciver(false);
                   });
                 });
               },
               decoration: InputDecoration(
+                hintStyle: TextStyle(
+                    color: Colors.grey, fontWeight: FontWeight.normal),
                 hintText: 'Type your message...',
               ),
             ),
