@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/resources/styles.dart';
 
 class ImageDet extends StatelessWidget {
   final String? image;
@@ -7,11 +9,12 @@ class ImageDet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.network(
-      image!,
-      color: Colors.black.withOpacity(0.2),
-      colorBlendMode: BlendMode.darken,
+    return CachedNetworkImage(
+      imageUrl: image!,
       fit: BoxFit.cover,
+      placeholder: (context, url) =>
+          Center(child: Image.asset(ImageAssets.app_icon)),
+      errorWidget: (context, url, error) => Icon(Icons.error),
     );
   }
 }

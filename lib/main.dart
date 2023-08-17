@@ -8,6 +8,7 @@ import 'package:food_delivery_app/core/controllers/profile_controllers/profile_c
 import 'package:food_delivery_app/resources/styles.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
 import 'package:food_delivery_app/routing/routes.dart';
+import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/chat_controllers/chat_controller.dart';
 import 'package:food_delivery_app/ui/pages/pages.dart';
 import 'package:food_delivery_app/utils/app_config.dart';
 import 'package:provider/provider.dart';
@@ -41,6 +42,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => ProfileController(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => ChatController(),
+        ),
       ],
       child: ScreenUtilInit(
         designSize: const Size(375, 812),
@@ -60,6 +64,8 @@ class MyApp extends StatelessWidget {
 }
 
 // yahya@gmail.com1
+//yahya@gmail.com2
+//yahya@gmail.com3
 // yahya123
 //111111
 //mmMM112233$

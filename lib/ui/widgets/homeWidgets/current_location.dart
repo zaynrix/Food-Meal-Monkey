@@ -31,7 +31,7 @@ class CurrentLocation extends StatelessWidget {
               ),
               Icon(
                 Icons.chevron_right,
-                size: 16.sp,
+                size: 16,
               )
             ],
           ),

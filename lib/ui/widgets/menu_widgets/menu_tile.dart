@@ -100,6 +100,7 @@
 //   }
 // }
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -131,10 +132,10 @@ class TileMenu extends StatelessWidget {
         onTap: onPressed,
         child: Container(
           width: AppSize.s280.w,
-          height: AppSize.s77.h,
+          height: AppSize.s87.h,
           decoration: BoxDecoration(
             color: whiteColor,
-            borderRadius: BorderRadius.circular(AppSize.s30.r),
+            borderRadius: BorderRadius.circular(AppSize.s85.r),
             boxShadow: [
               BoxShadow(blurRadius: AppSize.s10.r, color: Colors.grey.shade200),
             ],
@@ -151,12 +152,14 @@ class TileMenu extends StatelessWidget {
                   ],
                 ),
                 child: ClipOval(
-                  child: Image.network(
-                    imagePath,
+                  child: CachedNetworkImage(
+                    imageUrl: imagePath,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      color: Colors.grey,
-                    ),
+                    width: double.infinity,
+                    placeholder: (context, url) => Center(
+                        child: FittedBox(
+                            child: Image.asset(ImageAssets.app_icon))),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                 ),
               ),

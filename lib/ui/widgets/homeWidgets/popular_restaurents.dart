@@ -36,7 +36,7 @@ class PupularResturent extends StatelessWidget {
                   fit: BoxFit.fitWidth,
                   width: double.infinity,
                   placeholder: (context, url) =>
-                      Center(child: Center(child: CircularProgressIndicator())),
+                      Center(child: Image.asset(ImageAssets.app_icon)),
                   errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
                 addVerticalSpace(AppSize.s10.h),
