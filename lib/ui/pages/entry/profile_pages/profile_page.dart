@@ -48,6 +48,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     width: 45,
                   )),
                   imageUrl: currentUser?.photoURL ?? "",
+                  errorWidget: (context, url, error) => CircleAvatar(
+                    radius: 24,
+                    backgroundColor: Colors.white,
+                    backgroundImage: AssetImage(ImageAssets
+                        .app_icon), // Replace with your actual asset path
+                  ),
                   imageBuilder: (context, imageProvider) => CircleAvatar(
                     maxRadius: 45,
                     backgroundImage: imageProvider,
