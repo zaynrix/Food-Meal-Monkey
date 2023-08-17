@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/core/controllers/notification_controllers/finrebase_notification_controller.dart';
 import 'package:food_delivery_app/core/data/remote/auth_exception_handler.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
 import 'package:food_delivery_app/routing/router.dart';
@@ -50,6 +51,7 @@ class AuthController extends ChangeNotifier {
       stopLoading();
       ServiceNavigation.serviceNavi
           .pushNamedAndRemoveUtils(RouteGenerator.mainPage);
+      await NotificationController().initNotification();
     } catch (e) {
       stopLoading();
       print('Error: $e');
@@ -57,9 +59,22 @@ class AuthController extends ChangeNotifier {
     }
   }
 
+  bool googleLoading = false;
+
+  startGoogleLoading(){
+    googleLoading = true;
+    notifyListeners();
+  }
+
+  stopGoogleLoading(){
+    googleLoading = false;
+    notifyListeners();
+  }
+
+
   Future<void> signInWithGoogle() async {
     try {
-      startLoading();
+      startGoogleLoading();
       final GoogleSignInAccount? googleSignInAccount =
           await _googleSignIn.signIn();
       if (googleSignInAccount != null) {
@@ -90,13 +105,14 @@ class AuthController extends ChangeNotifier {
               .collection('users')
               .doc(userId)
               .set(userData, SetOptions(merge: true));
-          stopLoading();
+          stopGoogleLoading();
           ServiceNavigation.serviceNavi
               .pushNamedAndRemoveUtils(RouteGenerator.mainPage);
+          await NotificationController().initNotification();
         }
       }
     } catch (e) {
-      stopLoading();
+      stopGoogleLoading();
       print('Error: $e');
     }
   }
@@ -127,10 +143,9 @@ class AuthController extends ChangeNotifier {
           'address': address,
         });
         stopLoading();
-
         ServiceNavigation.serviceNavi
             .pushNamedReplacement(RouteGenerator.mainPage);
-        // Navigate to the next screen or perform other actions
+        await NotificationController().initNotification();
       }
     } catch (e) {
       stopLoading();
@@ -142,11 +157,12 @@ class AuthController extends ChangeNotifier {
   Future logout() async {
     try {
       await auth.signOut();
-      ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.loginPage);
+      await NotificationController().disposeNotification();
+      ServiceNavigation.serviceNavi.pushNamedReplacement(RouteGenerator.loginPage);
     } catch (e) {
       print('Error signing out: $e');
+      ServiceNavigation.serviceNavi.pushNamedReplacement(RouteGenerator.loginPage);
     }
-    await auth.signOut();
   }
 
   Future resetPassword({required String email}) async {

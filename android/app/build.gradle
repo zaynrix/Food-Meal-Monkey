@@ -29,7 +29,7 @@ android {
     compileSdkVersion 33
     defaultConfig {
         applicationId "com.example.food_delivery_app"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 33
         versionCode flutterVersionCode.toInteger() // Convert to integer
         versionName flutterVersionName
