@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/core/controllers/auth_controller/auth_controller.dart';
+import 'package:food_delivery_app/resources/styles.dart';
 import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/chat_controllers/chat_controller.dart';
 import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/models/chat_messages.dart';
 import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/ui/chat_screen.dart';
@@ -70,8 +72,8 @@ class _MessageBubbleWidgetState extends State<MessageBubbleWidget> {
                           children: [
                             messageBubble(
                               chatContent: chatMessages.content,
-                              // color: AppColors.spaceLight,
-                              // textColor: AppColors.white,
+                              color: Colors.deepOrange,
+                              textColor: Colors.white,
                               margin: 10.marginRight,
                             ),
                           ],
@@ -90,33 +92,25 @@ class _MessageBubbleWidgetState extends State<MessageBubbleWidget> {
                             borderRadius:
                                 BorderRadius.circular(20.borderRadius),
                           ),
-                          child: Image.network(
-                            widget.chatArgument!.userAvatar,
-                            width: 40.width,
-                            height: 40.height,
+                          child: CachedNetworkImage(
+                            imageUrl: widget.chatArgument!.userAvatar,
+                            width: 40,
+                            height: 40,
                             fit: BoxFit.cover,
-                            loadingBuilder: (BuildContext ctx, Widget child,
-                                ImageChunkEvent? loadingProgress) {
-                              if (loadingProgress == null) return child;
+                            imageBuilder: (context, imageProvider) =>
+                                Image.asset(ImageAssets.app_icon),
+                            progressIndicatorBuilder: (BuildContext context,
+                                String url, DownloadProgress progress) {
                               return Center(
                                 child: CircularProgressIndicator(
                                   color: Colors.red,
-                                  value: loadingProgress.expectedTotalBytes !=
-                                              null &&
-                                          loadingProgress.expectedTotalBytes !=
-                                              null
-                                      ? loadingProgress.cumulativeBytesLoaded /
-                                          loadingProgress.expectedTotalBytes!
-                                      : null,
+                                  value: progress.progress,
                                 ),
                               );
                             },
-                            errorBuilder: (context, object, stackTrace) {
-                              return const Icon(
-                                Icons.account_circle,
-                                size: 35,
-                                color: Colors.blueGrey,
-                              );
+                            errorWidget: (BuildContext context, String url,
+                                dynamic error) {
+                              return Image.asset(ImageAssets.app_icon);
                             },
                           ),
                         )
@@ -160,33 +154,25 @@ class _MessageBubbleWidgetState extends State<MessageBubbleWidget> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: Image.network(
-                            widget.chatArgument!.peerAvatar,
+                          child: CachedNetworkImage(
+                            imageUrl: widget.chatArgument!.peerAvatar,
                             width: 40,
                             height: 40,
                             fit: BoxFit.cover,
-                            loadingBuilder: (BuildContext ctx, Widget child,
-                                ImageChunkEvent? loadingProgress) {
-                              if (loadingProgress == null) return child;
+                            imageBuilder: (context, imageProvider) =>
+                                Image.asset(ImageAssets.app_icon),
+                            progressIndicatorBuilder: (BuildContext context,
+                                String url, DownloadProgress progress) {
                               return Center(
                                 child: CircularProgressIndicator(
                                   color: Colors.red,
-                                  value: loadingProgress.expectedTotalBytes !=
-                                              null &&
-                                          loadingProgress.expectedTotalBytes !=
-                                              null
-                                      ? loadingProgress.cumulativeBytesLoaded /
-                                          loadingProgress.expectedTotalBytes!
-                                      : null,
+                                  value: progress.progress,
                                 ),
                               );
                             },
-                            errorBuilder: (context, object, stackTrace) {
-                              return const Icon(
-                                Icons.account_circle,
-                                size: 35,
-                                color: Colors.grey,
-                              );
+                            errorWidget: (BuildContext context, String url,
+                                dynamic error) {
+                              return Image.asset(ImageAssets.app_icon);
                             },
                           ),
                         )
