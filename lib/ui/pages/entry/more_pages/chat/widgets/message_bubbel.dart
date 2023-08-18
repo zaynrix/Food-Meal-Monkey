@@ -194,8 +194,6 @@ class _MessageBubbleWidgetState extends State<MessageBubbleWidget> {
                           // Set message side.
                           onPlay: () {
                             chatController.loadFile('${chatMessages.content}');
-
-                            // _loadFile(chatMessages.content);
                           }, // Do something when voice played.
                         )
                       : SizedBox.shrink(),

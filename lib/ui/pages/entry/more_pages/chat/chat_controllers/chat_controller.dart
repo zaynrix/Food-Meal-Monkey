@@ -13,45 +13,39 @@ import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:record_mp3/record_mp3.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ChatController extends ChangeNotifier {
   final SharedPreferences prefs;
   final FirebaseFirestore firebaseFirestore;
-  final FocusNode focusNode = FocusNode();
-
   final FirebaseStorage firebaseStorage;
-  FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
   String groupChatId = '';
   bool isSending = false;
-
+  bool isPlayingMsg = false, isRecording = false;
   File? imageFile;
   bool isLoading = false;
   bool isShowSticker = false;
   String imageUrl = '';
-
-  ChatController(
-      {required this.prefs,
-      required this.firebaseStorage,
-      required this.firebaseFirestore});
-
+  String? recordFilePath;
   String senderString = "";
+
+  final TextEditingController textEditingController = TextEditingController();
+
+  ChatController({
+    required this.prefs,
+    required this.firebaseStorage,
+    required this.firebaseFirestore,
+  });
 
   void setMessageSender(String senderID) {
     senderString = senderID;
-    // notifyListeners();
   }
 
   Stream<QuerySnapshot> getFirestoreData(String collectionPath) {
-    // if (textSearch?.isNotEmpty == true) {
-    //   return firebaseFirestore
-    //       .collection(collectionPath)
-    //       .where(FirestoreConstants.displayName, isEqualTo: textSearch)
-    //       .snapshots();
-    // } else {
     return firebaseFirestore.collection(collectionPath).snapshots();
-    // }
   }
 
   Future<void> updateFirestoreData(
@@ -64,8 +58,36 @@ class ChatController extends ChangeNotifier {
 
   UploadTask uploadImageFile(File image, String filename) {
     Reference reference = firebaseStorage.ref().child(filename);
-    UploadTask uploadTask = reference.putFile(image);
-    return uploadTask;
+    return reference.putFile(image);
+  }
+
+  Future loadFile(String url) async {
+    final bytes = await readBytes(Uri(host: url));
+    final dir = await getApplicationDocumentsDirectory();
+    final file = File('${dir.path}/audio.mp3');
+
+    await file.writeAsBytes(bytes);
+    if (await file.exists()) {
+      // setState(() {
+      recordFilePath = file.path;
+      isPlayingMsg = true;
+      notifyListeners();
+      // });
+      await play();
+      isPlayingMsg = false;
+      notifyListeners();
+    }
+  }
+
+  bool isMessageReceived(int index) {
+    if ((index > 0 &&
+            listMessages[index - 1].get(FirestoreConstants.idFrom) ==
+                auth.currentUser!.uid) ||
+        index == 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   void sendChatMessage(String content, int type, String groupChatId,
@@ -76,11 +98,12 @@ class ChatController extends ChangeNotifier {
         .collection(groupChatId)
         .doc(DateTime.now().millisecondsSinceEpoch.toString());
     ChatMessages chatMessages = ChatMessages(
-        idFrom: currentUserId,
-        idTo: peerId,
-        timestamp: DateTime.now().millisecondsSinceEpoch.toString(),
-        content: content,
-        type: type);
+      idFrom: currentUserId,
+      idTo: peerId,
+      timestamp: DateTime.now().millisecondsSinceEpoch.toString(),
+      content: content,
+      type: type,
+    );
 
     FirebaseFirestore.instance.runTransaction((transaction) async {
       transaction.set(documentReference, chatMessages.toJson());
@@ -97,23 +120,16 @@ class ChatController extends ChangeNotifier {
   }
 
   void readLocal({ChatArgument? chatArgument}) {
-    // if (authProvider.getFirebaseUserId()?.isNotEmpty == true) {
-    //   currentUserId = authProvider.auth.currentUser!.uid;
-    //   ;
-    // } else {
-    //   Navigator.of(context).pushAndRemoveUntil(
-    //       MaterialPageRoute(builder: (context) => const LoginPage()),
-    //       (Route<dynamic> route) => false);
-    // }
     if (auth.currentUser!.uid.compareTo(chatArgument!.peerId) > 0) {
       groupChatId = '${auth.currentUser!.uid} - ${chatArgument.peerId}';
     } else {
       groupChatId = '${chatArgument.peerId} - ${auth.currentUser!.uid}';
     }
     updateFirestoreData(
-        FirestoreConstants.pathUserCollection,
-        auth.currentUser!.uid,
-        {FirestoreConstants.chattingWith: chatArgument.peerId});
+      FirestoreConstants.pathUserCollection,
+      auth.currentUser!.uid,
+      {FirestoreConstants.chattingWith: chatArgument.peerId},
+    );
   }
 
   void callPhoneNumber(String phoneNumber) async {
@@ -123,6 +139,19 @@ class ChatController extends ChangeNotifier {
       await launchUrl(uri);
     } else {
       throw 'Error Occurred';
+    }
+  }
+
+  List<QueryDocumentSnapshot> listMessages = [];
+
+  bool isMessageSent(int index) {
+    if ((index > 0 &&
+            listMessages[index - 1].get(FirestoreConstants.idFrom) !=
+                auth.currentUser!.uid) ||
+        index == 0) {
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -156,150 +185,7 @@ class ChatController extends ChangeNotifier {
     }
   }
 
-  final TextEditingController textEditingController = TextEditingController();
-
-  void onSendMessage(String content, int type, {String? peerId}) {
-    isSending = true;
-    notifyListeners();
-    if (content.trim().isNotEmpty) {
-      textEditingController.clear();
-      Future.delayed(Duration(seconds: 1), () {
-        sendChatMessage(
-            content, type, groupChatId, auth.currentUser!.uid, peerId!);
-        isSending = false;
-        notifyListeners();
-      });
-
-      // scrollController.animateTo(0,
-      //     duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
-    } else {
-      Fluttertoast.showToast(
-          msg: 'Nothing to send', backgroundColor: Colors.grey);
-    }
-    // setState(() {
-    //   isSending = false;
-    // });
-  }
-
-  List<QueryDocumentSnapshot> listMessages = [];
-
-  // checking if received message
-  bool isMessageReceived(int index) {
-    if ((index > 0 &&
-            listMessages[index - 1].get(FirestoreConstants.idFrom) ==
-                auth.currentUser!.uid) ||
-        index == 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  // checking if sent message
-  bool isMessageSent(int index) {
-    if ((index > 0 &&
-            listMessages[index - 1].get(FirestoreConstants.idFrom) !=
-                auth.currentUser!.uid) ||
-        index == 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  bool isPlayingMsg = false, isRecording = false;
-
-  void onFocusChanged() {
-    if (focusNode.hasFocus) {
-      isShowSticker = false;
-    }
-  }
-
-  void startRecord() {
-    isRecording = true;
-    notifyListeners();
-  }
-
-  void stopRecord() {
-    isRecording = false;
-    notifyListeners();
-  }
-
-  void getSticker() {
-    focusNode.unfocus();
-    isShowSticker = !isShowSticker;
-    notifyListeners();
-  }
-
-  Future<bool> onBackPressed() {
-    if (isShowSticker) {
-      isShowSticker = false;
-      notifyListeners();
-    } else {
-      updateFirestoreData(FirestoreConstants.pathUserCollection,
-          auth.currentUser!.uid, {FirestoreConstants.chattingWith: null});
-    }
-    return Future.value(false);
-  }
-
-  Future loadFile(String url) async {
-    final bytes = await readBytes(Uri(host: url));
-    final dir = await getApplicationDocumentsDirectory();
-    final file = File('${dir.path}/audio.mp3');
-
-    await file.writeAsBytes(bytes);
-    if (await file.exists()) {
-      // setState(() {
-      recordFilePath = file.path;
-      isPlayingMsg = true;
-      notifyListeners();
-      // });
-      await play();
-      isPlayingMsg = false;
-      notifyListeners();
-    }
-  }
-
-  Future<bool> checkPermission() async {
-    if (!await Permission.microphone.isGranted) {
-      PermissionStatus status = await Permission.microphone.request();
-      if (status != PermissionStatus.granted) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  // bool isRecording = false;
-
-  // void startRecord() async {
-  //   bool hasPermission = await checkPermission();
-  //   if (hasPermission) {
-  //     recordFilePath = await getFilePath();
-  //
-  //     RecordMp3.instance.start(recordFilePath!, (type) {
-  //       setState(() {});
-  //     });
-  //   } else {}
-  //   setState(() {});
-  // }
-  //
-  // void stopRecord() async {
-  //   bool s = RecordMp3.instance.stop();
-  //   if (s) {
-  //     setState(() {
-  //       chatProvider.isSending = true;
-  //     });
-  //     await uploadAudio();
-  //
-  //     setState(() {
-  //       chatProvider.isPlayingMsg = false;
-  //     });
-  //   }
-  // }
-
-  String? recordFilePath;
-
+  // Rest of the methods...
   Future<void> play() async {
     if (recordFilePath != null && File(recordFilePath!).existsSync()) {
       AudioPlayer audioPlayer = AudioPlayer();
@@ -310,8 +196,34 @@ class ChatController extends ChangeNotifier {
     }
   }
 
-  int i = 0;
+  // Load audio file from URL and play
+  // Future<void> loadFileAndPlay(String url) async {
+  //   final bytes = await readBytes(Uri.parse(url));
+  //   final dir = await getApplicationDocumentsDirectory();
+  //   final file = File('${dir.path}/audio.mp3');
+  //
+  //   await file.writeAsBytes(bytes);
+  //
+  //   if (await file.exists()) {
+  //     recordFilePath = file.path;
+  //     isPlayingMsg = true;
+  //     notifyListeners();
+  //     await play();
+  //     isPlayingMsg = false;
+  //     notifyListeners();
+  //   }
+  // }
 
+  // Check microphone permission
+  Future<bool> checkMicrophonePermission() async {
+    if (!await Permission.microphone.isGranted) {
+      PermissionStatus status = await Permission.microphone.request();
+      return status == PermissionStatus.granted;
+    }
+    return true;
+  }
+
+  int i = 0;
   Future<String> getFilePath() async {
     Directory storageDirectory = await getApplicationDocumentsDirectory();
     String sdPath = storageDirectory.path + "/record";
@@ -345,7 +257,31 @@ class ChatController extends ChangeNotifier {
       // scrollController.animateTo(0.0,
       //     duration: Duration(milliseconds: 100), curve: Curves.bounceInOut);
     } else {
+      isSending = false;
+      notifyListeners();
       print("Hello");
+    }
+  }
+
+  // Start recording audio
+  void startRecording() async {
+    bool hasPermission = await checkMicrophonePermission();
+    if (hasPermission) {
+      recordFilePath = await getFilePath();
+      RecordMp3.instance.start(recordFilePath!, (type) {});
+      notifyListeners();
+    }
+  }
+
+  // Stop recording audio and upload
+  void stopRecordingAndUpload({ChatArgument? chatArgument}) async {
+    bool success = RecordMp3.instance.stop();
+    if (success) {
+      isSending = true;
+      notifyListeners();
+      await uploadAudio(chatArgument: chatArgument);
+      isPlayingMsg = false;
+      notifyListeners();
     }
   }
 
@@ -363,4 +299,44 @@ class ChatController extends ChangeNotifier {
       print(e);
     });
   }
+
+  // Play audio from local file
+  Future<void> playAudio() async {
+    if (recordFilePath != null && File(recordFilePath!).existsSync()) {
+      AudioPlayer audioPlayer = AudioPlayer();
+      await audioPlayer.play(
+        UrlSource(recordFilePath!),
+      );
+    }
+  }
+
+  void onSendMessage(String content, int type, {String? peerId}) {
+    isSending = true;
+    notifyListeners();
+    if (content.trim().isNotEmpty) {
+      textEditingController.clear();
+      Future.delayed(Duration(seconds: 1), () {
+        sendChatMessage(
+          content,
+          type,
+          groupChatId,
+          auth.currentUser!.uid,
+          peerId!,
+        );
+        isSending = false;
+        notifyListeners();
+      });
+    } else {
+      Fluttertoast.showToast(
+        msg: 'Nothing to send',
+        backgroundColor: Colors.grey,
+      );
+    }
+    isSending = false;
+    notifyListeners();
+  }
+
+// Rest of the methods...
+
+// Rest of the class...
 }
