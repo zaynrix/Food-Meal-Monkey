@@ -214,7 +214,7 @@ class _ChatItemState extends State<ChatItem> {
                     size: 50,
                   ),
             title: Text(
-              "www${userChat.displayName}",
+              "${userChat.displayName}",
               style: const TextStyle(color: Colors.black),
             ),
           ),
