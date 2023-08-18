@@ -70,7 +70,7 @@ class _MessageBubbleWidgetState extends State<MessageBubbleWidget> {
                   chatMessages.type == MessageType.text
                       ? Row(
                           children: [
-                            messageBubble(
+                            messageBubbleText(
                               chatContent: chatMessages.content,
                               color: Colors.deepOrange,
                               textColor: Colors.white,
@@ -82,6 +82,7 @@ class _MessageBubbleWidgetState extends State<MessageBubbleWidget> {
                           ? Container(
                               margin: EdgeInsets.only(right: 10, top: 10),
                               child: chatImage(
+                                  context: context,
                                   imageSrc: chatMessages.content,
                                   onTap: () {
                                     print(
@@ -198,7 +199,7 @@ class _MessageBubbleWidgetState extends State<MessageBubbleWidget> {
                         )
                       : SizedBox.shrink(),
                   chatMessages.type == MessageType.text
-                      ? messageBubble(
+                      ? messageBubbleText(
                           color: Colors.red,
                           textColor: Colors.white,
                           chatContent: chatMessages.content,
@@ -208,6 +209,7 @@ class _MessageBubbleWidgetState extends State<MessageBubbleWidget> {
                           ? Container(
                               margin: const EdgeInsets.only(left: 10, top: 10),
                               child: chatImage(
+                                  context: context,
                                   imageSrc: chatMessages.content,
                                   onTap: () {
                                     print(

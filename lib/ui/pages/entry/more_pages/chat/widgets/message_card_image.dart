@@ -2,9 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/widgets/error_widget.dart';
 import 'package:food_delivery_app/utils/extension/responsive_extension.dart';
 
-Widget chatImage({required String imageSrc, required Function onTap}) {
+void _showEnlargedImage({BuildContext? context, String? imageUrl}) {
+  showDialog(
+    context: context!,
+    builder: (BuildContext context) {
+      return Dialog(
+        child: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Image.network(
+            imageUrl!,
+            fit: BoxFit.contain,
+          ),
+        ),
+      );
+    },
+  );
+}
+
+Widget chatImage({required String imageSrc, required Function onTap, context}) {
   return OutlinedButton(
-    onPressed: onTap(),
+    onPressed: () => _showEnlargedImage(context: context, imageUrl: imageSrc),
     child: Image.network(
       imageSrc,
       width: 200.width,
