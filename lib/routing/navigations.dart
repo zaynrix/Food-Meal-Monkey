@@ -6,8 +6,8 @@ class ServiceNavigation {
   GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
   static final GlobalKey<ScaffoldMessengerState> scaffoldKey =
       GlobalKey<ScaffoldMessengerState>();
-  pushNamedWidget(String name) {
-    navKey.currentState?.pushNamed(name);
+  pushNamedWidget(String name, {args}) {
+    navKey.currentState?.pushNamed(name, arguments: args);
   }
 
   pushNamedReplacement(String name) {

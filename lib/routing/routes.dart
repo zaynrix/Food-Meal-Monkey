@@ -3,6 +3,7 @@ import 'package:food_delivery_app/core/controllers/home_Controllers/home_control
 import 'package:food_delivery_app/routing/router.dart';
 import 'package:food_delivery_app/ui/pages/entry/auth_pages/sign_up_screen.dart';
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/det_screen.dart';
+import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/ui/chat_screen.dart';
 
 import '../ui/pages/pages.dart';
 
@@ -39,6 +40,9 @@ class RoutsGenerate {
         return MaterialPageRoute(
             builder: (_) =>
                 DetailsScreen(arguments: args as DetailsScreenArguments));
+      case RouteGenerator.chatPage:
+        return MaterialPageRoute(
+            builder: (_) => ChatPage(arguments: args as ChatArgument));
 
       case RouteGenerator.inboxPage:
         return MaterialPageRoute(builder: (_) => InboxPage());

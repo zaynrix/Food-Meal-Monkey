@@ -16,6 +16,7 @@ class RouteGenerator {
   static const String inboxPage = '/inboxPage';
   static const String detailsPage = '/detailsPage';
   static const String mostPopuler = '/mostPopuler';
+  static const String chatPage = '/ChatPage';
 
   RouteGenerator._();
 }
