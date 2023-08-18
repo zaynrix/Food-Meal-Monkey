@@ -30,7 +30,6 @@ class AuthController extends ChangeNotifier {
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   final TextEditingController nameController = TextEditingController();
