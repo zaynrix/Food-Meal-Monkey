@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +9,7 @@ import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/models/chat_use
 import 'package:food_delivery_app/utils/helper.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 enum Status {
   uninitialized,
@@ -207,7 +206,6 @@ class AuthController extends ChangeNotifier {
   }
 
   Future<void> signUp({ChatUser? userData, required String password}) async {
-    String random = Random().nextInt(20).toString();
     try {
       startLoading();
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
@@ -220,6 +218,10 @@ class AuthController extends ChangeNotifier {
         // Update user profile with name
         await user.updateDisplayName(userData.displayName);
 
+        // Generate a UUID
+        final uuid = Uuid();
+        String random = uuid.v4(); // Generates a random UUID
+        //PR
         // Store additional user information in Firestore
         await FirebaseFirestore.instance
             .collection(FirestoreConstants.pathUserCollection)
@@ -230,7 +232,9 @@ class AuthController extends ChangeNotifier {
           FirestoreConstants.id: random,
           FirestoreConstants.address: userData.address,
           FirestoreConstants.email: userData.email,
-          "createdAt: ": DateTime.now().millisecondsSinceEpoch.toString(),
+          "createdAt": DateTime.now()
+              .millisecondsSinceEpoch
+              .toString(), // Remove the extra colon
           FirestoreConstants.chattingWith: null
         });
         stopLoading();
