@@ -221,7 +221,7 @@ class AuthController extends ChangeNotifier {
         // Generate a UUID
         final uuid = Uuid();
         String random = uuid.v4(); // Generates a random UUID
-
+        //PR
         // Store additional user information in Firestore
         await FirebaseFirestore.instance
             .collection(FirestoreConstants.pathUserCollection)
