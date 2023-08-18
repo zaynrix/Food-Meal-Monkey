@@ -46,198 +46,201 @@ class _MessageBubbleWidgetState extends State<MessageBubbleWidget> {
       if (chatMessages.idFrom == userData!.uid) {
         // right side (my message)
         return Consumer<ChatController>(
-          builder: (context, chatController, child) => Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  chatMessages.type == MessageType.audio
-                      ? VoiceMessage(
-                          meBgColor: Colors.black38,
-                          audioSrc: '${chatMessages.content}',
-                          played: true,
-                          // To show played badge or not.
-                          me: false,
-                          noiseCount: 1,
-
-                          // Set message side.
-                          onPlay: () {
-                            chatController.loadFile('${chatMessages.content}');
-                          }, // Do something when voice played.
-                        )
-                      : SizedBox.shrink(),
-                  chatMessages.type == MessageType.text
-                      ? Row(
-                          children: [
-                            messageBubbleText(
-                              chatContent: chatMessages.content,
-                              color: Colors.deepOrange,
-                              textColor: Colors.white,
-                              margin: 10.marginRight,
+          builder: (context, chatController, child) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    chatMessages.type == MessageType.audio
+                        ? VoiceMessage(
+                            meBgColor: Colors.black45,
+                            audioSrc: '${chatMessages.content}',
+                            played: true,
+                            me: false,
+                            noiseCount: 1,
+                            onPlay: () {
+                              chatController
+                                  .loadFile('${chatMessages.content}');
+                            }, // Do something when voice played.
+                          )
+                        : SizedBox.shrink(),
+                    chatMessages.type == MessageType.text
+                        ? Row(
+                            children: [
+                              messageBubbleText(
+                                chatContent: chatMessages.content,
+                                color: Colors.deepOrange,
+                                textColor: Colors.white,
+                                margin: 10.marginRight,
+                              ),
+                            ],
+                          )
+                        : chatMessages.type == MessageType.image
+                            ? Container(
+                                margin: EdgeInsets.only(right: 10, top: 10),
+                                child: chatImage(
+                                    context: context,
+                                    imageSrc: chatMessages.content,
+                                    onTap: () {
+                                      print(
+                                          "This is the image ${chatMessages.content}");
+                                    }),
+                              )
+                            : const SizedBox.shrink(),
+                    chatController.isMessageSent(widget.index!)
+                        ? Container(
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.circular(20.borderRadius),
                             ),
-                          ],
-                        )
-                      : chatMessages.type == MessageType.image
-                          ? Container(
-                              margin: EdgeInsets.only(right: 10, top: 10),
-                              child: chatImage(
-                                  context: context,
-                                  imageSrc: chatMessages.content,
-                                  onTap: () {
-                                    print(
-                                        "This is the image ${chatMessages.content}");
-                                  }),
-                            )
-                          : const SizedBox.shrink(),
-                  chatController.isMessageSent(widget.index!)
-                      ? Container(
-                          clipBehavior: Clip.hardEdge,
-                          decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.circular(20.borderRadius),
+                            child: CachedNetworkImage(
+                              imageUrl: widget.chatArgument!.userAvatar,
+                              width: 40,
+                              height: 40,
+                              fit: BoxFit.cover,
+                              imageBuilder: (context, imageProvider) =>
+                                  Image.asset(ImageAssets.app_icon),
+                              progressIndicatorBuilder: (BuildContext context,
+                                  String url, DownloadProgress progress) {
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    color: Colors.red,
+                                    value: progress.progress,
+                                  ),
+                                );
+                              },
+                              errorWidget: (BuildContext context, String url,
+                                  dynamic error) {
+                                return Image.asset(ImageAssets.app_icon);
+                              },
+                            ),
+                          )
+                        : Container(
+                            width: 35,
                           ),
-                          child: CachedNetworkImage(
-                            imageUrl: widget.chatArgument!.userAvatar,
-                            width: 40,
-                            height: 40,
-                            fit: BoxFit.cover,
-                            imageBuilder: (context, imageProvider) =>
-                                Image.asset(ImageAssets.app_icon),
-                            progressIndicatorBuilder: (BuildContext context,
-                                String url, DownloadProgress progress) {
-                              return Center(
-                                child: CircularProgressIndicator(
-                                  color: Colors.red,
-                                  value: progress.progress,
-                                ),
-                              );
-                            },
-                            errorWidget: (BuildContext context, String url,
-                                dynamic error) {
-                              return Image.asset(ImageAssets.app_icon);
-                            },
+                  ],
+                ),
+                chatController.isMessageSent(widget.index!)
+                    ? Container(
+                        margin: EdgeInsets.only(right: 50, top: 6, bottom: 8),
+                        child: Text(
+                          DateFormat('dd MMM yyyy, hh:mm a').format(
+                            DateTime.fromMillisecondsSinceEpoch(
+                              int.parse(chatMessages.timestamp),
+                            ),
                           ),
-                        )
-                      : Container(
-                          width: 35,
+                          style: const TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                              fontStyle: FontStyle.italic),
                         ),
-                ],
-              ),
-              chatController.isMessageSent(widget.index!)
-                  ? Container(
-                      margin: EdgeInsets.only(right: 50, top: 6, bottom: 8),
-                      child: Text(
-                        DateFormat('dd MMM yyyy, hh:mm a').format(
-                          DateTime.fromMillisecondsSinceEpoch(
-                            int.parse(chatMessages.timestamp),
-                          ),
-                        ),
-                        style: const TextStyle(
-                            color: Colors.grey,
-                            fontSize: 12,
-                            fontStyle: FontStyle.italic),
-                      ),
-                    )
-                  : const SizedBox.shrink(),
-            ],
-          ),
+                      )
+                    : const SizedBox.shrink(),
+              ],
+            );
+          },
         );
       } else {
         return Consumer<ChatController>(
-          builder: (context, chatController, child) => Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  chatController.isMessageReceived(widget.index!)
+          builder: (context, chatController, child) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    chatController.isMessageReceived(widget.index!)
 
-                      // left side (received message)
-                      ? Container(
-                          clipBehavior: Clip.hardEdge,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
+                        // left side (received message)
+                        ? Container(
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: CachedNetworkImage(
+                              imageUrl: widget.chatArgument!.peerAvatar,
+                              width: 40,
+                              height: 40,
+                              fit: BoxFit.cover,
+                              imageBuilder: (context, imageProvider) =>
+                                  Image.asset(ImageAssets.app_icon),
+                              progressIndicatorBuilder: (BuildContext context,
+                                  String url, DownloadProgress progress) {
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    color: Colors.red,
+                                    value: progress.progress,
+                                  ),
+                                );
+                              },
+                              errorWidget: (BuildContext context, String url,
+                                  dynamic error) {
+                                return Image.asset(ImageAssets.app_icon);
+                              },
+                            ),
+                          )
+                        : Container(
+                            width: 35,
                           ),
-                          child: CachedNetworkImage(
-                            imageUrl: widget.chatArgument!.peerAvatar,
-                            width: 40,
-                            height: 40,
-                            fit: BoxFit.cover,
-                            imageBuilder: (context, imageProvider) =>
-                                Image.asset(ImageAssets.app_icon),
-                            progressIndicatorBuilder: (BuildContext context,
-                                String url, DownloadProgress progress) {
-                              return Center(
-                                child: CircularProgressIndicator(
-                                  color: Colors.red,
-                                  value: progress.progress,
-                                ),
-                              );
-                            },
-                            errorWidget: (BuildContext context, String url,
-                                dynamic error) {
-                              return Image.asset(ImageAssets.app_icon);
-                            },
+                    chatMessages.type == MessageType.audio
+                        ? VoiceMessage(
+                            meBgColor: Colors.red,
+                            audioSrc: '${chatMessages.content}',
+                            played: true,
+                            me: true,
+                            noiseCount: 1,
+                            // Set message side.
+                            onPlay: () {
+                              chatController
+                                  .loadFile('${chatMessages.content}');
+                            }, // Do something when voice played.
+                          )
+                        : SizedBox.shrink(),
+                    chatMessages.type == MessageType.text
+                        ? messageBubbleText(
+                            color: Colors.red,
+                            textColor: Colors.white,
+                            chatContent: chatMessages.content,
+                            margin: EdgeInsets.only(left: 10),
+                          )
+                        : chatMessages.type == MessageType.image
+                            ? Container(
+                                margin:
+                                    const EdgeInsets.only(left: 10, top: 10),
+                                child: chatImage(
+                                    context: context,
+                                    imageSrc: chatMessages.content,
+                                    onTap: () {
+                                      print(
+                                          "This is the image ${chatMessages.content}");
+                                    }),
+                              )
+                            : const SizedBox.shrink(),
+                  ],
+                ),
+                chatController.isMessageReceived(widget.index!)
+                    ? Container(
+                        margin:
+                            const EdgeInsets.only(left: 50, top: 6, bottom: 8),
+                        child: Text(
+                          DateFormat('dd MMM yyyy, hh:mm a').format(
+                            DateTime.fromMillisecondsSinceEpoch(
+                              int.parse(chatMessages.timestamp),
+                            ),
                           ),
-                        )
-                      : Container(
-                          width: 35,
+                          style: const TextStyle(
+                              color: Colors.blueGrey,
+                              fontSize: 12,
+                              fontStyle: FontStyle.italic),
                         ),
-                  chatMessages.type == MessageType.audio
-                      ? VoiceMessage(
-                          meBgColor: Colors.red,
-                          audioSrc: '${chatMessages.content}',
-                          played: true,
-                          // To show played badge or not.
-                          me: true,
-                          noiseCount: 1,
-                          // Set message side.
-                          onPlay: () {
-                            chatController.loadFile('${chatMessages.content}');
-                          }, // Do something when voice played.
-                        )
-                      : SizedBox.shrink(),
-                  chatMessages.type == MessageType.text
-                      ? messageBubbleText(
-                          color: Colors.red,
-                          textColor: Colors.white,
-                          chatContent: chatMessages.content,
-                          margin: EdgeInsets.only(left: 10),
-                        )
-                      : chatMessages.type == MessageType.image
-                          ? Container(
-                              margin: const EdgeInsets.only(left: 10, top: 10),
-                              child: chatImage(
-                                  context: context,
-                                  imageSrc: chatMessages.content,
-                                  onTap: () {
-                                    print(
-                                        "This is the image ${chatMessages.content}");
-                                  }),
-                            )
-                          : const SizedBox.shrink(),
-                ],
-              ),
-              chatController.isMessageReceived(widget.index!)
-                  ? Container(
-                      margin:
-                          const EdgeInsets.only(left: 50, top: 6, bottom: 8),
-                      child: Text(
-                        DateFormat('dd MMM yyyy, hh:mm a').format(
-                          DateTime.fromMillisecondsSinceEpoch(
-                            int.parse(chatMessages.timestamp),
-                          ),
-                        ),
-                        style: const TextStyle(
-                            color: Colors.blueGrey,
-                            fontSize: 12,
-                            fontStyle: FontStyle.italic),
-                      ),
-                    )
-                  : const SizedBox.shrink(),
-            ],
-          ),
+                      )
+                    : const SizedBox.shrink(),
+              ],
+            );
+          },
         );
       }
     } else {
@@ -245,210 +248,3 @@ class _MessageBubbleWidgetState extends State<MessageBubbleWidget> {
     }
   }
 }
-
-// Widget buildItem(int index, DocumentSnapshot? documentSnapshot) {
-//   if (documentSnapshot != null) {
-//     ChatMessages chatMessages = ChatMessages.fromDocument(documentSnapshot);
-//     if (chatMessages.idFrom == authProvider.auth.currentUser!.uid) {
-//       // right side (my message)
-//       return Column(
-//         crossAxisAlignment: CrossAxisAlignment.end,
-//         children: [
-//           Row(
-//             mainAxisAlignment: MainAxisAlignment.end,
-//             children: [
-//               chatMessages.type == MessageType.audio
-//                   ? VoiceMessage(
-//                 meBgColor: Colors.black38,
-//                 audioSrc: '${chatMessages.content}',
-//                 played: true,
-//                 // To show played badge or not.
-//                 me: false,
-//                 noiseCount: 1,
-//
-//                 // Set message side.
-//                 onPlay: () {
-//                   _loadFile('${chatMessages.content}');
-//                 }, // Do something when voice played.
-//               )
-//                   : SizedBox.shrink(),
-//               chatMessages.type == MessageType.text
-//                   ? Row(
-//                 children: [
-//                   messageBubble(
-//                     chatContent: chatMessages.content,
-//                     // color: AppColors.spaceLight,
-//                     // textColor: AppColors.white,
-//                     margin: 10.marginRight,
-//                   ),
-//                 ],
-//               )
-//                   : chatMessages.type == MessageType.image
-//                   ? Container(
-//                 margin: EdgeInsets.only(right: 10, top: 10),
-//                 child: chatImage(
-//                     imageSrc: chatMessages.content, onTap: () {}),
-//               )
-//                   : const SizedBox.shrink(),
-//               isMessageSent(index)
-//                   ? Container(
-//                 clipBehavior: Clip.hardEdge,
-//                 decoration: BoxDecoration(
-//                   borderRadius: BorderRadius.circular(20.borderRadius),
-//                 ),
-//                 child: Image.network(
-//                   widget.arguments.userAvatar,
-//                   width: 40.width,
-//                   height: 40.height,
-//                   fit: BoxFit.cover,
-//                   loadingBuilder: (BuildContext ctx, Widget child,
-//                       ImageChunkEvent? loadingProgress) {
-//                     if (loadingProgress == null) return child;
-//                     return Center(
-//                       child: CircularProgressIndicator(
-//                         color: Colors.red,
-//                         value: loadingProgress.expectedTotalBytes !=
-//                             null &&
-//                             loadingProgress.expectedTotalBytes !=
-//                                 null
-//                             ? loadingProgress.cumulativeBytesLoaded /
-//                             loadingProgress.expectedTotalBytes!
-//                             : null,
-//                       ),
-//                     );
-//                   },
-//                   errorBuilder: (context, object, stackTrace) {
-//                     return const Icon(
-//                       Icons.account_circle,
-//                       size: 35,
-//                       color: Colors.blueGrey,
-//                     );
-//                   },
-//                 ),
-//               )
-//                   : Container(
-//                 width: 35,
-//               ),
-//             ],
-//           ),
-//           isMessageSent(index)
-//               ? Container(
-//             margin: EdgeInsets.only(right: 50, top: 6, bottom: 8),
-//             child: Text(
-//               DateFormat('dd MMM yyyy, hh:mm a').format(
-//                 DateTime.fromMillisecondsSinceEpoch(
-//                   int.parse(chatMessages.timestamp),
-//                 ),
-//               ),
-//               style: const TextStyle(
-//                   color: Colors.grey,
-//                   fontSize: 12,
-//                   fontStyle: FontStyle.italic),
-//             ),
-//           )
-//               : const SizedBox.shrink(),
-//         ],
-//       );
-//     } else {
-//       return Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Row(
-//             mainAxisAlignment: MainAxisAlignment.start,
-//             children: [
-//               isMessageReceived(index)
-//
-//               // left side (received message)
-//                   ? Container(
-//                 clipBehavior: Clip.hardEdge,
-//                 decoration: BoxDecoration(
-//                   borderRadius: BorderRadius.circular(20),
-//                 ),
-//                 child: Image.network(
-//                   widget.arguments.peerAvatar,
-//                   width: 40,
-//                   height: 40,
-//                   fit: BoxFit.cover,
-//                   loadingBuilder: (BuildContext ctx, Widget child,
-//                       ImageChunkEvent? loadingProgress) {
-//                     if (loadingProgress == null) return child;
-//                     return Center(
-//                       child: CircularProgressIndicator(
-//                         color: Colors.red,
-//                         value: loadingProgress.expectedTotalBytes !=
-//                             null &&
-//                             loadingProgress.expectedTotalBytes !=
-//                                 null
-//                             ? loadingProgress.cumulativeBytesLoaded /
-//                             loadingProgress.expectedTotalBytes!
-//                             : null,
-//                       ),
-//                     );
-//                   },
-//                   errorBuilder: (context, object, stackTrace) {
-//                     return const Icon(
-//                       Icons.account_circle,
-//                       size: 35,
-//                       color: Colors.grey,
-//                     );
-//                   },
-//                 ),
-//               )
-//                   : Container(
-//                 width: 35,
-//               ),
-//               chatMessages.type == MessageType.audio
-//                   ? VoiceMessage(
-//                 meBgColor: Colors.red,
-//                 audioSrc: '${chatMessages.content}',
-//                 played: true,
-//                 // To show played badge or not.
-//                 me: true,
-//                 noiseCount: 1,
-//                 // Set message side.
-//                 onPlay: () {
-//                   _loadFile('${chatMessages.content}');
-//
-//                   // _loadFile(chatMessages.content);
-//                 }, // Do something when voice played.
-//               )
-//                   : SizedBox.shrink(),
-//               chatMessages.type == MessageType.text
-//                   ? messageBubble(
-//                 color: Colors.red,
-//                 textColor: Colors.white,
-//                 chatContent: chatMessages.content,
-//                 margin: EdgeInsets.only(left: 10),
-//               )
-//                   : chatMessages.type == MessageType.image
-//                   ? Container(
-//                 margin: const EdgeInsets.only(left: 10, top: 10),
-//                 child: chatImage(
-//                     imageSrc: chatMessages.content, onTap: () {}),
-//               )
-//                   : const SizedBox.shrink(),
-//             ],
-//           ),
-//           isMessageReceived(index)
-//               ? Container(
-//             margin: const EdgeInsets.only(left: 50, top: 6, bottom: 8),
-//             child: Text(
-//               DateFormat('dd MMM yyyy, hh:mm a').format(
-//                 DateTime.fromMillisecondsSinceEpoch(
-//                   int.parse(chatMessages.timestamp),
-//                 ),
-//               ),
-//               style: const TextStyle(
-//                   color: Colors.blueGrey,
-//                   fontSize: 12,
-//                   fontStyle: FontStyle.italic),
-//             ),
-//           )
-//               : const SizedBox.shrink(),
-//         ],
-//       );
-//     }
-//   } else {
-//     return const SizedBox.shrink();
-//   }
-// }
