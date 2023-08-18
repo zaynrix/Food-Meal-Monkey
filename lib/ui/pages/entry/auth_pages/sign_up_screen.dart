@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:food_delivery_app/core/controllers/auth_controller/auth_controller.dart';
 import 'package:food_delivery_app/resources/values_manager.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
 import 'package:food_delivery_app/routing/router.dart';
-import 'package:food_delivery_app/core/controllers/auth_controller/auth_controller.dart';
+import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/models/chat_user.dart';
 import 'package:food_delivery_app/ui/widgets/widgets.dart';
 import 'package:food_delivery_app/utils/extension/validate_extension.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +26,6 @@ class _SignUpPageState extends State<SignUpPage> {
       TextEditingController();
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
 
   @override
   void dispose() {
@@ -105,12 +105,17 @@ class _SignUpPageState extends State<SignUpPage> {
                   text: 'Sign Up',
                   onPress: () {
                     if (formKey.currentState!.validate()) {
-                      provider.signUp(
-                          name: nameController.text,
+                      ChatUser user = ChatUser(
+                          id: "",
+                          photoUrl: "",
                           email: emailController.text,
-                          password: passwordController.text,
-                          mobile: mobileController.text,
+                          displayName: nameController.text,
+                          phoneNumber: mobileController.text,
                           address: addressController.text);
+                      provider.signUp(
+                        userData: user,
+                        password: passwordController.text,
+                      );
                     }
                   },
                   isLoading: provider.isLoading,

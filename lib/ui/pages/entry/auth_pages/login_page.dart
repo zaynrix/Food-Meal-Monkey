@@ -24,7 +24,21 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final TextStyle? mediumStyle = Theme.of(context).textTheme.labelMedium;
     final provider = Provider.of<AuthController>(context);
+    final authProvider = Provider.of<AuthController>(context);
 
+    switch (authProvider.status) {
+      case Status.authenticateError:
+        Fluttertoast.showToast(msg: 'Sign in failed');
+        break;
+      case Status.authenticateCanceled:
+        Fluttertoast.showToast(msg: 'Sign in cancelled');
+        break;
+      case Status.authenticated:
+        Fluttertoast.showToast(msg: 'Sign in successful');
+        break;
+      default:
+        break;
+    }
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Padding(

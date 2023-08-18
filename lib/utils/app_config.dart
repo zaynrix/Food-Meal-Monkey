@@ -16,7 +16,7 @@ class AppConfig extends ChangeNotifier {
   Future<void> checkFirstSeen() async {
     bool seen = await SharedPrefUtil.hasSeenOnboarding();
     bool isAuthenticated = FirebaseAuth.instance.currentUser != null;
-
+    // final authProvider = context.read<AuthProvider>();
     if (seen) {
       if (isAuthenticated) {
         ServiceNavigation.serviceNavi
