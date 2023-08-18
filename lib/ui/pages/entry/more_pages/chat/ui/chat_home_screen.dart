@@ -6,23 +6,9 @@ class InboxPage extends StatefulWidget {
 }
 
 class _InboxPageState extends State<InboxPage> {
-  late final String? currentUserId;
-  late AuthController authProvider;
-  // late String currentUserId;
-  // late HomeProvider homeProvider;
-
   @override
   void initState() {
     super.initState();
-    authProvider = context.read<AuthController>();
-    // homeProvider = context.read<HomeProvider>();
-    // if (authProvider.getFirebaseUserId()?.isNotEmpty == true) {
-    currentUserId = authProvider.auth.currentUser!.uid;
-    // } else {
-    //   // ServiceNavigation.serviceNavi.pushNamedAndRemoveUtils(RouteGenerator.loginPage);
-    // }
-
-    // scrollController.addListener(scrollListener);
   }
 
   @override
@@ -41,8 +27,8 @@ class _InboxPageState extends State<InboxPage> {
           IconButton(onPressed: () {}, icon: const Icon(Icons.shopping_cart)),
         ],
       ),
-      body: Consumer<ChatController>(
-        builder: (context, chatController, child) =>
+      body: Consumer2<ChatController, AuthController>(
+        builder: (context, chatController, authController, child) =>
             StreamBuilder<QuerySnapshot>(
           stream: chatController.getFirestoreData(
             FirestoreConstants.pathUserCollection,
@@ -54,8 +40,9 @@ class _InboxPageState extends State<InboxPage> {
                 return ListView.separated(
                   shrinkWrap: true,
                   itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (context, index) => buildItem(
-                      context, snapshot.data?.docs[index], currentUserId),
+                  itemBuilder: (context, index) => ChatItem(
+                    snapshot.data?.docs[index],
+                  ),
                   // controller: scrollController,
                   separatorBuilder: (BuildContext context, int index) =>
                       const Divider(),

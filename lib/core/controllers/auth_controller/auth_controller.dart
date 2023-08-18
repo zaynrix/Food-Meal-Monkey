@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -37,11 +39,13 @@ class AuthController extends ChangeNotifier {
   final TextEditingController addressController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
+
   AuthController(
       {required this.googleSignIn,
       required this.firebaseAuth,
       required this.firebaseFirestore,
       required this.prefs});
+
   void clearControllers() {
     nameController.clear();
     emailController.clear();
@@ -52,6 +56,7 @@ class AuthController extends ChangeNotifier {
   }
 
   bool isLoading = false;
+
   startLoading() {
     isLoading = true;
     notifyListeners();
@@ -86,8 +91,7 @@ class AuthController extends ChangeNotifier {
 
   Future<void> signInWithGoogle() async {
     try {
-      _status = Status.authenticating;
-      notifyListeners();
+      startLoading();
       _status = Status.authenticating;
       notifyListeners();
 
@@ -117,6 +121,7 @@ class AuthController extends ChangeNotifier {
               FirestoreConstants.displayName: firebaseUser.displayName,
               FirestoreConstants.photoUrl: firebaseUser.photoURL,
               FirestoreConstants.id: firebaseUser.uid,
+              FirestoreConstants.email: firebaseUser.email,
               "createdAt: ": DateTime.now().millisecondsSinceEpoch.toString(),
               FirestoreConstants.chattingWith: null
             });
@@ -128,6 +133,9 @@ class AuthController extends ChangeNotifier {
             await prefs.setString(
                 FirestoreConstants.photoUrl, currentUser.photoURL ?? "");
             await prefs.setString(
+                FirestoreConstants.email, currentUser.email ?? "");
+
+            await prefs.setString(
                 FirestoreConstants.phoneNumber, currentUser.phoneNumber ?? "");
           } else {
             DocumentSnapshot documentSnapshot = document[0];
@@ -135,14 +143,15 @@ class AuthController extends ChangeNotifier {
             await prefs.setString(FirestoreConstants.id, userChat.id);
             await prefs.setString(
                 FirestoreConstants.displayName, userChat.displayName);
-            await prefs.setString(FirestoreConstants.aboutMe, userChat.aboutMe);
+            await prefs.setString(FirestoreConstants.email, userChat.email);
             await prefs.setString(
                 FirestoreConstants.phoneNumber, userChat.phoneNumber);
           }
           _status = Status.authenticated;
+          stopLoading();
+          notifyListeners();
           ServiceNavigation.serviceNavi
               .pushNamedAndRemoveUtils(RouteGenerator.mainPage);
-          notifyListeners();
           // return true;
         } else {
           _status = Status.authenticateError;
@@ -155,7 +164,7 @@ class AuthController extends ChangeNotifier {
         // return false;
       }
       //
-      // startLoading();
+      //
       // final GoogleSignInAccount? googleSignInAccount =
       //     await _googleSignIn.signIn();
       // if (googleSignInAccount != null) {
@@ -197,40 +206,41 @@ class AuthController extends ChangeNotifier {
     }
   }
 
-  Future<void> signUp(
-      {required String name,
-      required String email,
-      required String mobile,
-      required String address,
-      required String password}) async {
+  Future<void> signUp({ChatUser? userData, required String password}) async {
+    String random = Random().nextInt(20).toString();
     try {
       startLoading();
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
-        email: email,
+        email: userData!.email,
         password: password,
       );
 
       User? user = userCredential.user;
       if (user != null) {
         // Update user profile with name
-        await user.updateDisplayName(name);
+        await user.updateDisplayName(userData.displayName);
 
         // Store additional user information in Firestore
-        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-          'name': name,
-          'email': email,
-          'mobile': mobile,
-          'address': address,
+        await FirebaseFirestore.instance
+            .collection(FirestoreConstants.pathUserCollection)
+            .doc(user.uid)
+            .set({
+          FirestoreConstants.displayName: userData.displayName,
+          FirestoreConstants.photoUrl: userData.photoUrl,
+          FirestoreConstants.id: random,
+          FirestoreConstants.address: userData.address,
+          FirestoreConstants.email: userData.email,
+          "createdAt: ": DateTime.now().millisecondsSinceEpoch.toString(),
+          FirestoreConstants.chattingWith: null
         });
         stopLoading();
 
-        ServiceNavigation.serviceNavi
-            .pushNamedReplacement(RouteGenerator.mainPage);
         // Navigate to the next screen or perform other actions
+        ServiceNavigation.serviceNavi
+            .pushNamedReplacement(RouteGenerator.loginPage);
       }
     } catch (e) {
       stopLoading();
-      print('Error during sign-up: $e');
       AuthExceptionHandler.handleException(e);
     }
   }

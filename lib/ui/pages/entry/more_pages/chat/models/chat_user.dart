@@ -8,14 +8,17 @@ class ChatUser extends Equatable {
   final String photoUrl;
   final String displayName;
   final String phoneNumber;
-  final String aboutMe;
+  final String email;
+  final String address;
 
-  const ChatUser(
-      {required this.id,
-      required this.photoUrl,
-      required this.displayName,
-      required this.phoneNumber,
-      required this.aboutMe});
+  const ChatUser({
+    required this.id,
+    required this.photoUrl,
+    required this.email,
+    required this.displayName,
+    required this.phoneNumber,
+    required this.address,
+  });
 
   ChatUser copyWith({
     String? id,
@@ -23,31 +26,36 @@ class ChatUser extends Equatable {
     String? nickname,
     String? phoneNumber,
     String? email,
+    String? address,
   }) =>
       ChatUser(
           id: id ?? this.id,
           photoUrl: photoUrl ?? this.photoUrl,
           displayName: nickname ?? displayName,
           phoneNumber: phoneNumber ?? this.phoneNumber,
-          aboutMe: email ?? aboutMe);
+          address: address ?? this.address,
+          email: email ?? this.email);
 
   Map<String, dynamic> toJson() => {
         FirestoreConstants.displayName: displayName,
         FirestoreConstants.photoUrl: photoUrl,
         FirestoreConstants.phoneNumber: phoneNumber,
-        FirestoreConstants.aboutMe: aboutMe,
+        FirestoreConstants.email: email,
+        FirestoreConstants.address: address,
       };
   factory ChatUser.fromDocument(DocumentSnapshot snapshot) {
     String photoUrl = "";
     String nickname = "";
     String phoneNumber = "";
-    String aboutMe = "";
+    String email = "";
+    String address = "";
 
     try {
       photoUrl = snapshot.get(FirestoreConstants.photoUrl);
       nickname = snapshot.get(FirestoreConstants.displayName);
       phoneNumber = snapshot.get(FirestoreConstants.phoneNumber);
-      aboutMe = snapshot.get(FirestoreConstants.aboutMe);
+      email = snapshot.get(FirestoreConstants.email);
+      address = snapshot.get(FirestoreConstants.address);
     } catch (e) {
       if (kDebugMode) {
         print(e);
@@ -58,9 +66,11 @@ class ChatUser extends Equatable {
         photoUrl: photoUrl,
         displayName: nickname,
         phoneNumber: phoneNumber,
-        aboutMe: aboutMe);
+        address: address,
+        email: email);
   }
   @override
   // TODO: implement props
-  List<Object?> get props => [id, photoUrl, displayName, phoneNumber, aboutMe];
+  List<Object?> get props =>
+      [id, photoUrl, displayName, phoneNumber, email, address];
 }

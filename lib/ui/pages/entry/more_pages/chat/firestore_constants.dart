@@ -13,4 +13,5 @@ class FirestoreConstants {
   static const content = "text";
   static const type = "type";
   static const email = "email";
+  static const address = "address";
 }

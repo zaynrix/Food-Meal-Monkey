@@ -11,6 +11,7 @@ import 'package:food_delivery_app/resources/styles.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
 import 'package:food_delivery_app/routing/routes.dart';
 import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/chat_controllers/chat_controller.dart';
+import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/chat_controllers/singel_chat_controller.dart';
 import 'package:food_delivery_app/ui/pages/pages.dart';
 import 'package:food_delivery_app/utils/app_config.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -59,6 +60,12 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => ChatController(
+              firebaseFirestore: firebaseFirestore,
+              firebaseStorage: firebaseStorage,
+              prefs: prefs),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SingleChatController(
               firebaseFirestore: firebaseFirestore,
               firebaseStorage: firebaseStorage,
               prefs: prefs),

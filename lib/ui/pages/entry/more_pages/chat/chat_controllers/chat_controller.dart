@@ -1,17 +1,35 @@
 import 'dart:io';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/firestore_constants.dart';
 import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/models/chat_messages.dart';
+import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/ui/chat_screen.dart';
+import 'package:http/http.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ChatController extends ChangeNotifier {
   final SharedPreferences prefs;
   final FirebaseFirestore firebaseFirestore;
+  final FocusNode focusNode = FocusNode();
+
   final FirebaseStorage firebaseStorage;
-  // final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  FirebaseAuth auth = FirebaseAuth.instance;
+  String groupChatId = '';
+  bool isSending = false;
+
+  File? imageFile;
+  bool isLoading = false;
+  bool isShowSticker = false;
+  String imageUrl = '';
 
   ChatController(
       {required this.prefs,
@@ -69,13 +87,280 @@ class ChatController extends ChangeNotifier {
     });
   }
 
-  Stream<QuerySnapshot> getChatMessage(String groupChatId, int limit) {
+  Stream<QuerySnapshot> getChatMessage(String groupChatId) {
     return firebaseFirestore
         .collection(FirestoreConstants.pathMessageCollection)
         .doc(groupChatId)
         .collection(groupChatId)
         .orderBy(FirestoreConstants.timestamp, descending: true)
-        .limit(limit)
         .snapshots();
+  }
+
+  void readLocal({ChatArgument? chatArgument}) {
+    // if (authProvider.getFirebaseUserId()?.isNotEmpty == true) {
+    //   currentUserId = authProvider.auth.currentUser!.uid;
+    //   ;
+    // } else {
+    //   Navigator.of(context).pushAndRemoveUntil(
+    //       MaterialPageRoute(builder: (context) => const LoginPage()),
+    //       (Route<dynamic> route) => false);
+    // }
+    if (auth.currentUser!.uid.compareTo(chatArgument!.peerId) > 0) {
+      groupChatId = '${auth.currentUser!.uid} - ${chatArgument.peerId}';
+    } else {
+      groupChatId = '${chatArgument.peerId} - ${auth.currentUser!.uid}';
+    }
+    updateFirestoreData(
+        FirestoreConstants.pathUserCollection,
+        auth.currentUser!.uid,
+        {FirestoreConstants.chattingWith: chatArgument.peerId});
+  }
+
+  void callPhoneNumber(String phoneNumber) async {
+    var url = 'tel://$phoneNumber';
+    var uri = Uri(host: url);
+    if (await launchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      throw 'Error Occurred';
+    }
+  }
+
+  void uploadImageFileController({String? peerID}) async {
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    UploadTask uploadTask = uploadImageFile(imageFile!, fileName);
+    try {
+      TaskSnapshot snapshot = await uploadTask;
+      imageUrl = await snapshot.ref.getDownloadURL();
+      isLoading = false;
+      notifyListeners();
+      onSendMessage(imageUrl, MessageType.image, peerId: peerID!);
+    } on FirebaseException catch (e) {
+      isLoading = false;
+      notifyListeners();
+      Fluttertoast.showToast(msg: e.message ?? e.toString());
+    }
+  }
+
+  Future getImage({String? peerID}) async {
+    ImagePicker imagePicker = ImagePicker();
+    XFile? pickedFile;
+    pickedFile = await imagePicker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      imageFile = File(pickedFile.path);
+      if (imageFile != null) {
+        isLoading = true;
+        notifyListeners();
+        uploadImageFileController(peerID: peerID!);
+      }
+    }
+  }
+
+  final TextEditingController textEditingController = TextEditingController();
+
+  void onSendMessage(String content, int type, {String? peerId}) {
+    isSending = true;
+    notifyListeners();
+    if (content.trim().isNotEmpty) {
+      textEditingController.clear();
+      Future.delayed(Duration(seconds: 1), () {
+        sendChatMessage(
+            content, type, groupChatId, auth.currentUser!.uid, peerId!);
+        isSending = false;
+        notifyListeners();
+      });
+
+      // scrollController.animateTo(0,
+      //     duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
+    } else {
+      Fluttertoast.showToast(
+          msg: 'Nothing to send', backgroundColor: Colors.grey);
+    }
+    // setState(() {
+    //   isSending = false;
+    // });
+  }
+
+  List<QueryDocumentSnapshot> listMessages = [];
+
+  // checking if received message
+  bool isMessageReceived(int index) {
+    if ((index > 0 &&
+            listMessages[index - 1].get(FirestoreConstants.idFrom) ==
+                auth.currentUser!.uid) ||
+        index == 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // checking if sent message
+  bool isMessageSent(int index) {
+    if ((index > 0 &&
+            listMessages[index - 1].get(FirestoreConstants.idFrom) !=
+                auth.currentUser!.uid) ||
+        index == 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool isPlayingMsg = false, isRecording = false;
+
+  void onFocusChanged() {
+    if (focusNode.hasFocus) {
+      isShowSticker = false;
+    }
+  }
+
+  void startRecord() {
+    isRecording = true;
+    notifyListeners();
+  }
+
+  void stopRecord() {
+    isRecording = false;
+    notifyListeners();
+  }
+
+  void getSticker() {
+    focusNode.unfocus();
+    isShowSticker = !isShowSticker;
+    notifyListeners();
+  }
+
+  Future<bool> onBackPressed() {
+    if (isShowSticker) {
+      isShowSticker = false;
+      notifyListeners();
+    } else {
+      updateFirestoreData(FirestoreConstants.pathUserCollection,
+          auth.currentUser!.uid, {FirestoreConstants.chattingWith: null});
+    }
+    return Future.value(false);
+  }
+
+  Future loadFile(String url) async {
+    final bytes = await readBytes(Uri(host: url));
+    final dir = await getApplicationDocumentsDirectory();
+    final file = File('${dir.path}/audio.mp3');
+
+    await file.writeAsBytes(bytes);
+    if (await file.exists()) {
+      // setState(() {
+      recordFilePath = file.path;
+      isPlayingMsg = true;
+      notifyListeners();
+      // });
+      await play();
+      isPlayingMsg = false;
+      notifyListeners();
+    }
+  }
+
+  Future<bool> checkPermission() async {
+    if (!await Permission.microphone.isGranted) {
+      PermissionStatus status = await Permission.microphone.request();
+      if (status != PermissionStatus.granted) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  // bool isRecording = false;
+
+  // void startRecord() async {
+  //   bool hasPermission = await checkPermission();
+  //   if (hasPermission) {
+  //     recordFilePath = await getFilePath();
+  //
+  //     RecordMp3.instance.start(recordFilePath!, (type) {
+  //       setState(() {});
+  //     });
+  //   } else {}
+  //   setState(() {});
+  // }
+  //
+  // void stopRecord() async {
+  //   bool s = RecordMp3.instance.stop();
+  //   if (s) {
+  //     setState(() {
+  //       chatProvider.isSending = true;
+  //     });
+  //     await uploadAudio();
+  //
+  //     setState(() {
+  //       chatProvider.isPlayingMsg = false;
+  //     });
+  //   }
+  // }
+
+  String? recordFilePath;
+
+  Future<void> play() async {
+    if (recordFilePath != null && File(recordFilePath!).existsSync()) {
+      AudioPlayer audioPlayer = AudioPlayer();
+      await audioPlayer.play(
+        UrlSource(recordFilePath!),
+        // isLocal: true,
+      );
+    }
+  }
+
+  int i = 0;
+
+  Future<String> getFilePath() async {
+    Directory storageDirectory = await getApplicationDocumentsDirectory();
+    String sdPath = storageDirectory.path + "/record";
+    var d = Directory(sdPath);
+    if (!d.existsSync()) {
+      d.createSync(recursive: true);
+    }
+    return sdPath + "/test_${i++}.mp3";
+  }
+
+  sendAudioMsg(String audioMsg, {ChatArgument? chatArgument}) async {
+    if (audioMsg.isNotEmpty) {
+      var ref = FirebaseFirestore.instance
+          .collection(FirestoreConstants.pathMessageCollection)
+          .doc(groupChatId)
+          .collection(groupChatId)
+          .doc(DateTime.now().millisecondsSinceEpoch.toString());
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        await transaction.set(ref, {
+          FirestoreConstants.idFrom: auth.currentUser!.uid,
+          FirestoreConstants.idTo: chatArgument!.peerId,
+          FirestoreConstants.timestamp:
+              DateTime.now().millisecondsSinceEpoch.toString(),
+          FirestoreConstants.content: audioMsg,
+          FirestoreConstants.type: 3,
+        });
+      }).then((value) {
+        isSending = false;
+        notifyListeners();
+      });
+      // scrollController.animateTo(0.0,
+      //     duration: Duration(milliseconds: 100), curve: Curves.bounceInOut);
+    } else {
+      print("Hello");
+    }
+  }
+
+  uploadAudio({ChatArgument? chatArgument}) {
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference ref = storage.ref().child(
+        'profilepics/audio${DateTime.now().millisecondsSinceEpoch.toString()}.jpg');
+    UploadTask uploadTask = ref.putFile(File(recordFilePath!));
+    uploadTask.then((value) async {
+      print('##############done#########');
+      var audioURL = await value.ref.getDownloadURL();
+      String strVal = audioURL.toString();
+      await sendAudioMsg(strVal, chatArgument: chatArgument);
+    }).catchError((e) {
+      print(e);
+    });
   }
 }
