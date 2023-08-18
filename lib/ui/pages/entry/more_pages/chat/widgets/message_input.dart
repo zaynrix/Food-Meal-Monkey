@@ -106,8 +106,9 @@ class _MessageInputWidgetState extends State<MessageInputWidget> {
               ),
               child: IconButton(
                 onPressed: !chatConntroller.isRecording
-                    ? () => chatConntroller.startRecord()
-                    : () => chatConntroller.stopRecord(),
+                    ? () => chatConntroller.startRecording()
+                    : () => chatConntroller.stopRecordingAndUpload(
+                        chatArgument: widget.chatArgument),
                 icon: Icon(
                   !chatConntroller.isRecording ? Icons.play_arrow : Icons.pause,
                   size: 28,
@@ -174,13 +175,14 @@ class _MessageInputWidgetState extends State<MessageInputWidget> {
                     shape: BoxShape.circle),
                 child: GestureDetector(
                   onLongPress: () {
-                    chatConntroller.startRecord();
+                    chatConntroller.startRecording();
                     setState(() {
                       chatConntroller.isRecording = true;
                     });
                   },
                   onLongPressEnd: (details) {
-                    chatConntroller.stopRecord();
+                    chatConntroller.stopRecordingAndUpload(
+                        chatArgument: widget.chatArgument);
                     setState(() {
                       chatConntroller.isRecording = false;
                     });

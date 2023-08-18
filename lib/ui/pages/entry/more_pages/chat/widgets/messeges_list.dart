@@ -20,9 +20,13 @@ class MessagesListWidget extends StatelessWidget {
                 if (snapshot.hasData) {
                   chatController.listMessages = snapshot.data!.docs;
                   if (chatController.listMessages.isNotEmpty) {
-                    return ListView.builder(
+                    return ListView.separated(
                         padding: const EdgeInsets.all(10),
-                        itemCount: snapshot.data?.docs.length,
+                        itemCount: snapshot.data!.docs.length,
+                        separatorBuilder: (context, index) => Divider(
+                              color: Colors.transparent,
+                              height: 3,
+                            ),
                         reverse: true,
                         // controller: scrollController,
                         itemBuilder: (context, index) {
