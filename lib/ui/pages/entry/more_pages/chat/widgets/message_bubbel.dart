@@ -82,7 +82,11 @@ class _MessageBubbleWidgetState extends State<MessageBubbleWidget> {
                           ? Container(
                               margin: EdgeInsets.only(right: 10, top: 10),
                               child: chatImage(
-                                  imageSrc: chatMessages.content, onTap: () {}),
+                                  imageSrc: chatMessages.content,
+                                  onTap: () {
+                                    print(
+                                        "This is the image ${chatMessages.content}");
+                                  }),
                             )
                           : const SizedBox.shrink(),
                   chatController.isMessageSent(widget.index!)
@@ -206,7 +210,11 @@ class _MessageBubbleWidgetState extends State<MessageBubbleWidget> {
                           ? Container(
                               margin: const EdgeInsets.only(left: 10, top: 10),
                               child: chatImage(
-                                  imageSrc: chatMessages.content, onTap: () {}),
+                                  imageSrc: chatMessages.content,
+                                  onTap: () {
+                                    print(
+                                        "This is the image ${chatMessages.content}");
+                                  }),
                             )
                           : const SizedBox.shrink(),
                 ],
