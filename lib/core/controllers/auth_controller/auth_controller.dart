@@ -89,9 +89,19 @@ class AuthController extends ChangeNotifier {
     }
   }
 
+  bool googleLoading = false;
+  startGoogleLoading(){
+    googleLoading = true;
+    notifyListeners();
+  }
+
+  stopGoogleLoading(){
+    googleLoading = false;
+    notifyListeners();
+  }
   Future<void> signInWithGoogle() async {
     try {
-      startLoading();
+      startGoogleLoading();
       _status = Status.authenticating;
       notifyListeners();
 
@@ -148,7 +158,7 @@ class AuthController extends ChangeNotifier {
                 FirestoreConstants.phoneNumber, userChat.phoneNumber);
           }
           _status = Status.authenticated;
-          stopLoading();
+          stopGoogleLoading();
           notifyListeners();
           ServiceNavigation.serviceNavi
               .pushNamedAndRemoveUtils(RouteGenerator.mainPage);
@@ -201,7 +211,7 @@ class AuthController extends ChangeNotifier {
       //   }
       // }
     } catch (e) {
-      stopLoading();
+      stopGoogleLoading();
       print('Error: $e');
     }
   }

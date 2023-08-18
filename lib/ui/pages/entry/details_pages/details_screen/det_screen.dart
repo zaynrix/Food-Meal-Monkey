@@ -56,7 +56,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
           SliverList(
             delegate: SliverChildListDelegate([
               RatingPos(
-                prices: "${widget.arguments.prices}",
+                prices: "30",
                 rating: widget.arguments.rating,
                 title: widget.arguments.title,
               ),

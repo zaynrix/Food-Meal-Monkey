@@ -41,6 +41,7 @@ dependencies:
   voice_message_package: ^1.0.41
 
   firebase_messaging: ^14.6.5
+  awesome_notifications: ^0.6.19
 
 
 dev_dependencies:
