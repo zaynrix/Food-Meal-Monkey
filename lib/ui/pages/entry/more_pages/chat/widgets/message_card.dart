@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/utils/extension/responsive_extension.dart';
 
-Widget messageBubble(
+Widget messageBubbleText(
     {required String chatContent,
     required EdgeInsetsGeometry? margin,
     Color? color,
