@@ -34,54 +34,6 @@ class _MessageInputWidgetState extends State<MessageInputWidget> {
         height: 50,
         child: Row(
           children: [
-            // Padding(
-            //   padding: EdgeInsets.only(
-            //       top: 8,
-            //       left: ((widget.chatArgument!.peerId == userData!.uid)
-            //           ? 64
-            //           : 10),
-            //       right: ((widget.chatArgument!.peerId == userData!.uid)
-            //           ? 10
-            //           : 64)),
-            //   child: Container(
-            //     width: MediaQuery.of(context).size.width * 0.5,
-            //     padding: EdgeInsets.all(8),
-            //     decoration: BoxDecoration(
-            //       color: (widget.chatArgument!.peerId == userData!.uid)
-            //           ? Colors.greenAccent
-            //           : Colors.orangeAccent,
-            //       borderRadius: BorderRadius.circular(10),
-            //     ),
-            //     child: GestureDetector(
-            //         onTap: () {
-            //           // _loadFile(chatMessages.content);
-            //         },
-            //         onSecondaryTap: () {
-            //           chatConntroller.stopRecord();
-            //         },
-            //         child: Row(
-            //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //           crossAxisAlignment: CrossAxisAlignment.end,
-            //           children: [
-            //             Row(
-            //               children: [
-            //                 Icon(chatConntroller.isPlayingMsg
-            //                     ? Icons.cancel
-            //                     : Icons.play_arrow),
-            //                 // Text(
-            //                 //   'Audio-${doc['timestamp']}',
-            //                 //   maxLines: 10,
-            //                 // ),
-            //               ],
-            //             ),
-            //             // Text(
-            //             //   date + " " + hour.toString() + ":" + min.toString() + ampm,
-            //             //   style: TextStyle(fontSize: 10),
-            //             // )
-            //           ],
-            //         )),
-            //   ),
-            // ),
             Container(
               margin: 4.marginRight,
               decoration: BoxDecoration(
@@ -98,24 +50,24 @@ class _MessageInputWidgetState extends State<MessageInputWidget> {
                 color: Colors.white,
               ),
             ),
-            Container(
-              margin: 4.marginRight,
-              decoration: BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.circular(40.borderRadius),
-              ),
-              child: IconButton(
-                onPressed: !chatConntroller.isRecording
-                    ? () => chatConntroller.startRecording()
-                    : () => chatConntroller.stopRecordingAndUpload(
-                        chatArgument: widget.chatArgument),
-                icon: Icon(
-                  !chatConntroller.isRecording ? Icons.play_arrow : Icons.pause,
-                  size: 28,
-                ),
-                color: Colors.white,
-              ),
-            ),
+            // Container(
+            //   margin: 4.marginRight,
+            //   decoration: BoxDecoration(
+            //     color: Colors.red,
+            //     borderRadius: BorderRadius.circular(40.borderRadius),
+            //   ),
+            //   child: IconButton(
+            //     onPressed: !chatConntroller.isRecording
+            //         ? () => chatConntroller.startRecording()
+            //         : () => chatConntroller.stopRecordingAndUpload(
+            //             chatArgument: widget.chatArgument),
+            //     icon: Icon(
+            //       !chatConntroller.isRecording ? Icons.play_arrow : Icons.pause,
+            //       size: 28,
+            //     ),
+            //     color: Colors.white,
+            //   ),
+            // ),
             chatConntroller.isRecording
                 ? Flexible(
                     child: Container(
