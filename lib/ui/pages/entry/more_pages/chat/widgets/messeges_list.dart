@@ -28,7 +28,6 @@ class MessagesListWidget extends StatelessWidget {
                               height: 3,
                             ),
                         reverse: true,
-                        // controller: scrollController,
                         itemBuilder: (context, index) {
                           if (snapshot.hasData && snapshot.data != null) {
                             return MessageBubbleWidget(

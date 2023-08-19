@@ -4,6 +4,7 @@ import 'package:food_delivery_app/routing/router.dart';
 import 'package:food_delivery_app/ui/pages/entry/auth_pages/sign_up_screen.dart';
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/det_screen.dart';
 import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/ui/chat_screen.dart';
+import 'package:food_delivery_app/ui/pages/entry/profile_pages/profile_page.dart';
 
 import '../ui/pages/pages.dart';
 
@@ -46,6 +47,8 @@ class RoutsGenerate {
 
       case RouteGenerator.inboxPage:
         return MaterialPageRoute(builder: (_) => InboxPage());
+      case RouteGenerator.profilePage:
+        return MaterialPageRoute(builder: (_) => ProfilePage());
       default:
         throw const FormatException("Route not found");
     }
