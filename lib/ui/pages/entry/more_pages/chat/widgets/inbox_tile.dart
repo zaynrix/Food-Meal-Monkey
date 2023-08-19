@@ -123,9 +123,9 @@ class _ChatItemState extends State<ChatItem> {
               "${userChat.displayName}",
               style: const TextStyle(color: Colors.black),
             ),
-            minVerticalPadding: 0,
-            horizontalTitleGap: 0,
-            contentPadding: EdgeInsets.zero,
+            // minVerticalPadding: 0,
+            // horizontalTitleGap: 0,
+            // contentPadding: EdgeInsets.zero,
           ),
         );
       }

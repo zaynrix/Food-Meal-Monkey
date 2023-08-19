@@ -54,7 +54,7 @@ class _InboxPageState extends State<InboxPage> {
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (context, index) {
                   DocumentSnapshot chatData = snapshot.data!.docs[index];
-                  return FutureBuilder<dynamic>(
+                  return FutureBuilder<String?>(
                     future: chatController.getLastMessageForUserChats(
                       chatData.id,
                       authController.auth.currentUser!.uid,
