@@ -29,8 +29,6 @@ dependencies:
   intl: ^0.18.0
   jiffy: ^5.0.0
 
-  firebase_messaging: ^14.6.5
-
   cached_network_image: ^3.2.3
   equatable: ^2.0.5
   audioplayers:
@@ -42,6 +40,9 @@ dependencies:
   url_launcher: ^6.1.12
   voice_message_package: ^1.0.41
   uuid: ^3.0.7
+
+  firebase_messaging: ^14.6.5
+  awesome_notifications: ^0.6.19
 
 
 dev_dependencies:
