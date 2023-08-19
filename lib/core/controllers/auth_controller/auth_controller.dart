@@ -154,53 +154,19 @@ class AuthController extends ChangeNotifier {
         } else {
           _status = Status.authenticateError;
           notifyListeners();
+          stopLoading();
           // return false;
         }
       } else {
         _status = Status.authenticateCanceled;
         notifyListeners();
-        // return false;
+        stopLoading(); // return false;
       }
-      //
-      //
-      // final GoogleSignInAccount? googleSignInAccount =
-      //     await _googleSignIn.signIn();
-      // if (googleSignInAccount != null) {
-      //   final GoogleSignInAuthentication googleSignInAuth =
-      //       await googleSignInAccount.authentication;
-      //   final AuthCredential credential = GoogleAuthProvider.credential(
-      //     accessToken: googleSignInAuth.accessToken,
-      //     idToken: googleSignInAuth.idToken,
-      //   );
-      //
-      //   final UserCredential userCredential =
-      //       await auth.signInWithCredential(credential);
-      //
-      //   if (userCredential.user != null) {
-      //     final String userId = userCredential.user!.uid;
-      //     final String userEmail = userCredential.user!.email ?? '';
-      //     final String userName = userCredential.user!.displayName ?? '';
-      //     // const String userMobile =
-      //     //     ''; // You can retrieve this from user input or other sources
-      //
-      //     final userData = {
-      //       'email': userEmail,
-      //       'name': userName,
-      //       // 'mobile': userMobile,
-      //     };
-      //
-      //     await FirebaseFirestore.instance
-      //         .collection('users')
-      //         .doc(userId)
-      //         .set(userData, SetOptions(merge: true));
-      //     stopLoading();
-      //     ServiceNavigation.serviceNavi
-      //         .pushNamedAndRemoveUtils(RouteGenerator.mainPage);
-      //   }
-      // }
     } catch (e) {
       stopLoading();
       print('Error: $e');
+    } finally {
+      stopLoading();
     }
   }
 
