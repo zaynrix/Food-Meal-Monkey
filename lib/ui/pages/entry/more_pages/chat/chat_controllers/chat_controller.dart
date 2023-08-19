@@ -62,9 +62,39 @@ class ChatController extends ChangeNotifier {
     return reference.putFile(image);
   }
 
-  Future loadFile(String url) async {
-    final bytes = await readBytes(
-        Uri.parse(url)); // Use 'Uri.parse' to create a valid Uri object
+  // Future loadFile(String url) async {
+  //   final bytes = await readBytes(
+  //       Uri.parse(url)); // Use 'Uri.parse' to create a valid Uri object
+  //   final dir = await getApplicationDocumentsDirectory();
+  //   final file = File('${dir.path}/audio.mp3');
+  //
+  //   await file.writeAsBytes(bytes);
+  //
+  //   if (await file.exists()) {
+  //     recordFilePath = file.path;
+  //     isPlayingMsg = true;
+  //     notifyListeners();
+  //
+  //     await play(); // Make sure you have the 'play' function defined somewhere
+  //     isPlayingMsg = false;
+  //     notifyListeners();
+  //   }
+  // }
+  Future<void> play(String filePath) async {
+    if (File(filePath).existsSync()) {
+      AudioPlayer audioPlayer = AudioPlayer();
+      await audioPlayer.play(
+        UrlSource(filePath),
+      );
+      audioPlayer.onPlayerComplete.listen((event) {
+        // Release the audio player when playback is complete
+        audioPlayer.dispose();
+      });
+    }
+  }
+
+  Future<void> loadAndPlay(String url) async {
+    final bytes = await readBytes(Uri.parse(url));
     final dir = await getApplicationDocumentsDirectory();
     final file = File('${dir.path}/audio.mp3');
 
@@ -75,10 +105,10 @@ class ChatController extends ChangeNotifier {
       isPlayingMsg = true;
       notifyListeners();
 
-      await play(); // Make sure you have the 'play' function defined somewhere
-      isPlayingMsg = false;
-      notifyListeners();
+      await play(recordFilePath!);
     }
+    isPlayingMsg = false;
+    notifyListeners();
   }
 
   bool isMessageReceived(int index) {
@@ -235,8 +265,9 @@ class ChatController extends ChangeNotifier {
     }
   }
 
-  Future<String?> getLastMessageForUserChats(
+  Future getLastMessageForUserChats(
       String chatUserId, String currentUserId) async {
+    String lastMessage = '';
     try {
       QuerySnapshot messagesSnapshot = await firebaseFirestore
           .collection(FirestoreConstants.pathMessageCollection)
@@ -248,7 +279,6 @@ class ChatController extends ChangeNotifier {
       if (messagesSnapshot.docs.isNotEmpty) {
         Map<String, dynamic> lastMessageData =
             messagesSnapshot.docs.first.data() as Map<String, dynamic>;
-        String lastMessage = '';
 
         if (lastMessageData['type'] == MessageType.text) {
           lastMessage = lastMessageData['text'] as String;
@@ -262,12 +292,6 @@ class ChatController extends ChangeNotifier {
         }
 
         return lastMessage;
-        // if (messagesSnapshot.docs.isNotEmpty) {
-        //   String lastMessage = messagesSnapshot.docs.first.get('text') as String;
-        //
-        //   return lastMessage;
-        // } else {
-        //   return null; // Return null if no messages found
       }
     } catch (error) {
       print("Error fetching last message: $error");
@@ -319,31 +343,13 @@ class ChatController extends ChangeNotifier {
   }
 
   // Rest of the methods...
-  Future<void> play() async {
-    if (recordFilePath != null && File(recordFilePath!).existsSync()) {
-      AudioPlayer audioPlayer = AudioPlayer();
-      await audioPlayer.play(
-        UrlSource(recordFilePath!),
-        // isLocal: true,
-      );
-    }
-  }
-
-  // Load audio file from URL and play
-  // Future<void> loadFileAndPlay(String url) async {
-  //   final bytes = await readBytes(Uri.parse(url));
-  //   final dir = await getApplicationDocumentsDirectory();
-  //   final file = File('${dir.path}/audio.mp3');
-  //
-  //   await file.writeAsBytes(bytes);
-  //
-  //   if (await file.exists()) {
-  //     recordFilePath = file.path;
-  //     isPlayingMsg = true;
-  //     notifyListeners();
-  //     await play();
-  //     isPlayingMsg = false;
-  //     notifyListeners();
+  // Future<void> play() async {
+  //   if (recordFilePath != null && File(recordFilePath!).existsSync()) {
+  //     AudioPlayer audioPlayer = AudioPlayer();
+  //     await audioPlayer.play(
+  //       UrlSource(recordFilePath!),
+  //       // isLocal: true,
+  //     );
   //   }
   // }
 

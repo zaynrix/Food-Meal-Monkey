@@ -80,7 +80,7 @@ class _MessageBubbleWidgetState extends State<MessageBubbleWidget> {
                                 noiseCount: 1,
                                 onPlay: () {
                                   chatController
-                                      .loadFile('${chatMessages.content}');
+                                      .loadAndPlay('${chatMessages.content}');
                                 }, // Do something when voice played.
                               ),
                             ),
@@ -231,7 +231,7 @@ class _MessageBubbleWidgetState extends State<MessageBubbleWidget> {
                                   // Set message side.
                                   onPlay: () {
                                     chatController
-                                        .loadFile('${chatMessages.content}');
+                                        .loadAndPlay('${chatMessages.content}');
                                   }, // Do something when voice played.
                                 )),
                           )
