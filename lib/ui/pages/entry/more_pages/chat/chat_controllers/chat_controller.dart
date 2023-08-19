@@ -63,18 +63,19 @@ class ChatController extends ChangeNotifier {
   }
 
   Future loadFile(String url) async {
-    final bytes = await readBytes(Uri(host: url));
+    final bytes = await readBytes(
+        Uri.parse(url)); // Use 'Uri.parse' to create a valid Uri object
     final dir = await getApplicationDocumentsDirectory();
     final file = File('${dir.path}/audio.mp3');
 
     await file.writeAsBytes(bytes);
+
     if (await file.exists()) {
-      // setState(() {
       recordFilePath = file.path;
       isPlayingMsg = true;
       notifyListeners();
-      // });
-      await play();
+
+      await play(); // Make sure you have the 'play' function defined somewhere
       isPlayingMsg = false;
       notifyListeners();
     }
@@ -120,17 +121,108 @@ class ChatController extends ChangeNotifier {
         .snapshots();
   }
 
-  void readLocal({ChatArgument? chatArgument}) {
-    if (auth.currentUser!.uid.compareTo(chatArgument!.peerId) > 0) {
-      groupChatId = '${auth.currentUser!.uid} - ${chatArgument.peerId}';
-    } else {
-      groupChatId = '${chatArgument.peerId} - ${auth.currentUser!.uid}';
+  Future<String?> getLastMessage(String groupChatId) async {
+    try {
+      QuerySnapshot messagesSnapshot = await firebaseFirestore
+          .collection(FirestoreConstants.pathMessageCollection)
+          .doc(groupChatId)
+          .collection(groupChatId)
+          .orderBy(FirestoreConstants.timestamp, descending: true)
+          .limit(1)
+          .get();
+
+      if (messagesSnapshot.docs.isNotEmpty) {
+        String lastMessageContent =
+            messagesSnapshot.docs.first.get('content') as String;
+        return lastMessageContent;
+      } else {
+        return null; // Return null if no messages found
+      }
+    } catch (error) {
+      print("Error fetching last message: $error");
+      return null; // Return null on error
     }
-    updateFirestoreData(
-      FirestoreConstants.pathUserCollection,
-      auth.currentUser!.uid,
-      {FirestoreConstants.chattingWith: chatArgument.peerId},
-    );
+  }
+  // Future<String?> getLastMessage(String peerId, String currentUserId) async {
+  //   try {
+  //     QuerySnapshot messagesSnapshot = await FirebaseFirestore.instance
+  //         .collection('messages')
+  //         .doc(peerId)
+  //         .collection(currentUserId)
+  //         .orderBy('timestamp', descending: true)
+  //         .limit(1)
+  //         .get();
+  //
+  //     if (messagesSnapshot.docs.isNotEmpty) {
+  //       String lastMessage = messagesSnapshot.docs.first.get('text') as String;
+  //       return lastMessage;
+  //     } else {
+  //       return null; // Return null if no messages found
+  //     }
+  //   } catch (error) {
+  //     print("Error fetching last message: $error");
+  //     return null; // Return null on error
+  //   }
+  // }
+  // String lastMessage = "";
+  // void loadLastMessage(documentSnapshot) async {
+  //   if (documentSnapshot != null) {
+  //     String groupChatId = documentSnapshot!.id;
+  //     print("this id ${groupChatId}");
+  //     // Use the group chat ID from the document ID
+  //
+  //     QuerySnapshot lastMessageQuery = await FirebaseFirestore.instance
+  //         .collection('messages')
+  //         .doc(groupChatId)
+  //         .collection(groupChatId)
+  //         .orderBy('timestamp', descending: true)
+  //         .limit(1)
+  //         .get();
+  //     print(
+  //         "sdadadasda${FirebaseFirestore.instance.collection('messages').doc(groupChatId)}");
+  //     if (lastMessageQuery.docs.isNotEmpty) {
+  //       lastMessage = lastMessageQuery.docs.first['message'];
+  //       notifyListeners();
+  //     }
+  //   }
+  // }
+
+  // void fetchLastMessage(documentSnapshot) async {
+  //   if (documentSnapshot != null) {
+  //     ChatUser userChat = ChatUser.fromDocument(documentSnapshot!);
+  //
+  //     QuerySnapshot messagesSnapshot = await FirebaseFirestore.instance
+  //         .collection(FirestoreConstants.pathMessageCollection)
+  //         .doc(groupChatId)
+  //         .collection(groupChatId)
+  //         .orderBy('timestamp', descending: true)
+  //         .limit(1)
+  //         .get();
+  //     // setState(() {});
+  //     if (messagesSnapshot.docs.isNotEmpty) {
+  //       lastMessage = messagesSnapshot.docs.first['text'];
+  //       print("This last $lastMessage");
+  //     }
+  //
+  //     // setState(() {});
+  //   }
+  // }
+
+  void readLocal({ChatArgument? chatArgument}) {
+    final currentUserUid = auth.currentUser?.uid;
+    if (currentUserUid != null) {
+      final peerId = chatArgument?.peerId ?? '';
+      if (currentUserUid.compareTo(peerId) > 0) {
+        groupChatId = '$currentUserUid - $peerId';
+      } else {
+        groupChatId = '$peerId - $currentUserUid';
+      }
+      updateFirestoreData(
+        FirestoreConstants.pathUserCollection,
+        currentUserUid,
+        {FirestoreConstants.chattingWith: peerId},
+      );
+    }
   }
 
   void callPhoneNumber(String phoneNumber) async {
@@ -140,6 +232,46 @@ class ChatController extends ChangeNotifier {
       await launchUrl(uri);
     } else {
       throw 'Error Occurred';
+    }
+  }
+
+  Future<String?> getLastMessageForUserChats(
+      String chatUserId, String currentUserId) async {
+    try {
+      QuerySnapshot messagesSnapshot = await firebaseFirestore
+          .collection(FirestoreConstants.pathMessageCollection)
+          .doc("$currentUserId - $chatUserId")
+          .collection("$currentUserId - $chatUserId")
+          .orderBy(FirestoreConstants.timestamp, descending: true)
+          .limit(1)
+          .get();
+      if (messagesSnapshot.docs.isNotEmpty) {
+        Map<String, dynamic> lastMessageData =
+            messagesSnapshot.docs.first.data() as Map<String, dynamic>;
+        String lastMessage = '';
+
+        if (lastMessageData['type'] == MessageType.text) {
+          lastMessage = lastMessageData['text'] as String;
+        } else if (lastMessageData['type'] == MessageType.image) {
+          lastMessage = 'Image'; // Or any other appropriate message for images
+        } else if (lastMessageData['type'] == MessageType.sticker) {
+          lastMessage =
+              'Sticker'; // Or any other appropriate message for stickers
+        } else if (lastMessageData['type'] == MessageType.audio) {
+          lastMessage = 'Audio'; // Or any other appropriate message for audio
+        }
+
+        return lastMessage;
+        // if (messagesSnapshot.docs.isNotEmpty) {
+        //   String lastMessage = messagesSnapshot.docs.first.get('text') as String;
+        //
+        //   return lastMessage;
+        // } else {
+        //   return null; // Return null if no messages found
+      }
+    } catch (error) {
+      print("Error fetching last message: $error");
+      return null; // Return null on error
     }
   }
 
@@ -267,10 +399,21 @@ class ChatController extends ChangeNotifier {
   // Start recording audio
   void startRecording() async {
     bool hasPermission = await checkMicrophonePermission();
+
     if (hasPermission) {
-      recordFilePath = await getFilePath();
-      RecordMp3.instance.start(recordFilePath!, (type) {});
-      notifyListeners();
+      try {
+        recordFilePath = await getFilePath();
+        RecordMp3.instance.start(recordFilePath!, (type) {
+          // Handle different types or events if needed
+          print('Recording event: $type');
+          notifyListeners();
+        });
+      } catch (e) {
+        print('Error starting recording: $e');
+        // Handle the error as needed, e.g., show a message to the user
+      }
+    } else {
+      // Handle the case where microphone permission is not granted
     }
   }
 

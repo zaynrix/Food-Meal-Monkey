@@ -13,14 +13,156 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 50), vsync: this, value: 0.5);
   late final AnimationController _controller2 = AnimationController(
       duration: const Duration(milliseconds: 50), vsync: this, value: 1.0);
+
   @override
   void dispose() {
     super.dispose();
     _controller.dispose();
   }
 
+  // Widget _getIconForIndex(MainMenu data, {String? imagePath = ""}) {
+  //   if (data.index == 3) {
+  //     // Placeholder for profile image
+  //     if (imagePath != null && imagePath.isEmpty) {
+  //       return Container(
+  //         decoration: BoxDecoration(
+  //           shape: BoxShape.circle,
+  //           border: Border.all(
+  //             color: Colors.orange,
+  //             width: 2.0,
+  //           ),
+  //         ),
+  //         child: CircleAvatar(
+  //           radius: 12, // Adjust as needed
+  //           backgroundImage: CachedNetworkImageProvider(imagePath),
+  //         ),
+  //       );
+  //     } else {
+  //       return Container(
+  //         decoration: BoxDecoration(
+  //           shape: BoxShape.circle,
+  //           border: Border.all(
+  //             color: Colors.orange,
+  //             width: 2.0,
+  //           ),
+  //         ),
+  //         child: CircleAvatar(
+  //           backgroundColor: Colors.grey,
+  //           radius: 12, // Adjust as needed
+  //           backgroundImage: AssetImage(ImageAssets.app_icon),
+  //         ),
+  //       );
+  //     }
+  //   } else {
+  //     return Icon(
+  //       data.icon,
+  //       color: currentIndex == data.index ? orangeColor : unSelectedIconColor,
+  //     );
+  //   }
+  // }
+  // Widget _getIconForIndex(MainMenu data, {String? imagePath = ""}) {
+  //   if (data.index == 3) {
+  //     // Placeholder for profile image
+  //     if (imagePath != null || imagePath!.isEmpty) {
+  //       return Container(
+  //         decoration: BoxDecoration(
+  //           shape: BoxShape.circle,
+  //           border: Border.all(
+  //             color:
+  //                 currentIndex == data.index ? orangeColor : secondaryFontColor,
+  //             width: 2.0,
+  //           ),
+  //         ),
+  //         child: CircleAvatar(
+  //           radius: 12, // Adjust as needed
+  //           backgroundImage: CachedNetworkImageProvider(imagePath),
+  //         ),
+  //       );
+  //     } else {
+  //       return Container(
+  //         decoration: BoxDecoration(
+  //           shape: BoxShape.circle,
+  //           border: Border.all(
+  //             color: Colors.orange,
+  //             width: 2.0,
+  //           ),
+  //         ),
+  //         child: CircleAvatar(
+  //           backgroundColor:
+  //               currentIndex == data.index ? Colors.transparent : Colors.grey,
+  //           radius: 12, // Adjust as needed
+  //           backgroundImage: AssetImage(ImageAssets.app_icon),
+  //         ),
+  //       );
+  //     }
+  //   } else {
+  //     return Icon(
+  //       data.icon,
+  //       color: currentIndex == data.index ? orangeColor : unSelectedIconColor,
+  //     );
+  //   }
+  // }
+  Widget _getIconForIndex(MainMenu data, {String? imagePath = ""}) {
+    if (data.index == 3) {
+      // Placeholder for profile image
+      if (imagePath != null && imagePath.isNotEmpty) {
+        return Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color:
+                  currentIndex == data.index ? orangeColor : secondaryFontColor,
+              width: 2.0,
+            ),
+          ),
+          child: Stack(
+            children: [
+              CircleAvatar(
+                radius: 12, // Adjust as needed
+                backgroundImage: CachedNetworkImageProvider(
+                  imagePath,
+                ),
+              ),
+              currentIndex != data.index
+                  ? CircleAvatar(
+                      radius: 12, // Adjus
+                      backgroundColor: Colors.grey.withOpacity(0.4),
+                      // t as needed
+                      // backgroundImage: CachedNetworkImageProvider(imagePath,),
+                    )
+                  : SizedBox.shrink()
+            ],
+          ),
+        );
+      } else {
+        return Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color:
+                  currentIndex == data.index ? orangeColor : secondaryFontColor,
+              width: 2.0,
+            ),
+          ),
+          child: CircleAvatar(
+            backgroundColor:
+                currentIndex == data.index ? Colors.transparent : Colors.grey,
+            radius: 12, // Adjust as needed
+            backgroundImage: AssetImage(ImageAssets.app_icon),
+          ),
+        );
+      }
+    } else {
+      return Icon(
+        data.icon,
+        color: currentIndex == data.index ? orangeColor : unSelectedIconColor,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    var user = Provider.of<ProfileController>(context).auth.currentUser;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       extendBody: true,
@@ -69,12 +211,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(
-                                data.icon,
-                                color: currentIndex == data.index
-                                    ? orangeColor
-                                    : unSelectedIconColor,
-                              ),
+                              _getIconForIndex(data, imagePath: user!.photoURL),
                               SizedBox(
                                 height: 5.h,
                               ),
@@ -109,7 +246,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         return const OffersPage();
 
       case 2:
-        return const ProfilePage();
+        return InboxPage();
 
       case 3:
         return const MorePage();

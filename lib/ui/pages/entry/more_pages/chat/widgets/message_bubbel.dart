@@ -54,16 +54,36 @@ class _MessageBubbleWidgetState extends State<MessageBubbleWidget> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     chatMessages.type == MessageType.audio
-                        ? VoiceMessage(
-                            meBgColor: Colors.black45,
-                            audioSrc: '${chatMessages.content}',
-                            played: true,
-                            me: false,
-                            noiseCount: 1,
-                            onPlay: () {
-                              chatController
-                                  .loadFile('${chatMessages.content}');
-                            }, // Do something when voice played.
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(
+                                30), // Adjust the value as needed
+                            child: Material(
+                              shadowColor: Colors
+                                  .grey, // Set the desideepOrange shadow color
+
+                              elevation: 5,
+                              child: VoiceMessage(
+                                contactCircleColor: Colors.white,
+                                mePlayIconColor: Colors.white,
+                                contactPlayIconBgColor: Colors.white,
+                                contactFgColor: Colors.white,
+                                contactPlayIconColor: Colors.black,
+                                meFgColor: Colors.white,
+                                contactBgColor: Colors.red,
+                                formatDuration: (Duration duration) {
+                                  return duration.toString().substring(0, 4);
+                                },
+                                meBgColor: Colors.white,
+                                audioSrc: '${chatMessages.content}',
+                                played: false,
+                                me: false,
+                                noiseCount: 1,
+                                onPlay: () {
+                                  chatController
+                                      .loadFile('${chatMessages.content}');
+                                }, // Do something when voice played.
+                              ),
+                            ),
                           )
                         : SizedBox.shrink(),
                     chatMessages.type == MessageType.text
@@ -71,7 +91,7 @@ class _MessageBubbleWidgetState extends State<MessageBubbleWidget> {
                             children: [
                               messageBubbleText(
                                 chatContent: chatMessages.content,
-                                color: Colors.deepOrange,
+                                color: Colors.red,
                                 textColor: Colors.white,
                                 margin: 10.marginRight,
                               ),
@@ -91,31 +111,33 @@ class _MessageBubbleWidgetState extends State<MessageBubbleWidget> {
                             : const SizedBox.shrink(),
                     chatController.isMessageSent(widget.index!)
                         ? Container(
-                            clipBehavior: Clip.hardEdge,
                             decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.circular(20.borderRadius),
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.red,
+                                width: 2.0,
+                              ),
                             ),
-                            child: CachedNetworkImage(
-                              imageUrl: widget.chatArgument!.userAvatar,
-                              width: 40,
-                              height: 40,
-                              fit: BoxFit.cover,
-                              imageBuilder: (context, imageProvider) =>
-                                  Image.asset(ImageAssets.app_icon),
-                              progressIndicatorBuilder: (BuildContext context,
-                                  String url, DownloadProgress progress) {
-                                return Center(
-                                  child: CircularProgressIndicator(
-                                    color: Colors.red,
-                                    value: progress.progress,
-                                  ),
-                                );
-                              },
-                              errorWidget: (BuildContext context, String url,
-                                  dynamic error) {
-                                return Image.asset(ImageAssets.app_icon);
-                              },
+                            child: ClipOval(
+                              child: CachedNetworkImage(
+                                imageUrl: widget.chatArgument!.userAvatar,
+                                width: 40,
+                                height: 40,
+                                fit: BoxFit.cover,
+                                progressIndicatorBuilder: (BuildContext context,
+                                    String url, DownloadProgress progress) {
+                                  return Center(
+                                    child: CircularProgressIndicator(
+                                      color: Colors.red,
+                                      value: progress.progress,
+                                    ),
+                                  );
+                                },
+                                errorWidget: (BuildContext context, String url,
+                                    dynamic error) {
+                                  return Image.asset(ImageAssets.app_icon);
+                                },
+                              ),
                             ),
                           )
                         : Container(
@@ -156,52 +178,67 @@ class _MessageBubbleWidgetState extends State<MessageBubbleWidget> {
 
                         // left side (received message)
                         ? Container(
-                            clipBehavior: Clip.hardEdge,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: orangeColor,
+                                width: 2.0,
+                              ),
                             ),
-                            child: CachedNetworkImage(
-                              imageUrl: widget.chatArgument!.peerAvatar,
-                              width: 40,
-                              height: 40,
-                              fit: BoxFit.cover,
-                              imageBuilder: (context, imageProvider) =>
-                                  Image.asset(ImageAssets.app_icon),
-                              progressIndicatorBuilder: (BuildContext context,
-                                  String url, DownloadProgress progress) {
-                                return Center(
-                                  child: CircularProgressIndicator(
-                                    color: Colors.red,
-                                    value: progress.progress,
-                                  ),
-                                );
-                              },
-                              errorWidget: (BuildContext context, String url,
-                                  dynamic error) {
-                                return Image.asset(ImageAssets.app_icon);
-                              },
+                            child: ClipOval(
+                              child: CachedNetworkImage(
+                                imageUrl: widget.chatArgument!.userAvatar,
+                                width: 40,
+                                height: 40,
+                                fit: BoxFit.cover,
+                                progressIndicatorBuilder: (BuildContext context,
+                                    String url, DownloadProgress progress) {
+                                  return Center(
+                                    child: CircularProgressIndicator(
+                                      color: Colors.deepOrange,
+                                      value: progress.progress,
+                                    ),
+                                  );
+                                },
+                                errorWidget: (BuildContext context, String url,
+                                    dynamic error) {
+                                  return Image.asset(ImageAssets.app_icon);
+                                },
+                              ),
                             ),
                           )
                         : Container(
                             width: 35,
                           ),
                     chatMessages.type == MessageType.audio
-                        ? VoiceMessage(
-                            meBgColor: Colors.red,
-                            audioSrc: '${chatMessages.content}',
-                            played: true,
-                            me: true,
-                            noiseCount: 1,
-                            // Set message side.
-                            onPlay: () {
-                              chatController
-                                  .loadFile('${chatMessages.content}');
-                            }, // Do something when voice played.
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(
+                                30), // Adjust the value as needed
+                            child: Material(
+                                shadowColor: Colors
+                                    .grey, // Set the desideepOrange shadow color
+
+                                elevation: 5,
+                                child: VoiceMessage(
+                                  meBgColor: Colors.deepOrange,
+                                  audioSrc: '${chatMessages.content}',
+                                  played: true,
+                                  formatDuration: (Duration duration) {
+                                    return duration.toString().substring(0, 4);
+                                  },
+                                  me: true,
+                                  noiseCount: 1,
+                                  // Set message side.
+                                  onPlay: () {
+                                    chatController
+                                        .loadFile('${chatMessages.content}');
+                                  }, // Do something when voice played.
+                                )),
                           )
                         : SizedBox.shrink(),
                     chatMessages.type == MessageType.text
                         ? messageBubbleText(
-                            color: Colors.red,
+                            color: Colors.deepOrange,
                             textColor: Colors.white,
                             chatContent: chatMessages.content,
                             margin: EdgeInsets.only(left: 10),

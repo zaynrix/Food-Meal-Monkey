@@ -23,6 +23,17 @@ class _MorePageState extends State<MorePage> {
         child: Column(
           children: [
             MoreTile(
+              title: 'Profile',
+
+              /// TODO : add new {profile image} inn the assets
+              iconPath: IconAssets.inboxIcon,
+              onTap: () {
+                ServiceNavigation.serviceNavi
+                    .pushNamedWidget(RouteGenerator.profilePage);
+              },
+            ),
+            vSpace20,
+            MoreTile(
               title: 'Payment Details',
               iconPath: IconAssets.paymentIcon,
               onTap: () {},
@@ -38,15 +49,6 @@ class _MorePageState extends State<MorePage> {
               title: 'Notifications',
               iconPath: IconAssets.notificationIcon,
               onTap: () {},
-            ),
-            vSpace20,
-            MoreTile(
-              title: 'Inbox',
-              iconPath: IconAssets.inboxIcon,
-              onTap: () {
-                ServiceNavigation.serviceNavi
-                    .pushNamedWidget(RouteGenerator.inboxPage);
-              },
             ),
             vSpace20,
             MoreTile(
