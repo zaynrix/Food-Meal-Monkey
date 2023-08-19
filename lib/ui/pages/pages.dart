@@ -1,7 +1,5 @@
 library pages;
 
-import 'dart:async';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +16,6 @@ import 'package:food_delivery_app/routing/router.dart';
 import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/chat_controllers/chat_controller.dart';
 import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/firestore_constants.dart';
 import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/widgets/inbox_tile.dart';
-import 'package:food_delivery_app/ui/pages/entry/profile_pages/profile_page.dart';
 import 'package:food_delivery_app/utils/app_config.dart';
 import 'package:food_delivery_app/utils/extension/responsive_extension.dart';
 import 'package:food_delivery_app/utils/extension/validate_extension.dart';
