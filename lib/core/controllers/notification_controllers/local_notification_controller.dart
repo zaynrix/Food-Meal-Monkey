@@ -2,8 +2,9 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:food_delivery_app/resources/styles.dart';
 
-class LocalNotificationController{
-  initLocalNotification(){
+//PR
+class LocalNotificationController {
+  initLocalNotification() {
     AwesomeNotifications().initialize(
       'resource://drawable/launcher_icon',
       [
@@ -19,7 +20,8 @@ class LocalNotificationController{
     );
   }
 
-  Future<void> createLocalNotification({required String title ,required String body}) async {
+  Future<void> createLocalNotification(
+      {required String title, required String body}) async {
     debugPrint("This is inside create notification in local\n ");
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
