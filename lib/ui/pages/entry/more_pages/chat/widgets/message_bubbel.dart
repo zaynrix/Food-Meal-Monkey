@@ -187,7 +187,7 @@ class _MessageBubbleWidgetState extends State<MessageBubbleWidget> {
                             ),
                             child: ClipOval(
                               child: CachedNetworkImage(
-                                imageUrl: widget.chatArgument!.userAvatar,
+                                imageUrl: widget.chatArgument!.peerAvatar,
                                 width: 40,
                                 height: 40,
                                 fit: BoxFit.cover,
