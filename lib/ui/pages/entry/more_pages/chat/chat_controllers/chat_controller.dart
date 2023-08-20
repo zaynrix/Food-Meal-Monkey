@@ -198,8 +198,34 @@ class ChatController extends ChangeNotifier {
             lastMessage = 'Audio'; // Or any other appropriate message for audio
           }
           return lastMessage;
-        } else {
+        } else if (messagesSnapshot.docs.isEmpty) {
+          QuerySnapshot messagesSnapshot = await firebaseFirestore
+              .collection(FirestoreConstants.pathMessageCollection)
+              .doc("$currentUserId - $chatUserId")
+              .collection("$currentUserId - $chatUserId")
+              .orderBy(FirestoreConstants.timestamp, descending: true)
+              .limit(54)
+              .get();
+          print(
+              " messagesSnapshot.docs.isEmpty: ${messagesSnapshot.docs.isEmpty}");
+          Map<String, dynamic> lastMessageData =
+              messagesSnapshot.docs.first.data() as Map<String, dynamic>;
+
+          print("This Message ${lastMessageData['type']}");
+          String lastMessage = '';
+          if (lastMessageData['type'] == MessageType.text) {
+            lastMessage = lastMessageData['text'] as String;
+          } else if (lastMessageData['type'] == MessageType.image) {
+            lastMessage =
+                'Image'; // Or any other appropriate message for images
+          } else if (lastMessageData['type'] == MessageType.sticker) {
+            lastMessage =
+                'Sticker'; // Or any other appropriate message for stickers
+          } else if (lastMessageData['type'] == MessageType.audio) {
+            lastMessage = 'Audio'; // Or any other appropriate message for audio
+          }
           print("else ");
+          return lastMessage;
         }
       }
     } catch (error) {
