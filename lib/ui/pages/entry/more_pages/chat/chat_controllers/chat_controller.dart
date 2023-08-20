@@ -136,93 +136,6 @@ class ChatController extends ChangeNotifier {
         .snapshots();
   }
 
-  Future<String?> getLastMessage(String groupChatId) async {
-    try {
-      QuerySnapshot messagesSnapshot = await firebaseFirestore
-          .collection(FirestoreConstants.pathMessageCollection)
-          .doc(groupChatId)
-          .collection(groupChatId)
-          .orderBy(FirestoreConstants.timestamp, descending: true)
-          .limit(1)
-          .get();
-
-      if (messagesSnapshot.docs.isNotEmpty) {
-        String lastMessageContent =
-            messagesSnapshot.docs.first.get('content') as String;
-        return lastMessageContent;
-      } else {
-        return null; // Return null if no messages found
-      }
-    } catch (error) {
-      print("Error fetching last message: $error");
-      return null; // Return null on error
-    }
-  }
-  // Future<String?> getLastMessage(String peerId, String currentUserId) async {
-  //   try {
-  //     QuerySnapshot messagesSnapshot = await FirebaseFirestore.instance
-  //         .collection('messages')
-  //         .doc(peerId)
-  //         .collection(currentUserId)
-  //         .orderBy('timestamp', descending: true)
-  //         .limit(1)
-  //         .get();
-  //
-  //     if (messagesSnapshot.docs.isNotEmpty) {
-  //       String lastMessage = messagesSnapshot.docs.first.get('text') as String;
-  //       return lastMessage;
-  //     } else {
-  //       return null; // Return null if no messages found
-  //     }
-  //   } catch (error) {
-  //     print("Error fetching last message: $error");
-  //     return null; // Return null on error
-  //   }
-  // }
-  // String lastMessage = "";
-  // void loadLastMessage(documentSnapshot) async {
-  //   if (documentSnapshot != null) {
-  //     String groupChatId = documentSnapshot!.id;
-  //     print("this id ${groupChatId}");
-  //     // Use the group chat ID from the document ID
-  //
-  //     QuerySnapshot lastMessageQuery = await FirebaseFirestore.instance
-  //         .collection('messages')
-  //         .doc(groupChatId)
-  //         .collection(groupChatId)
-  //         .orderBy('timestamp', descending: true)
-  //         .limit(1)
-  //         .get();
-  //     print(
-  //         "sdadadasda${FirebaseFirestore.instance.collection('messages').doc(groupChatId)}");
-  //     if (lastMessageQuery.docs.isNotEmpty) {
-  //       lastMessage = lastMessageQuery.docs.first['message'];
-  //       notifyListeners();
-  //     }
-  //   }
-  // }
-
-  // void fetchLastMessage(documentSnapshot) async {
-  //   if (documentSnapshot != null) {
-  //     ChatUser userChat = ChatUser.fromDocument(documentSnapshot!);
-  //
-  //     QuerySnapshot messagesSnapshot = await FirebaseFirestore.instance
-  //         .collection(FirestoreConstants.pathMessageCollection)
-  //         .doc(groupChatId)
-  //         .collection(groupChatId)
-  //         .orderBy('timestamp', descending: true)
-  //         .limit(1)
-  //         .get();
-  //     // setState(() {});
-  //     if (messagesSnapshot.docs.isNotEmpty) {
-  //       lastMessage = messagesSnapshot.docs.first['text'];
-  //       print("This last $lastMessage");
-  //     }
-  //
-  //     // setState(() {});
-  //   }
-  // }
-
   void readLocal({ChatArgument? chatArgument}) {
     final currentUserUid = auth.currentUser?.uid;
     if (currentUserUid != null) {
@@ -250,42 +163,6 @@ class ChatController extends ChangeNotifier {
     }
   }
 
-  // Future<String?> getLastMessageForUserChats(
-  //     String chatUserId, String currentUserId) async {
-  //   try {
-  //     QuerySnapshot messagesSnapshot = await firebaseFirestore
-  //         .collection(FirestoreConstants.pathMessageCollection)
-  //         .doc(chatUserId)
-  //         .collection(currentUserId)
-  //         .orderBy(FirestoreConstants.timestamp, descending: true)
-  //         .limit(1)
-  //         .get();
-  //
-  //     if (messagesSnapshot.docs.isNotEmpty) {
-  //       Map<String, dynamic> lastMessageData =
-  //           messagesSnapshot.docs.first.data() as Map<String, dynamic>;
-  //       String lastMessage = '';
-  //
-  //       if (lastMessageData['type'] == MessageType.text) {
-  //         lastMessage = lastMessageData['content'] as String;
-  //       } else if (lastMessageData['type'] == MessageType.image) {
-  //         lastMessage = 'Image'; // Or any other appropriate message for images
-  //       } else if (lastMessageData['type'] == MessageType.sticker) {
-  //         lastMessage =
-  //             'Sticker'; // Or any other appropriate message for stickers
-  //       } else if (lastMessageData['type'] == MessageType.audio) {
-  //         lastMessage = 'Audio'; // Or any other appropriate message for audio
-  //       }
-  //
-  //       return lastMessage;
-  //     } else {
-  //       return null; // Return null if no messages found
-  //     }
-  //   } catch (error) {
-  //     print("Error fetching last message: $error");
-  //     return null; // Return null on error
-  //   }
-  // }zzzzzzzz
   Future<String?> getLastMessageForUserChats(
       String chatUserId, String currentUserId) async {
     print("This chatUserId $chatUserId - $currentUserId ");
@@ -295,14 +172,15 @@ class ChatController extends ChangeNotifier {
 
         QuerySnapshot messagesSnapshot = await firebaseFirestore
             .collection(FirestoreConstants.pathMessageCollection)
-            .doc("$currentUserId - $chatUserId")
-            .collection("$currentUserId - $chatUserId")
+            .doc("$chatUserId - $currentUserId")
+            .collection("$chatUserId - $currentUserId")
             .orderBy(FirestoreConstants.timestamp, descending: true)
-            .limit(1)
+            .limit(54)
             .get();
 
-        print(" ssssss ${messagesSnapshot.docs.isEmpty}");
         if (messagesSnapshot.docs.isNotEmpty) {
+          print(
+              " messagesSnapshot.docs.isEmpty: ${messagesSnapshot.docs.isEmpty}");
           Map<String, dynamic> lastMessageData =
               messagesSnapshot.docs.first.data() as Map<String, dynamic>;
 

@@ -79,10 +79,12 @@ class _ChatItemState extends State<ChatItem> {
                   const Icon(
                       Icons.music_video_sharp), // Change this icon as needed
                 const SizedBox(width: 8),
-                Text(
-                  "${widget.lastMesage}",
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                Expanded(
+                  child: Text(
+                    "${widget.lastMesage}",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ],
             ),
