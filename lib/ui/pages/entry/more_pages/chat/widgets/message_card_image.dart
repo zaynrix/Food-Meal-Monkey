@@ -21,37 +21,51 @@ void _showEnlargedImage({BuildContext? context, String? imageUrl}) {
   );
 }
 
-Widget chatImage({required String imageSrc, required Function onTap, context}) {
+Widget chatImage(
+    {required String imageSrc, required Function onTap, context, timeStamp}) {
   return OutlinedButton(
     onPressed: () => _showEnlargedImage(context: context, imageUrl: imageSrc),
-    child: Image.network(
-      imageSrc,
-      width: 200.width,
-      height: 200.height,
-      fit: BoxFit.cover,
-      loadingBuilder:
-          (BuildContext ctx, Widget child, ImageChunkEvent? loadingProgress) {
-        if (loadingProgress == null) return child;
-        return Container(
-          decoration: BoxDecoration(
-            color: Colors.blueGrey,
-            borderRadius: BorderRadius.circular(10.borderRadius),
-          ),
+    child: Column(
+      children: [
+        Image.network(
+          imageSrc,
           width: 200.width,
           height: 200.height,
-          child: Center(
-            child: CircularProgressIndicator(
-              color: Colors.red,
-              value: loadingProgress.expectedTotalBytes != null &&
-                      loadingProgress.expectedTotalBytes != null
-                  ? loadingProgress.cumulativeBytesLoaded /
-                      loadingProgress.expectedTotalBytes!
-                  : null,
-            ),
+          fit: BoxFit.cover,
+          loadingBuilder: (BuildContext ctx, Widget child,
+              ImageChunkEvent? loadingProgress) {
+            if (loadingProgress == null) return child;
+            return Container(
+              decoration: BoxDecoration(
+                color: Colors.blueGrey,
+                borderRadius: BorderRadius.circular(10.borderRadius),
+              ),
+              width: 200.width,
+              height: 200.height,
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: Colors.red,
+                  value: loadingProgress.expectedTotalBytes != null &&
+                          loadingProgress.expectedTotalBytes != null
+                      ? loadingProgress.cumulativeBytesLoaded /
+                          loadingProgress.expectedTotalBytes!
+                      : null,
+                ),
+              ),
+            );
+          },
+          errorBuilder: (context, object, stackTrace) => errorContainer(),
+        ),
+        Container(
+          padding: 10.paddingAll,
+          child: Text(
+            timeStamp!,
+            textAlign: TextAlign.start,
+            style: const TextStyle(
+                color: Colors.grey, fontSize: 12, fontStyle: FontStyle.italic),
           ),
-        );
-      },
-      errorBuilder: (context, object, stackTrace) => errorContainer(),
+        )
+      ],
     ),
   );
 }
