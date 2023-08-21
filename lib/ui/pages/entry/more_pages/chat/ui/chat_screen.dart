@@ -53,7 +53,8 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   void didChangeDependencies() {
-    chatProvider!.readLocal(chatArgument: widget.arguments);
+    chatProvider!.readLocal(
+        chatArgument: widget.arguments, idTo: chatProvider!.idToReceiver);
     super.didChangeDependencies();
   }
 

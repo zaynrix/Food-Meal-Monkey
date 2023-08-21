@@ -16,13 +16,6 @@ class _InboxPageState extends State<InboxPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Inbox"),
-        // leading: IconButton(
-        //   onPressed: () {
-        //     ServiceNavigation.serviceNavi.back();
-        //     // Your navigation logic
-        //   },
-        //   icon: const Icon(Icons.arrow_back_ios_new_outlined),
-        // ),
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.shopping_cart)),
         ],
@@ -69,13 +62,15 @@ class _InboxPageState extends State<InboxPage> {
                         String messageText = lastMessageData['text'] as String;
                         String messageTime =
                             lastMessageData['timestamp'] as String;
-                        // bool isSeen = lastMessageData['isSeen'];
+                        bool isSeen = lastMessageData['seenByReceiver'];
+                        bool seenByReceiver = lastMessageData['seenByReceiver'];
+                        String idTo = lastMessageData['idTo'];
 
                         return ChatItem(chatData, messageText, messageType,
-                            false, messageTime.formattedTime());
+                            isSeen, messageTime.formattedTime(), idTo);
                       } else {
                         return ChatItem(chatData, "No messages yet",
-                            "No messages yet", false, "");
+                            "No messages yet", false, "", "");
                       }
                     },
                   );

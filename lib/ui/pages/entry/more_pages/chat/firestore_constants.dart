@@ -15,4 +15,5 @@ class FirestoreConstants {
   static const email = "email";
   static const address = "address";
   static const isSeen = "isSeen";
+  static const seenByReceiver = "seenByReceiver";
 }

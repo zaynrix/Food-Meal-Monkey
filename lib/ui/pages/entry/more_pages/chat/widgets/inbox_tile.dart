@@ -14,13 +14,14 @@ import 'package:provider/provider.dart';
 
 class ChatItem extends StatefulWidget {
   final DocumentSnapshot? documentSnapshot;
-  final String? lastMesage;
+  final String? lastMessage;
   final dynamic lastMessageType; // Add this parameter
   final bool isSeen; // Add this parameter
   final String? messageTime;
+  final String? idTo;
 
-  const ChatItem(this.documentSnapshot, this.lastMesage, this.lastMessageType,
-      this.isSeen, this.messageTime)
+  const ChatItem(this.documentSnapshot, this.lastMessage, this.lastMessageType,
+      this.isSeen, this.messageTime, this.idTo)
       : super();
 
   @override
@@ -64,6 +65,7 @@ class _ChatItemState extends State<ChatItem> {
               peerNickname: userChat.displayName,
               userAvatar: authUser!.photoURL ?? "",
             );
+            chatController!.setIdTo(widget.idTo!);
             ServiceNavigation.serviceNavi
                 .pushNamedWidget(RouteGenerator.chatPage, args: chatArgument);
           },
@@ -135,15 +137,33 @@ class _ChatItemState extends State<ChatItem> {
                   "${widget.messageTime}",
                   style: const TextStyle(color: Colors.grey, fontSize: 12),
                 ),
-                Icon(
-                  widget.isSeen ? Icons.done_all : Icons.done,
-                  color: Colors.deepOrange,
-                ),
+                widget.isSeen
+                    ? Icon(
+                        Icons.done_all,
+                        // This is an example icon, replace with your preferred indicator
+                        color: Colors
+                            .blue, // This is an example color, adjust as needed
+                      )
+                    : Visibility(
+                        visible: widget.messageTime != "",
+                        child: Icon(
+                          Icons.done,
+                          // This is an example icon, replace with your preferred indicator
+                          color: Colors
+                              .grey, // This is an example color, adjust as needed
+                        ),
+                      ),
+
+                // Visibility(
+                //   visible: widget.isSeen == true ? true : false,
+                //   child: Icon(
+                //     Icons.circle,
+                //     color: Colors.deepOrange,
+                //     size: 10,
+                //   ),
+                // ),
               ],
             ),
-            // minVerticalPadding: 0,
-            // horizontalTitleGap: 0,
-            // contentPadding: EdgeInsets.zero,
           ),
         );
       }
