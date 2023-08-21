@@ -34,18 +34,14 @@ class _MessagesListWidgetState extends State<MessagesListWidget> {
                 return GroupedListView<DocumentSnapshot, String>(
                   elements: chatController.listMessages,
                   floatingHeader: true,
-
                   sort: true,
                   useStickyGroupSeparators: true,
-                  // optional
                   groupBy: (message) {
                     return int.parse(message['timestamp']).formattedTimestamp();
                   },
                   itemComparator: (item1, item2) =>
                       item1['timestamp'].compareTo(item2['timestamp']),
-                  // optional
                   order: GroupedListOrder.DESC,
-                  // optional
                   reverse: true,
                   addAutomaticKeepAlives: true,
                   groupSeparatorBuilder: (element) => Padding(
@@ -58,7 +54,7 @@ class _MessagesListWidgetState extends State<MessagesListWidget> {
                                   20.0) //                 <--- border radius here
                               ),
                           shape: BoxShape.rectangle,
-                          color: Colors.deepOrange.withOpacity(0.8)),
+                          color: Colors.black.withOpacity(0.4)),
                       child: Text("$element",
                           textAlign: TextAlign.center,
                           style: TextStyle(color: Colors.white, fontSize: 12)),

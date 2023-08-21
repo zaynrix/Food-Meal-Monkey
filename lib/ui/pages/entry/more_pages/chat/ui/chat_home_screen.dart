@@ -47,23 +47,26 @@ class _InboxPageState extends State<InboxPage> {
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (context, index) {
                   DocumentSnapshot chatData = snapshot.data!.docs[index];
-                  return FutureBuilder<Map<String, dynamic>?>(
-                    future: chatController.getLastMessageForUserChats(
+                  return StreamBuilder<Map<String, dynamic>?>(
+                    stream: chatController.getLastMessageForUserChatsStream(
                       chatData.id,
                       authController.auth.currentUser!.uid,
                     ),
-                    builder: (context, messageSnapshot) {
-                      Map<String, dynamic>? lastMessageData =
-                          messageSnapshot.data;
-                      print("this data shor $lastMessageData");
-                      if (lastMessageData != null) {
-                        dynamic messageType = chatController
-                            .extractLastMessage(messageSnapshot.data!);
+                    builder: (context, snapshot) {
+                      Map<String, dynamic>? lastMessageData = snapshot.data;
+                      print("this data show $lastMessageData");
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Text('Error fetching data');
+                      } else if (lastMessageData != null) {
+                        dynamic messageType =
+                            chatController.extractLastMessage(lastMessageData);
                         String messageText = lastMessageData['text'] as String;
+                        print("texttttt $messageText");
                         String messageTime =
                             lastMessageData['timestamp'] as String;
                         bool isSeen = lastMessageData['seenByReceiver'];
-                        bool seenByReceiver = lastMessageData['seenByReceiver'];
                         String idTo = lastMessageData['idTo'];
 
                         return ChatItem(chatData, messageText, messageType,
@@ -74,6 +77,34 @@ class _InboxPageState extends State<InboxPage> {
                       }
                     },
                   );
+
+                  //   FutureBuilder<Map<String, dynamic>?>(
+                  //   future: chatController.getLastMessageForUserChats(
+                  //     chatData.id,
+                  //     authController.auth.currentUser!.uid,
+                  //   ),
+                  //   builder: (context, messageSnapshot) {
+                  //     Map<String, dynamic>? lastMessageData =
+                  //         messageSnapshot.data;
+                  //     print("this data shor $lastMessageData");
+                  //     if (lastMessageData != null) {
+                  //       dynamic messageType = chatController
+                  //           .extractLastMessage(messageSnapshot.data!);
+                  //       String messageText = lastMessageData['text'] as String;
+                  //       String messageTime =
+                  //           lastMessageData['timestamp'] as String;
+                  //       bool isSeen = lastMessageData['seenByReceiver'];
+                  //       bool seenByReceiver = lastMessageData['seenByReceiver'];
+                  //       String idTo = lastMessageData['idTo'];
+                  //
+                  //       return ChatItem(chatData, messageText, messageType,
+                  //           isSeen, messageTime.formattedTime(), idTo);
+                  //     } else {
+                  //       return ChatItem(chatData, "No messages yet",
+                  //           "No messages yet", false, "", "");
+                  //     }
+                  //   },
+                  // );
                 },
                 separatorBuilder: (BuildContext context, int index) =>
                     const Divider(
