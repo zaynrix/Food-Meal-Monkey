@@ -32,6 +32,7 @@ class ChatController extends ChangeNotifier {
   String imageUrl = '';
   String? recordFilePath;
   String senderString = "";
+  String idToReceiver = "";
 
   final TextEditingController textEditingController = TextEditingController();
 
@@ -43,6 +44,11 @@ class ChatController extends ChangeNotifier {
 
   void setMessageSender(String senderID) {
     senderString = senderID;
+  }
+
+  void setIdTo(String idTo) {
+    idToReceiver = idTo;
+    notifyListeners();
   }
 
   Stream<QuerySnapshot> getFirestoreData(String collectionPath) {
@@ -116,6 +122,7 @@ class ChatController extends ChangeNotifier {
         .doc(DateTime.now().millisecondsSinceEpoch.toString());
     ChatMessages chatMessages = ChatMessages(
       isSeen: false,
+      seenByReceiver: false,
       idFrom: currentUserId,
       idTo: peerId,
       timestamp: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -137,14 +144,27 @@ class ChatController extends ChangeNotifier {
         .snapshots();
   }
 
-  void readLocal({ChatArgument? chatArgument}) {
+  void readLocal({ChatArgument? chatArgument, idTo}) {
     final currentUserUid = auth.currentUser?.uid;
     if (currentUserUid != null) {
       final peerId = chatArgument?.peerId ?? '';
       if (currentUserUid.compareTo(peerId) > 0) {
         groupChatId = '$currentUserUid - $peerId';
+        if (currentUserUid == idToReceiver) {
+          markMessagesAsSeen(currentUserUid, peerId);
+          print("update now ");
+        } else {
+          print("no update");
+        }
       } else {
         groupChatId = '$peerId - $currentUserUid';
+        if (currentUserUid == idToReceiver) {
+          markMessagesAsSeen(peerId, currentUserUid);
+          print("update now ");
+        } else {
+          print("no update");
+        }
+        print("ELSE  peerId - currentUserUid : $peerId - $currentUserUid");
       }
       updateFirestoreData(
         FirestoreConstants.pathUserCollection,
@@ -258,6 +278,8 @@ class ChatController extends ChangeNotifier {
   // }
   Future<Map<String, dynamic>?> getLastMessageForUserChats(
       String chatUserId, String currentUserId) async {
+    print("chatUserId: $chatUserId - currentUserId: $currentUserId");
+
     try {
       if (currentUserId != chatUserId) {
         QuerySnapshot messagesSnapshot =
@@ -312,6 +334,53 @@ class ChatController extends ChangeNotifier {
     }
 
     return lastMessage;
+  }
+
+  void markMessagesAsSeen(String chatUserId, String currentUserId) async {
+    print("markMessagesAsSeen");
+
+    try {
+      if (currentUserId != chatUserId) {
+        QuerySnapshot messagesSnapshot =
+            await fetchMessagesSnapshot(chatUserId, currentUserId);
+        for (QueryDocumentSnapshot messageSnapshot in messagesSnapshot.docs) {
+          await messageSnapshot.reference.update({'seenByReceiver': true});
+        }
+        print("First if ${{messagesSnapshot.docs.single}}");
+        if (messagesSnapshot.docs.isEmpty) {
+          messagesSnapshot =
+              await markMessagesAsSeenSub(currentUserId, chatUserId);
+
+          print("Second if ${{messagesSnapshot.docs}}");
+          for (QueryDocumentSnapshot messageSnapshot in messagesSnapshot.docs) {
+            await messageSnapshot.reference.update({'isSeen': true});
+          }
+        }
+
+        if (messagesSnapshot.docs.isNotEmpty) {
+          messagesSnapshot =
+              await markMessagesAsSeenSub(currentUserId, chatUserId);
+
+          print("Second if ${{messagesSnapshot.docs}}");
+          for (QueryDocumentSnapshot messageSnapshot in messagesSnapshot.docs) {
+            await messageSnapshot.reference.update({'seenByReceiver': true});
+          }
+        }
+      }
+    } catch (error) {
+      print("Error fetching last message: $error");
+    }
+    return null; // Return null if no last message found
+  }
+
+  Future<QuerySnapshot> markMessagesAsSeenSub(
+      String firstOrder, String secondOrder) async {
+    print("firstOrder $firstOrder - $secondOrder");
+    return await firebaseFirestore
+        .collection(FirestoreConstants.pathMessageCollection)
+        .doc("$firstOrder - $secondOrder")
+        .collection("$firstOrder - $secondOrder")
+        .get();
   }
 
   List<QueryDocumentSnapshot> listMessages = [];
@@ -389,6 +458,7 @@ class ChatController extends ChangeNotifier {
           FirestoreConstants.idFrom: auth.currentUser!.uid,
           FirestoreConstants.idTo: chatArgument!.peerId,
           FirestoreConstants.isSeen: false,
+          FirestoreConstants.seenByReceiver: false,
           FirestoreConstants.timestamp:
               DateTime.now().millisecondsSinceEpoch.toString(),
           FirestoreConstants.content: audioMsg,
@@ -398,12 +468,9 @@ class ChatController extends ChangeNotifier {
         isSending = false;
         notifyListeners();
       });
-      // scrollController.animateTo(0.0,
-      //     duration: Duration(milliseconds: 100), curve: Curves.bounceInOut);
     } else {
       isSending = false;
       notifyListeners();
-      print("Hello");
     }
   }
 
