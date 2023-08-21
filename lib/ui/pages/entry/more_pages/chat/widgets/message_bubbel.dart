@@ -302,7 +302,8 @@ class _MessageBubbleWidgetState extends State<MessageBubbleWidget> {
                         ? Container(
                             margin: EdgeInsets.only(right: 10, top: 10),
                             child: chatImage(
-                                timeStamp: chatMessages.timestamp,
+                                timeStamp:
+                                    chatMessages.timestamp.formattedTime(),
                                 context: context,
                                 imageSrc: chatMessages.content,
                                 onTap: () {
@@ -347,22 +348,6 @@ class _MessageBubbleWidgetState extends State<MessageBubbleWidget> {
                       ),
               ],
             ),
-            // chatController.isMessageSent(widget.index!)
-            //     ? Container(
-            //         margin: EdgeInsets.only(right: 50, top: 6, bottom: 8),
-            //         child: Text(
-            //           DateFormat('dd MMM yyyy, hh:mm a').format(
-            //             DateTime.fromMillisecondsSinceEpoch(
-            //               int.parse(chatMessages.timestamp),
-            //             ),
-            //           ),
-            //           style: const TextStyle(
-            //               color: Colors.grey,
-            //               fontSize: 12,
-            //               fontStyle: FontStyle.italic),
-            //         ),
-            //       )
-            //     : const SizedBox.shrink(),
           ],
         );
       },
