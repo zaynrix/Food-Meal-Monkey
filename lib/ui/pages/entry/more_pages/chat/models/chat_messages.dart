@@ -7,11 +7,13 @@ class ChatMessages {
   String timestamp;
   String content;
   int type;
+  bool isSeen;
 
   ChatMessages(
       {required this.idFrom,
       required this.idTo,
       required this.timestamp,
+      required this.isSeen,
       required this.content,
       required this.type});
 
@@ -22,6 +24,7 @@ class ChatMessages {
       FirestoreConstants.timestamp: timestamp,
       FirestoreConstants.content: content,
       FirestoreConstants.type: type,
+      FirestoreConstants.isSeen: isSeen,
     };
   }
 
@@ -31,8 +34,10 @@ class ChatMessages {
     String timestamp = documentSnapshot.get(FirestoreConstants.timestamp);
     String content = documentSnapshot.get(FirestoreConstants.content);
     int type = documentSnapshot.get(FirestoreConstants.type);
+    bool isSeen = documentSnapshot.get(FirestoreConstants.isSeen);
 
     return ChatMessages(
+        isSeen: isSeen,
         idFrom: idFrom,
         idTo: idTo,
         timestamp: timestamp,
