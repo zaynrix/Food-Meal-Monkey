@@ -11,6 +11,11 @@ extension TimestampExtension on Timestamp {
     return DateFormat('yyyy-MM-dd HH:mm').format(dateTime);
     // You can customize the format string to match your preferred date and time format
   }
+
+  String formattedDate() {
+    DateTime timestamp = this.toDate();
+    return DateFormat('dd MMM yyyy').format(timestamp);
+  }
 }
 
 extension TimeExtension on String {
@@ -55,5 +60,22 @@ extension TimeExtension on String {
     DateTime dateFormat = DateTime.parse(this);
     final hours = Jiffy(DateTime.now()).diff(dateFormat, Units.HOUR).toString();
     return "$hours Hours ago";
+  }
+
+  String formattedTime() {
+    DateTime timestamp = DateTime.fromMillisecondsSinceEpoch(int.parse(this));
+    return DateFormat('hh:mm a').format(timestamp);
+  }
+
+  String formattedDate() {
+    DateTime timestamp = DateTime.fromMillisecondsSinceEpoch(int.parse(this));
+    return DateFormat('dd MMM yyyy').format(timestamp);
+  }
+}
+
+extension TimestampFormatting on int {
+  String formattedTimestamp() {
+    DateTime timestamp = DateTime.fromMillisecondsSinceEpoch(this);
+    return DateFormat('dd MMM yyyy').format(timestamp);
   }
 }

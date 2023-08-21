@@ -27,45 +27,7 @@ class _InboxPageState extends State<InboxPage> {
           IconButton(onPressed: () {}, icon: const Icon(Icons.shopping_cart)),
         ],
       ),
-      body:
-
-          // Consumer2<ChatController, AuthController>(
-          //   builder: (context, chatController, authController, child) =>
-          //       StreamBuilder<QuerySnapshot>(
-          //     stream: chatController.getFirestoreData(
-          //       FirestoreConstants.pathUserCollection,
-          //     ),
-          //     builder:
-          //         (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          //       if (snapshot.hasData) {
-          //         if ((snapshot.data?.docs.length ?? 0) > 0) {
-          //           return ListView.separated(
-          //             shrinkWrap: true,
-          //             itemCount: snapshot.data!.docs.length,
-          //             itemBuilder: (context, index) => ChatItem(
-          //               snapshot.data?.docs[index],
-          //             ),
-          //             // controller: scrollController,
-          //             separatorBuilder: (BuildContext context, int index) =>
-          //                 const Divider(
-          //               thickness: 0,
-          //               color: Colors.transparent,
-          //             ),
-          //           );
-          //         } else {
-          //           return const Center(
-          //             child: Text('No user found...'),
-          //           );
-          //         }
-          //       } else {
-          //         return const Center(
-          //           child: CircularProgressIndicator(),
-          //         );
-          //       }
-          //     },
-          //   ),
-          // ),
-          Consumer2<ChatController, AuthController>(
+      body: Consumer2<ChatController, AuthController>(
         builder: (context, chatController, authController, child) =>
             StreamBuilder<QuerySnapshot>(
           stream: chatController.getFirestoreData(
@@ -88,6 +50,7 @@ class _InboxPageState extends State<InboxPage> {
             } else {
               return ListView.separated(
                 shrinkWrap: true,
+                padding: EdgeInsets.zero,
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (context, index) {
                   DocumentSnapshot chatData = snapshot.data!.docs[index];

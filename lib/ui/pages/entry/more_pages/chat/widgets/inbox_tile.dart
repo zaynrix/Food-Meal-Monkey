@@ -48,7 +48,8 @@ class _ChatItemState extends State<ChatItem> {
     if (widget.documentSnapshot != null) {
       ChatUser userChat = ChatUser.fromDocument(widget.documentSnapshot!);
       if (userChat.id == authUser!.uid) {
-        return const SizedBox.shrink();
+        return Visibility(
+            visible: userChat.id == authUser!.uid, child: SizedBox());
       } else {
         return TextButton(
           onPressed: () {
@@ -66,6 +67,7 @@ class _ChatItemState extends State<ChatItem> {
           },
           child: ListTile(
             subtitle: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 if (widget.lastMessageType == "Text")
                   const Icon(Icons.text_fields), // Change this icon as needed
@@ -77,10 +79,12 @@ class _ChatItemState extends State<ChatItem> {
                   const Icon(
                       Icons.music_video_sharp), // Change this icon as needed
                 const SizedBox(width: 8),
-                Text(
-                  "${widget.lastMesage}",
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                Expanded(
+                  child: Text(
+                    "${widget.lastMesage}",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ],
             ),
@@ -121,11 +125,14 @@ class _ChatItemState extends State<ChatItem> {
               "${userChat.displayName}",
               style: const TextStyle(color: Colors.black),
             ),
+            // minVerticalPadding: 0,
+            // horizontalTitleGap: 0,
+            // contentPadding: EdgeInsets.zero,
           ),
         );
       }
     } else {
-      return const SizedBox.shrink();
+      return const Text("");
     }
   }
 }

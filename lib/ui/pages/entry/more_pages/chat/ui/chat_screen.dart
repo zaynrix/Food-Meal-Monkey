@@ -49,19 +49,8 @@ class _ChatPageState extends State<ChatPage> {
     super.initState();
     chatProvider = context.read<ChatController>();
     authProvider = context.read<AuthController>();
-
-    // focusNode.addListener(onFocusChanged);
-    // scrollController.addListener(_scrollListener);
   }
 
-  // _scrollListener() {
-  //   if (scrollController.offset >= scrollController.position.maxScrollExtent &&
-  //       !scrollController.position.outOfRange) {
-  //     setState(() {
-  //       _limit += _limitIncrement;
-  //     });
-  //   }
-  // }
   @override
   void didChangeDependencies() {
     chatProvider!.readLocal(chatArgument: widget.arguments);
