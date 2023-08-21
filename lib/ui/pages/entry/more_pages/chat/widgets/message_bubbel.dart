@@ -147,7 +147,6 @@ class _MessageBubbleWidgetState extends State<MessageBubbleWidget> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 chatController.isMessageReceived(widget.index!)
-
                     // left side (received message)
                     ? Container(
                         decoration: BoxDecoration(
