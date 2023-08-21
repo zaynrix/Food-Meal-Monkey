@@ -54,15 +54,29 @@ class _InboxPageState extends State<InboxPage> {
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (context, index) {
                   DocumentSnapshot chatData = snapshot.data!.docs[index];
-                  return FutureBuilder<String?>(
+                  return FutureBuilder<Map<String, dynamic>?>(
                     future: chatController.getLastMessageForUserChats(
                       chatData.id,
                       authController.auth.currentUser!.uid,
                     ),
                     builder: (context, messageSnapshot) {
-                      String lastMessage =
-                          messageSnapshot.data ?? "No messages yet";
-                      return ChatItem(chatData, lastMessage, lastMessage);
+                      Map<String, dynamic>? lastMessageData =
+                          messageSnapshot.data;
+                      print("this data shor $lastMessageData");
+                      if (lastMessageData != null) {
+                        dynamic messageType = chatController
+                            .extractLastMessage(messageSnapshot.data!);
+                        String messageText = lastMessageData['text'] as String;
+                        String messageTime =
+                            lastMessageData['timestamp'] as String;
+                        // bool isSeen = lastMessageData['isSeen'];
+
+                        return ChatItem(chatData, messageText, messageType,
+                            false, messageTime.formattedTime());
+                      } else {
+                        return ChatItem(chatData, "No messages yet",
+                            "No messages yet", false, "");
+                      }
                     },
                   );
                 },
@@ -78,6 +92,6 @@ class _InboxPageState extends State<InboxPage> {
       ),
     );
   }
-  // );
-  // }
+// );
+// }
 }
