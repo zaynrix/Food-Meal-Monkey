@@ -115,6 +115,7 @@ class ChatController extends ChangeNotifier {
         .collection(groupChatId)
         .doc(DateTime.now().millisecondsSinceEpoch.toString());
     ChatMessages chatMessages = ChatMessages(
+      isSeen: false,
       idFrom: currentUserId,
       idTo: peerId,
       timestamp: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -163,75 +164,154 @@ class ChatController extends ChangeNotifier {
     }
   }
 
-  Future<String?> getLastMessageForUserChats(
+  // Future<String?> getLastMessageForUserChats(
+  //     String chatUserId, String currentUserId) async {
+  //   print("This chatUserId $chatUserId - $currentUserId ");
+  //   try {
+  //     if (currentUserId != chatUserId) {
+  //       print(" inside ");
+  //
+  //       QuerySnapshot messagesSnapshot = await firebaseFirestore
+  //           .collection(FirestoreConstants.pathMessageCollection)
+  //           .doc("$chatUserId - $currentUserId")
+  //           .collection("$chatUserId - $currentUserId")
+  //           .orderBy(FirestoreConstants.timestamp, descending: true)
+  //           .limit(1)
+  //           .get();
+  //
+  //       if (messagesSnapshot.docs.isNotEmpty) {
+  //         print(
+  //             " messagesSnapshot.docs.isEmpty: ${messagesSnapshot.docs.isEmpty}");
+  //         Map<String, dynamic> lastMessageData =
+  //             messagesSnapshot.docs.first.data() as Map<String, dynamic>;
+  //
+  //         print("This Message ${lastMessageData['type']}");
+  //         String lastMessage = '';
+  //         if (lastMessageData['type'] == MessageType.text) {
+  //           lastMessage = lastMessageData['text'] as String;
+  //         } else if (lastMessageData['type'] == MessageType.image) {
+  //           lastMessage =
+  //               'Image'; // Or any other appropriate message for images
+  //         } else if (lastMessageData['type'] == MessageType.sticker) {
+  //           lastMessage =
+  //               'Sticker'; // Or any other appropriate message for stickers
+  //         } else if (lastMessageData['type'] == MessageType.audio) {
+  //           lastMessage = 'Audio'; // Or any other appropriate message for audio
+  //         }
+  //         return lastMessage;
+  //       } else if (messagesSnapshot.docs.isEmpty) {
+  //         QuerySnapshot messagesSnapshot = await firebaseFirestore
+  //             .collection(FirestoreConstants.pathMessageCollection)
+  //             .doc("$currentUserId - $chatUserId")
+  //             .collection("$currentUserId - $chatUserId")
+  //             .orderBy(FirestoreConstants.timestamp, descending: true)
+  //             .limit(54)
+  //             .get();
+  //         print(
+  //             " messagesSnapshot.docs.isEmpty: ${messagesSnapshot.docs.isEmpty}");
+  //         Map<String, dynamic> lastMessageData =
+  //             messagesSnapshot.docs.first.data() as Map<String, dynamic>;
+  //
+  //         print("This Message ${lastMessageData['type']}");
+  //         String lastMessage = '';
+  //         if (lastMessageData['type'] == MessageType.text) {
+  //           lastMessage = lastMessageData['text'] as String;
+  //         } else if (lastMessageData['type'] == MessageType.image) {
+  //           lastMessage =
+  //               'Image'; // Or any other appropriate message for images
+  //         } else if (lastMessageData['type'] == MessageType.sticker) {
+  //           lastMessage =
+  //               'Sticker'; // Or any other appropriate message for stickers
+  //         } else if (lastMessageData['type'] == MessageType.audio) {
+  //           lastMessage = 'Audio'; // Or any other appropriate message for audio
+  //         }
+  //         print("else ");
+  //         return lastMessage;
+  //       }
+  //     }
+  //   } catch (error) {
+  //     print("Error fetching last message: $error");
+  //     return null; // Return null on error
+  //   }
+  // }
+
+  // Future<String?> getLastMessageForUserChats(
+  //     String chatUserId, String currentUserId) async {
+  //   try {
+  //     if (currentUserId != chatUserId) {
+  //       QuerySnapshot messagesSnapshot =
+  //           await fetchMessagesSnapshot(chatUserId, currentUserId);
+  //
+  //       if (messagesSnapshot.docs.isEmpty) {
+  //         messagesSnapshot =
+  //             await fetchMessagesSnapshot(currentUserId, chatUserId);
+  //       }
+  //
+  //       if (messagesSnapshot.docs.isNotEmpty) {
+  //         return extractLastMessage(messagesSnapshot.docs.first.data());
+  //       }
+  //     }
+  //   } catch (error) {
+  //     print("Error fetching last message: $error");
+  //   }
+  //   return null; // Return null if no last message found
+  // }
+  Future<Map<String, dynamic>?> getLastMessageForUserChats(
       String chatUserId, String currentUserId) async {
-    print("This chatUserId $chatUserId - $currentUserId ");
     try {
       if (currentUserId != chatUserId) {
-        print(" inside ");
-
-        QuerySnapshot messagesSnapshot = await firebaseFirestore
-            .collection(FirestoreConstants.pathMessageCollection)
-            .doc("$chatUserId - $currentUserId")
-            .collection("$chatUserId - $currentUserId")
-            .orderBy(FirestoreConstants.timestamp, descending: true)
-            .limit(54)
-            .get();
+        QuerySnapshot messagesSnapshot =
+            await fetchMessagesSnapshot(chatUserId, currentUserId);
+        print("First if ${{messagesSnapshot.docs}}");
+        if (messagesSnapshot.docs.isEmpty) {
+          messagesSnapshot =
+              await fetchMessagesSnapshot(currentUserId, chatUserId);
+          print("Second if ${{messagesSnapshot.docs}}");
+        }
 
         if (messagesSnapshot.docs.isNotEmpty) {
-          print(
-              " messagesSnapshot.docs.isEmpty: ${messagesSnapshot.docs.isEmpty}");
-          Map<String, dynamic> lastMessageData =
-              messagesSnapshot.docs.first.data() as Map<String, dynamic>;
-
-          print("This Message ${lastMessageData['type']}");
-          String lastMessage = '';
-          if (lastMessageData['type'] == MessageType.text) {
-            lastMessage = lastMessageData['text'] as String;
-          } else if (lastMessageData['type'] == MessageType.image) {
-            lastMessage =
-                'Image'; // Or any other appropriate message for images
-          } else if (lastMessageData['type'] == MessageType.sticker) {
-            lastMessage =
-                'Sticker'; // Or any other appropriate message for stickers
-          } else if (lastMessageData['type'] == MessageType.audio) {
-            lastMessage = 'Audio'; // Or any other appropriate message for audio
-          }
-          return lastMessage;
-        } else if (messagesSnapshot.docs.isEmpty) {
-          QuerySnapshot messagesSnapshot = await firebaseFirestore
-              .collection(FirestoreConstants.pathMessageCollection)
-              .doc("$currentUserId - $chatUserId")
-              .collection("$currentUserId - $chatUserId")
-              .orderBy(FirestoreConstants.timestamp, descending: true)
-              .limit(54)
-              .get();
-          print(
-              " messagesSnapshot.docs.isEmpty: ${messagesSnapshot.docs.isEmpty}");
-          Map<String, dynamic> lastMessageData =
-              messagesSnapshot.docs.first.data() as Map<String, dynamic>;
-
-          print("This Message ${lastMessageData['type']}");
-          String lastMessage = '';
-          if (lastMessageData['type'] == MessageType.text) {
-            lastMessage = lastMessageData['text'] as String;
-          } else if (lastMessageData['type'] == MessageType.image) {
-            lastMessage =
-                'Image'; // Or any other appropriate message for images
-          } else if (lastMessageData['type'] == MessageType.sticker) {
-            lastMessage =
-                'Sticker'; // Or any other appropriate message for stickers
-          } else if (lastMessageData['type'] == MessageType.audio) {
-            lastMessage = 'Audio'; // Or any other appropriate message for audio
-          }
-          print("else ");
-          return lastMessage;
+          return messagesSnapshot.docs.first.data() as Map<String, dynamic>;
         }
       }
     } catch (error) {
       print("Error fetching last message: $error");
-      return null; // Return null on error
     }
+    return null; // Return null if no last message found
+  }
+
+  Future<QuerySnapshot> fetchMessagesSnapshot(
+      String firstOrder, String secondOrder) async {
+    print("firstOrder $firstOrder - $secondOrder");
+    return await firebaseFirestore
+        .collection(FirestoreConstants.pathMessageCollection)
+        .doc("$firstOrder - $secondOrder")
+        .collection("$firstOrder - $secondOrder")
+        .orderBy(FirestoreConstants.timestamp, descending: true)
+        .limit(1)
+        .get();
+  }
+
+  String extractLastMessage(Map<String, dynamic> messageData) {
+    String lastMessage = '';
+
+    switch (messageData['type']) {
+      case MessageType.text:
+        lastMessage = messageData['text'] as String;
+        break;
+      case MessageType.image:
+        lastMessage = 'Image';
+        break;
+      case MessageType.sticker:
+        lastMessage = 'Sticker';
+        break;
+      case MessageType.audio:
+        lastMessage = 'Audio';
+        break;
+      default:
+        lastMessage = 'Unknown Message Type';
+    }
+
+    return lastMessage;
   }
 
   List<QueryDocumentSnapshot> listMessages = [];
@@ -308,6 +388,7 @@ class ChatController extends ChangeNotifier {
         await transaction.set(ref, {
           FirestoreConstants.idFrom: auth.currentUser!.uid,
           FirestoreConstants.idTo: chatArgument!.peerId,
+          FirestoreConstants.isSeen: false,
           FirestoreConstants.timestamp:
               DateTime.now().millisecondsSinceEpoch.toString(),
           FirestoreConstants.content: audioMsg,

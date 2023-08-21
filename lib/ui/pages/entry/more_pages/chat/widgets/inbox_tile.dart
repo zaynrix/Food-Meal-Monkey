@@ -15,9 +15,12 @@ import 'package:provider/provider.dart';
 class ChatItem extends StatefulWidget {
   final DocumentSnapshot? documentSnapshot;
   final String? lastMesage;
-  final String lastMessageType; // Add this parameter
+  final dynamic lastMessageType; // Add this parameter
+  final bool isSeen; // Add this parameter
+  final String? messageTime;
 
-  const ChatItem(this.documentSnapshot, this.lastMesage, this.lastMessageType)
+  const ChatItem(this.documentSnapshot, this.lastMesage, this.lastMessageType,
+      this.isSeen, this.messageTime)
       : super();
 
   @override
@@ -39,7 +42,6 @@ class _ChatItemState extends State<ChatItem> {
 
   @override
   void didChangeDependencies() {
-    // chatController?.getChatMessage(authUser.uid - widget.)
     super.didChangeDependencies();
   }
 
@@ -81,7 +83,7 @@ class _ChatItemState extends State<ChatItem> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    "${widget.lastMesage}",
+                    "${widget.lastMessageType}",
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -124,6 +126,20 @@ class _ChatItemState extends State<ChatItem> {
             title: Text(
               "${userChat.displayName}",
               style: const TextStyle(color: Colors.black),
+            ),
+            trailing: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  "${widget.messageTime}",
+                  style: const TextStyle(color: Colors.grey, fontSize: 12),
+                ),
+                Icon(
+                  widget.isSeen ? Icons.done_all : Icons.done,
+                  color: Colors.deepOrange,
+                ),
+              ],
             ),
             // minVerticalPadding: 0,
             // horizontalTitleGap: 0,
