@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:food_delivery_app/core/controllers/cart_controller/cart_controller.dart';
 import 'package:food_delivery_app/core/model/models.dart';
+import 'package:food_delivery_app/routing/router.dart';
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/DivLine.dart';
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/Rating_pos.dart';
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/box_options.dart';
@@ -9,19 +11,15 @@ import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/wi
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/image_det.dart';
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/num_of_portions.dart';
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/total_price.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../../routing/navigations.dart';
 
-class DetailsScreen extends StatefulWidget {
+class DetailsScreen extends StatelessWidget {
   final ProductModel product;
 
   const DetailsScreen({required this.product, Key? key}) : super(key: key);
 
-  @override
-  State<DetailsScreen> createState() => _DetailsScreenState();
-}
-
-class _DetailsScreenState extends State<DetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +37,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
             ),
             actions: [
               IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.cartPage);
+                  },
                   icon: const Icon(
                     Icons.shopping_cart,
                     color: Colors.white,
@@ -49,20 +49,20 @@ class _DetailsScreenState extends State<DetailsScreen> {
             pinned: false,
             flexibleSpace: FlexibleSpaceBar(
               background: Hero(
-                  tag: widget.product.imagePath,
-                  child: ImageDet(image: widget.product.imagePath)),
+                  tag: product.imagePath,
+                  child: ImageDet(image: product.imagePath)),
             ),
           ),
           SliverList(
             delegate: SliverChildListDelegate([
               RatingPos(
                 prices: "30",
-                rating: widget.product.rating.toString(),
-                title: widget.product.name,
+                rating: product.rating.toString(),
+                title: product.name,
               ),
               SizedBox(height: 15),
               HeadTex(str: 'Descriptions'),
-              DescriptionDet(description: widget.product.description),
+              DescriptionDet(description: product.description),
               DevLine(),
               SizedBox(height: 15),
               HeadTex(str: 'Customize your Order'),
@@ -72,7 +72,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
               SizedBox(height: 15),
               NumOfPortions(),
               SizedBox(height: 35),
-              TotalPrice(),
+              Consumer<CartController>(
+                builder: (context , controller , child) => TotalPrice(
+                  price: product.price.toDouble(),
+                  onPressed: (){
+                    debugPrint("This is inside ui");
+                    controller.addItemToCard(product: product);
+                    },
+                ),
+              ),
             ]),
           ),
         ],

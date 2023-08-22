@@ -52,21 +52,20 @@ class ProductModel {
     );
   }
 
+
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
     return {
-      data['resName']: resName,
-      data['imagePath']: imagePath,
-      data['name']: name,
-      data['description']: description,
-      data['price']: price,
-      data['rating']: rating,
-      data['ratingCount']: ratingCount,
-      data['inCart']: inCart,
-      data['cartQuantity']: cartQuantity,
+      'resName': resName,
+      'imagePath': imagePath,
+      'name': name,
+      'description': description,
+      'price': price,
+      'rating': rating,
+      'ratingCount': ratingCount,
+      'inCart': inCart,
+      'cartQuantity': cartQuantity,
     };
   }
-
   static List<ProductModel> desserts = [
     ProductModel(
       imagePath: ImageAssets.applePie,

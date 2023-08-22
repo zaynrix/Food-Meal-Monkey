@@ -31,16 +31,16 @@ class ThemeManager {
 
 //--------------------------------textTheme-------------------------------------
         textTheme:   TextTheme(
-          headline1: TextStyle(fontSize: 30.sp, fontFamily: 'Metropolis',fontWeight: FontWeight.w600, color: primaryFontColor),
-          headline2: TextStyle(fontSize: 28.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.w600, color: blackColor),
-          headline3: TextStyle(fontSize: 24.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.w600, color: blackColor),
-          headline4: TextStyle(fontSize: 22.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.bold, color: blackColor),
-          headline5: TextStyle(fontSize: 14.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.w600, color: primaryFontColor ),
-          headline6: TextStyle(fontSize: 11.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.normal, color: secondaryFontColor),
-          subtitle2: TextStyle(fontSize: 14.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.w500, color: unSelectedIconColor),
-          bodyText1: TextStyle(fontSize: 12.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.normal, color: whiteColor ),
+          displayLarge: TextStyle(fontSize: 30.sp, fontFamily: 'Metropolis',fontWeight: FontWeight.w600, color: primaryFontColor),
+          displayMedium: TextStyle(fontSize: 28.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.w600, color: blackColor),
+          displaySmall: TextStyle(fontSize: 24.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.w600, color: blackColor),
+          headlineMedium: TextStyle(fontSize: 22.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.bold, color: blackColor),
+          headlineSmall: TextStyle(fontSize: 14.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.w600, color: primaryFontColor ),
+          titleLarge: TextStyle(fontSize: 11.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.normal, color: secondaryFontColor),
+          titleSmall: TextStyle(fontSize: 14.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.w500, color: primaryFontColor),
+          bodyLarge: TextStyle(fontSize: 12.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.normal, color: whiteColor ),
           // bodyText2: TextStyle(fontSize: 12.0.sp,fontFamily: 'Open Sans', fontWeight: FontWeight.normal, color: blackColor ),
-          subtitle1: TextStyle(fontSize: 16.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.bold, color: whiteColor),
+          titleMedium: TextStyle(fontSize: 16.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.bold, color: blackColor),
 
           labelMedium: TextStyle(fontSize: 14.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.normal, color: secondaryFontColor )
         ),

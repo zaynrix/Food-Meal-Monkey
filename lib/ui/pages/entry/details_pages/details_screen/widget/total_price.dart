@@ -1,57 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/utils/constant.dart';
+import 'package:food_delivery_app/resources/values_manager.dart';
+import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/cart_button.dart';
+import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/custom_button_cart.dart';
+import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/orange_container.dart';
+import 'package:food_delivery_app/utils/extension/responsive_extension.dart';
 
 class TotalPrice extends StatelessWidget {
   const TotalPrice({
+    required this.onPressed,
+    required this.price,
     Key? key,
   }) : super(key: key);
 
+  final double price;
+  final void Function()? onPressed;
+
   @override
   Widget build(BuildContext context) {
-    return const Stack(
-      children: [OrangeContainer(), CustCard(), CusButton()],
+    return Stack(
+      children: [OrangeContainer(), CostCard(price: price, onPressed: onPressed,), CartButton()],
     );
   }
 }
 
-class CusButton extends StatelessWidget {
-  const CusButton({
+
+class CostCard extends StatelessWidget {
+  const CostCard({
+    required this.onPressed,
+    required this.price,
     Key? key,
   }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      top: 65,
-      right: 43,
-      child: Container(
-        width: 47,
-        height: 47,
-        decoration: const BoxDecoration(boxShadow: [
-          BoxShadow(color: Colors.black12, offset: Offset(1.5, 1.5)),
-          BoxShadow(color: Colors.black12, offset: Offset(-1.5, -1.5)),
-        ], shape: BoxShape.circle, color: Colors.white),
-        child: IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.shopping_cart,
-            color: Color(primaryColor),
-            size: 25,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class CustCard extends StatelessWidget {
-  const CustCard({
-    Key? key,
-  }) : super(key: key);
+  final double price;
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
+    return Padding(
       padding: EdgeInsets.symmetric(horizontal: 40, vertical: 18),
       child: SizedBox(
         width: 330,
@@ -76,15 +61,15 @@ class CustCard extends StatelessWidget {
                 ),
                 SizedBox(height: 4),
                 Text(
-                  'LKR 1500',
+                  'LKR $price',
                   style: TextStyle(
                     fontSize: 21,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
                 ),
-                SizedBox(height: 5),
-                CustomButtonCard()
+                SizedBox(height: AppSize.s5.height),
+                CustomButtonCard(onPressed: onPressed,)
               ]),
         ),
       ),
@@ -92,56 +77,5 @@ class CustCard extends StatelessWidget {
   }
 }
 
-class CustomButtonCard extends StatelessWidget {
-  const CustomButtonCard({
-    Key? key,
-  }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 165,
-      height: 38,
-      child: ElevatedButton(
-        onPressed: () {},
-        style: const ButtonStyle(
-            backgroundColor: MaterialStatePropertyAll(Color(primaryColor)),
-            shape: MaterialStatePropertyAll(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(28),
-                ),
-              ),
-            )),
-        child: const Row(
-          children: [
-            Icon(Icons.add_shopping_cart_outlined),
-            SizedBox(width: 4),
-            FittedBox(child: Text('Add to Cart')),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
-class OrangeContainer extends StatelessWidget {
-  const OrangeContainer({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 180,
-      width: 95,
-      decoration: const BoxDecoration(
-        color: Color(primaryColor),
-        borderRadius: BorderRadius.only(
-          topRight: Radius.circular(38),
-          bottomRight: Radius.circular(38),
-        ),
-      ),
-    );
-  }
-}
