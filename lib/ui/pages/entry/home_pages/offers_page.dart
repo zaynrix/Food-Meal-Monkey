@@ -57,16 +57,7 @@ class _OffersPageState extends State<OffersPage> {
                 final offers = snapshot.data!.docs.map((doc) {
                   Map<String, dynamic> data =
                       doc.data() as Map<String, dynamic>;
-                  return ProductModel(
-                    rating: double.parse(data['rating']),
-                    imagePath: data['imagePath'],
-                    name: data['name'],
-                    ratingCount: data['ratingCount'],
-                    description: '',
-                    price: data["price"],
-                    cartQuantity: data["cartQuantity"],
-                    inCart: data["inCart"],
-                  );
+                  return ProductModel.fromJson(data);
                 }).toList();
 
                 return ListView.builder(
