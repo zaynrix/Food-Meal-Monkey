@@ -38,6 +38,20 @@ class ProductModel {
     );
   }
 
+  factory ProductModel.fromDocument(DocumentSnapshot doc){
+    return ProductModel(
+      imagePath: doc['imagePath'],
+      name: doc['name'],
+      price: (doc['price'] ).toDouble(),
+      rating: (doc['rating'] ).toDouble() ,
+      ratingCount: (doc['ratingCount']).toDouble() ,
+      description: doc['description'],
+      resName: doc['resName'] == null ? null :  doc['resName'],
+      inCart: doc["inCart"],
+      cartQuantity: (doc["cartQuantity"]).toDouble(),
+    );
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     return {

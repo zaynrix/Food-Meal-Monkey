@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/core/model/models.dart';
 import 'package:food_delivery_app/routing/router.dart';
 
 class DetailsScreenArguments {
@@ -21,18 +22,13 @@ class DetailsScreenArguments {
 }
 
 class HomeController extends ChangeNotifier {
-  void navigateToDetailsPage(BuildContext context, DocumentSnapshot doc) {
+
+
+  void navigateToDetailsPage(BuildContext context, ProductModel productModel) {
     Navigator.pushNamed(
       context,
       RouteGenerator.detailsPage,
-      arguments: DetailsScreenArguments(
-          title: getTitle(doc),
-          rating: getRating(doc),
-          description: getDescription(doc),
-          imagePath: getImagePath(doc),
-          ratingCount: getRatingCount(doc),
-          prices: getPrice(doc)),
-    );
+      arguments: productModel);
   }
 
   Stream<QuerySnapshot> getMostPopularFoodStream() {
