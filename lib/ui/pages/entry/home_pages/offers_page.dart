@@ -65,13 +65,14 @@ class _OffersPageState extends State<OffersPage> {
                   shrinkWrap: true,
                   itemCount: offers.length,
                   itemBuilder: (context, index) {
-                    ProductModel data = offers[index];
-                    DocumentSnapshot doc = snapshot.data!.docs[index];
+                    ProductModel product = offers[index];
 
                     return GestureDetector(
                       onTap: () {
-                        Provider.of<HomeController>(context, listen: false)
-                            .navigateToDetailsPage(context, doc);
+                        ServiceNavigation.serviceNavi
+                            .pushNamedWidget(RouteGenerator.detailsPage , args: product);
+                        // Provider.of<HomeController>(context, listen: false)
+                        //     .navigateToDetailsPage(context, data);
                       },
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
@@ -79,7 +80,7 @@ class _OffersPageState extends State<OffersPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CachedNetworkImage(
-                            imageUrl: data.imagePath,
+                            imageUrl: product.imagePath,
                             fit: BoxFit.fitWidth,
                             width: double.infinity,
                             placeholder: (context, url) => Center(
@@ -96,7 +97,7 @@ class _OffersPageState extends State<OffersPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  data.name,
+                                  product.name,
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyLarge!
@@ -107,10 +108,10 @@ class _OffersPageState extends State<OffersPage> {
                                 ),
                                 Row(
                                   children: [
-                                    ItemRating(rating: data.rating.toString()),
+                                    ItemRating(rating: product.rating.toString()),
                                     addHorizontalSpace(AppSize.s5.w),
                                     Text(
-                                      '(${data.ratingCount} rating)',
+                                      '(${product.ratingCount} rating)',
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodySmall!
