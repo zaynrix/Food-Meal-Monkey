@@ -26,11 +26,18 @@ class CartController extends ChangeNotifier {
 
   Future<void> addItemToCard({required ProductModel product}) async {
     try{
-      await FirebaseFirestore.instance.collection('cart').add(product.toJson());
+      product.cartQuantity++;
+      product.inCart = true;
+      final jsonProduct = product.toJson();
+      debugPrint("This is jsonProduct in controller >>>>> $jsonProduct");
+      await FirebaseFirestore.instance.collection('cart').add(jsonProduct);
+      debugPrint("This is inside add function in controller");
     } catch (error) {
       print('Error adding item to Firestore: $error');
     }
   }
+
+
 
   Future<void> updateProductInFirestore(ProductModel product) async {
     try {
@@ -45,6 +52,30 @@ class CartController extends ChangeNotifier {
             .collection('cart')
             .doc(docId)
             .update({'cartQuantity': product.cartQuantity});
+      } else {
+        print('Product not found or not unique');
+      }
+    } catch (error) {
+      print('Error updating product in Firestore: $error');
+    }
+  }
+
+  Future<void> deleteProduct(ProductModel product) async {
+    try {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('cart')
+          .where('name', isEqualTo: product.name)
+          .where('resName', isEqualTo: product.resName)
+          .get();
+      if (querySnapshot.size == 1) {
+        final docId = querySnapshot.docs.first.id;
+        await FirebaseFirestore.instance
+            .collection('cart')
+            .doc(docId)
+            .delete();
+        final index = cartProducts.indexOf(product);
+        cartProducts.removeAt(index);
+        notifyListeners();
       } else {
         print('Product not found or not unique');
       }
@@ -68,6 +99,9 @@ class CartController extends ChangeNotifier {
       final newCartQuantity = (item.cartQuantity) - 1;
       cartProducts[index].cartQuantity = newCartQuantity;
       notifyListeners();
+    }
+    if(item.cartQuantity == 0) {
+      deleteProduct(item);
     }
   }
 
