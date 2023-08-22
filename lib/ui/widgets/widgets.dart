@@ -7,7 +7,9 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:food_delivery_app/core/controllers/home_Controllers/home_controller.dart';
+import 'package:food_delivery_app/core/model/models.dart';
 import 'package:food_delivery_app/resources/values_manager.dart';
+import 'package:food_delivery_app/utils/extension/responsive_extension.dart';
 import 'package:provider/provider.dart';
 
 import '../../resources/styles.dart';
@@ -27,3 +29,4 @@ part 'menu_widgets//dessert_widget.dart';
 part 'more_widgets/more_tile.dart';
 part 'splash_logo.dart';
 part 'text_field.dart';
+part 'cart_widgets/cart_widget.dart';

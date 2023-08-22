@@ -3,7 +3,7 @@ part of pages;
 class DessertsPage extends StatelessWidget {
   DessertsPage({Key? key}) : super(key: key);
 
-  final List<ItemModel> dessertsItem = ItemModel.desserts;
+  final List<ProductModel> dessertsItem = ProductModel.desserts;
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +36,8 @@ class DessertsPage extends StatelessWidget {
                     return DessertsWidget(
                       title: dessert.name,
                       imagePath: dessert.imagePath,
-                      label: dessert.label,
-                      rate: dessert.rating,
+                      // label: dessert.label,
+                      rate: dessert.rating.toDouble(),
                     );
                   }),
               // DessertsWidget()

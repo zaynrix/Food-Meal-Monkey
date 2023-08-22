@@ -23,7 +23,11 @@ class _HomePageState extends State<HomePage> {
           },
         ),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.shopping_cart)),
+          IconButton(onPressed: () {
+            ServiceNavigation.serviceNavi
+                .pushNamedWidget(RouteGenerator.cartPage);
+          },
+              icon: const Icon(Icons.shopping_cart)),
         ],
       ),
       body: ListView(children: [

@@ -52,15 +52,20 @@ class _OffersPageState extends State<OffersPage> {
                   return const Center(child: CircularProgressIndicator());
                 }
 
+                ///Todo add description
+
                 final offers = snapshot.data!.docs.map((doc) {
                   Map<String, dynamic> data =
                       doc.data() as Map<String, dynamic>;
-                  return ItemModel(
+                  return ProductModel(
                     rating: double.parse(data['rating']),
                     imagePath: data['imagePath'],
                     name: data['name'],
-                    label: data['rating'],
-                    ratingCount: int.parse(data['ratingCount']),
+                    ratingCount: data['ratingCount'],
+                    description: '',
+                    price: data["price"],
+                    cartQuantity: data["cartQuantity"],
+                    inCart: data["inCart"],
                   );
                 }).toList();
 
@@ -69,7 +74,7 @@ class _OffersPageState extends State<OffersPage> {
                   shrinkWrap: true,
                   itemCount: offers.length,
                   itemBuilder: (context, index) {
-                    ItemModel data = offers[index];
+                    ProductModel data = offers[index];
                     DocumentSnapshot doc = snapshot.data!.docs[index];
 
                     return GestureDetector(
