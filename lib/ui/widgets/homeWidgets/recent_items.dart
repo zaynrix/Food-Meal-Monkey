@@ -29,10 +29,10 @@ class RecentItems extends StatelessWidget {
             String image = itemData['imagePath'];
             String name = itemData['name'];
             String description = itemData['description'];
-            String rating = itemData['rating'];
-            String ratingCount = itemData['ratingCount'];
+            String rating = itemData['rating'].toString();
+            String ratingCount = itemData['ratingCount'].toString();
             String res_name = itemData['res_name'];
-            String price = itemData['price'];
+            String price = itemData['price'].toString();
             return GestureDetector(
               onTap: () {
                 Provider.of<HomeController>(context, listen: false)

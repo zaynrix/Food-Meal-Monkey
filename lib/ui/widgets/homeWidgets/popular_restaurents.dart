@@ -53,7 +53,7 @@ class PupularResturent extends StatelessWidget {
                   child: Row(
                     children: [
                       ItemRating(
-                        rating: restaurantData['rating'],
+                        rating: restaurantData['rating'].toString(),
                       ),
                       addHorizontalSpace(AppSize.s5.w),
                       Text(

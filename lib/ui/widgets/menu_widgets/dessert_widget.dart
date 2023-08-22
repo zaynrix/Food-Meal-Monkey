@@ -4,13 +4,13 @@ class DessertsWidget extends StatelessWidget {
   const DessertsWidget({
     required this.title,
     required this.imagePath,
-    required this.label,
+    // required this.label,
     required this.rate,
     Key? key,
   }) : super(key: key);
 
   final String title;
-  final String label;
+  // final String label;
   final String imagePath;
   final double rate;
 
@@ -43,7 +43,7 @@ class DessertsWidget extends StatelessWidget {
                     ),
                     hSpace14,
                     Text(
-                      label,
+                      "label",
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ],

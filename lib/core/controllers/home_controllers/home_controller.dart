@@ -46,7 +46,7 @@ class HomeController extends ChangeNotifier {
   }
 
   String getRating(DocumentSnapshot doc) {
-    return doc['rating'];
+    return doc['rating'].toString();
   }
 
   String getDescription(DocumentSnapshot doc) {
@@ -58,10 +58,10 @@ class HomeController extends ChangeNotifier {
   }
 
   String getRatingCount(DocumentSnapshot doc) {
-    return doc['ratingCount'];
+    return doc['ratingCount'].toString();
   }
 
   String getPrice(DocumentSnapshot doc) {
-    return doc['price'];
+    return doc['price'].toString();
   }
 }
