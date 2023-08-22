@@ -10,9 +10,9 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   int currentIndex = -1;
   late final AnimationController _controller = AnimationController(
-      duration: const Duration(milliseconds: 50), vsync: this, value: 0.5);
+      duration: const Duration(milliseconds: 500), vsync: this, value: 0.5);
   late final AnimationController _controller2 = AnimationController(
-      duration: const Duration(milliseconds: 50), vsync: this, value: 1.0);
+      duration: const Duration(milliseconds: 500), vsync: this, value: 1.0);
 
   @override
   void dispose() {

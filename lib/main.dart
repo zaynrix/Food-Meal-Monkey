@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_delivery_app/core/controllers/auth_controller/auth_controller.dart';
+import 'package:food_delivery_app/core/controllers/cart_controller/cart_controller.dart';
 import 'package:food_delivery_app/core/controllers/home_Controllers/home_controller.dart';
 import 'package:food_delivery_app/core/controllers/profile_controllers/profile_controller.dart';
 import 'package:food_delivery_app/resources/styles.dart';
@@ -47,6 +48,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => AppConfig(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CartController(),
         ),
         ChangeNotifierProvider(
           create: (context) => AuthController(

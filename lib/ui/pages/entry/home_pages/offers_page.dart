@@ -52,16 +52,12 @@ class _OffersPageState extends State<OffersPage> {
                   return const Center(child: CircularProgressIndicator());
                 }
 
+                ///Todo add description
+
                 final offers = snapshot.data!.docs.map((doc) {
                   Map<String, dynamic> data =
                       doc.data() as Map<String, dynamic>;
-                  return ItemModel(
-                    rating: double.parse(data['rating']),
-                    imagePath: data['imagePath'],
-                    name: data['name'],
-                    label: data['rating'],
-                    ratingCount: int.parse(data['ratingCount']),
-                  );
+                  return ProductModel.fromJson(data);
                 }).toList();
 
                 return ListView.builder(
@@ -69,7 +65,7 @@ class _OffersPageState extends State<OffersPage> {
                   shrinkWrap: true,
                   itemCount: offers.length,
                   itemBuilder: (context, index) {
-                    ItemModel data = offers[index];
+                    ProductModel data = offers[index];
                     DocumentSnapshot doc = snapshot.data!.docs[index];
 
                     return GestureDetector(
