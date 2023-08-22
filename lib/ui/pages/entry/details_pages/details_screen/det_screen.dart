@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:food_delivery_app/core/controllers/home_Controllers/home_controller.dart';
+import 'package:food_delivery_app/core/model/models.dart';
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/DivLine.dart';
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/Rating_pos.dart';
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/box_options.dart';
@@ -13,9 +13,9 @@ import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/wi
 import '../../../../../routing/navigations.dart';
 
 class DetailsScreen extends StatefulWidget {
-  final DetailsScreenArguments arguments;
+  final ProductModel product;
 
-  const DetailsScreen({required this.arguments, Key? key}) : super(key: key);
+  const DetailsScreen({required this.product, Key? key}) : super(key: key);
 
   @override
   State<DetailsScreen> createState() => _DetailsScreenState();
@@ -49,20 +49,20 @@ class _DetailsScreenState extends State<DetailsScreen> {
             pinned: false,
             flexibleSpace: FlexibleSpaceBar(
               background: Hero(
-                  tag: widget.arguments.imagePath,
-                  child: ImageDet(image: widget.arguments.imagePath)),
+                  tag: widget.product.imagePath,
+                  child: ImageDet(image: widget.product.imagePath)),
             ),
           ),
           SliverList(
             delegate: SliverChildListDelegate([
               RatingPos(
                 prices: "30",
-                rating: widget.arguments.rating,
-                title: widget.arguments.title,
+                rating: widget.product.rating.toString(),
+                title: widget.product.name,
               ),
               SizedBox(height: 15),
               HeadTex(str: 'Descriptions'),
-              DescriptionDet(description: widget.arguments.description),
+              DescriptionDet(description: widget.product.description),
               DevLine(),
               SizedBox(height: 15),
               HeadTex(str: 'Customize your Order'),

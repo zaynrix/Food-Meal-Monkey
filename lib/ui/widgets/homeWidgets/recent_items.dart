@@ -16,6 +16,8 @@ class RecentItems extends StatelessWidget {
               'No recent items available.'); // Display a message if no data is available
         }
 
+        final docs = snapshot.data!.docs;
+
         return ListView.separated(
           separatorBuilder: (context, index) => Divider(
             color: Colors.transparent,
@@ -24,19 +26,15 @@ class RecentItems extends StatelessWidget {
           shrinkWrap: true,
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
-            DocumentSnapshot doc = snapshot.data!.docs[index];
-            final itemData = snapshot.data!.docs[index].data();
-            String image = itemData['imagePath'];
-            String name = itemData['name'];
-            String description = itemData['description'];
-            String rating = itemData['rating'].toString();
-            String ratingCount = itemData['ratingCount'].toString();
-            String res_name = itemData['res_name'];
-            String price = itemData['price'].toString();
+            final doc = docs[index];
+            final product = ProductModel.fromDocument(doc);
+
             return GestureDetector(
               onTap: () {
-                Provider.of<HomeController>(context, listen: false)
-                    .navigateToDetailsPage(context, doc);
+                ServiceNavigation.serviceNavi
+                    .pushNamedWidget(RouteGenerator.detailsPage , args: product);
+                // Provider.of<HomeController>(context, listen: false)
+                //     .navigateToDetailsPage(context, doc);
               },
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,9 +45,9 @@ class RecentItems extends StatelessWidget {
                       width: 80.w,
                       height: 80.h,
                       child: Hero(
-                        tag: image,
+                        tag: product.imagePath,
                         child: CachedNetworkImage(
-                          imageUrl: image,
+                          imageUrl: product.imagePath,
                           height: 80.h,
                           width: 80.w,
                           fit: BoxFit.cover,
@@ -68,7 +66,7 @@ class RecentItems extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            name,
+                            product.name,
                             style: Theme.of(context)
                                 .textTheme
                                 .headlineMedium!
@@ -93,7 +91,7 @@ class RecentItems extends StatelessWidget {
                               SizedBox(
                                 width: 5.w,
                               ),
-                              Text(res_name),
+                              Text(product.resName ?? ""),
                               SizedBox(
                                 width: 20.w,
                               ),
@@ -102,13 +100,13 @@ class RecentItems extends StatelessWidget {
                           Row(
                             children: [
                               ItemRating(
-                                rating: rating,
+                                rating: product.rating.toString(),
                               ),
                               SizedBox(
                                 width: 3.h,
                               ),
                               Text(
-                                '($ratingCount rating)',
+                                '(${product.ratingCount} rating)',
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodySmall!

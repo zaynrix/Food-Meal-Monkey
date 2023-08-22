@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/core/controllers/home_Controllers/home_controller.dart';
+import 'package:food_delivery_app/core/model/models.dart';
 import 'package:food_delivery_app/routing/router.dart';
 import 'package:food_delivery_app/ui/pages/entry/auth_pages/sign_up_screen.dart';
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/det_screen.dart';
@@ -37,10 +37,12 @@ class RoutsGenerate {
         return MaterialPageRoute(builder: (_) => DessertsPage());
       case RouteGenerator.aboutAsPage:
         return MaterialPageRoute(builder: (_) => const AboutAsPage());
+
       case RouteGenerator.detailsPage:
         return MaterialPageRoute(
             builder: (_) =>
-                DetailsScreen(arguments: args as DetailsScreenArguments));
+                DetailsScreen( product: args as ProductModel,));
+
       case RouteGenerator.chatPage:
         return MaterialPageRoute(
             builder: (_) => ChatPage(arguments: args as ChatArgument));

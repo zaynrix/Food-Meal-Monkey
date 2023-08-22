@@ -15,6 +15,7 @@ class _MostPopularState extends State<MostPopular> {
     return StreamBuilder<QuerySnapshot>(
       stream: widget.homeController.getMostPopularFoodStream(),
       builder: (context, snapshot) {
+
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -23,21 +24,20 @@ class _MostPopularState extends State<MostPopular> {
           return const Text('No data available');
         }
 
+        final docs = snapshot.data!.docs;
+        debugPrint("This is docs for most pobular >>> $docs");
         return ListView.builder(
           shrinkWrap: true,
           scrollDirection: Axis.horizontal,
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
-            DocumentSnapshot doc = snapshot.data!.docs[index];
-            String title = widget.homeController.getTitle(doc);
-            String rating = widget.homeController.getRating(doc);
-            String imagePath = widget.homeController.getImagePath(doc);
-            String ratingCount = widget.homeController.getRatingCount(doc);
-            String price = widget.homeController.getPrice(doc);
+            final doc = docs[index];
+            final product = ProductModel.fromDocument(doc);
 
             return GestureDetector(
               onTap: () {
-                widget.homeController.navigateToDetailsPage(context, doc);
+                ServiceNavigation.serviceNavi
+                    .pushNamedWidget(RouteGenerator.detailsPage , args: product);
               },
               child: Container(
                 padding: EdgeInsetsDirectional.only(start: AppPadding.p20.w),
@@ -49,12 +49,12 @@ class _MostPopularState extends State<MostPopular> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Hero(
-                      tag: imagePath,
+                      tag: product.imagePath,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(15),
                         child: Center(
                           child: CachedNetworkImage(
-                            imageUrl: imagePath,
+                            imageUrl: product.imagePath,
                             height: 135.h,
                             fit: BoxFit.cover,
                             placeholder: (context, url) => Center(
@@ -67,7 +67,7 @@ class _MostPopularState extends State<MostPopular> {
                     ),
                     addVerticalSpace(AppSize.s12.h),
                     Text(
-                      title,
+                      product.name,
                       style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -75,12 +75,12 @@ class _MostPopularState extends State<MostPopular> {
                     ),
                     Row(
                       children: [
-                        ItemRating(rating: rating.toString()),
+                        ItemRating(rating: product.rating.toString()),
                         SizedBox(
                           width: 3.h,
                         ),
                         Text(
-                          ratingCount,
+                          product.ratingCount.toString(),
                           style: const TextStyle(
                             color: Colors.grey,
                             fontWeight: FontWeight.bold,
