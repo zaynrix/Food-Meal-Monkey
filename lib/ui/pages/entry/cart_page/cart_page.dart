@@ -25,10 +25,10 @@ class _CartPageState extends State<CartPage> {
       body: SingleChildScrollView(
         child: Padding(
           padding: AppPadding.p20.paddingHorizontal,
-          child: Column(
-            children: [
-              Consumer<CartController>(
-                builder: (context, value, child) => ListView.builder(
+          child: Consumer<CartController>(
+            builder: (context , value , child) => Column(
+              children: [
+                ListView.builder(
                   shrinkWrap: true,
                   itemCount: value.cartProducts.length ,
                   itemBuilder: (context, index) {
@@ -50,20 +50,7 @@ class _CartPageState extends State<CartPage> {
                         Divider(
                           color: secondaryFontColor,
                         ),
-                        20.addVerticalSpace,
-                        Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Subtotal',),
-                            Text(
-                              '\$${calculateSubtotal(value.cartProducts).toStringAsFixed(2)}',
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: FlutterSizes.screenDeviceHeight.height * 0.35,
-                        )
+
                       ],
                     )
                         :
@@ -73,9 +60,23 @@ class _CartPageState extends State<CartPage> {
 
                   },
                 ),
-              ),
-              50.addVerticalSpace,
-            ],
+                50.addVerticalSpace,
+                20.addVerticalSpace,
+                Row(
+                  mainAxisAlignment:
+                  MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Subtotal', style: textTheme.titleMedium!.copyWith(color: Colors.black),),
+                    Text(
+                      '\$${calculateSubtotal(value.cartProducts).toStringAsFixed(2)}',
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: FlutterSizes.screenDeviceHeight.height * 0.35,
+                )
+              ],
+            ),
           ),
         ),
       ),

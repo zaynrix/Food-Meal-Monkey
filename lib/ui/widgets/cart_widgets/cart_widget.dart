@@ -19,11 +19,16 @@ class CartCard extends StatefulWidget {
 class _CartCardState extends State<CartCard> {
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+
     return Row(
       children: [
-        Image.network(
-          widget.food.imagePath,
+        CachedNetworkImage(
           width: AppSize.s80.width,
+          placeholder: (context, url) =>
+              Center(child: Image.asset(ImageAssets.app_icon)),
+          errorWidget: (context, url, error) => Icon(Icons.error),
+          imageUrl: widget.food.imagePath,
         ),
         AppSize.s25.addHorizontalSpace,
         Expanded(
@@ -35,6 +40,7 @@ class _CartCardState extends State<CartCard> {
                 width: 166.width,
                 child: Text(
                   widget.food.name,
+                  style: textTheme.titleSmall,
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -42,7 +48,7 @@ class _CartCardState extends State<CartCard> {
               20.addVerticalSpace,
               Text(
                 '\$${widget.food.price}',
-                // style: bodyBoldPrimary,
+                style: textTheme.titleMedium,
               ),
             ],
           ),
@@ -64,4 +70,3 @@ class _CartCardState extends State<CartCard> {
     );
   }
 }
-
