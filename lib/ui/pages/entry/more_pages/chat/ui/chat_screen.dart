@@ -39,8 +39,6 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  // final ScrollController scrollController = ScrollController();
-
   ChatController? chatProvider;
   AuthController? authProvider;
 
