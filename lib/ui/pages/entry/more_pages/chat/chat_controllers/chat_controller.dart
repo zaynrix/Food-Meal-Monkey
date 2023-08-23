@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 //PR
@@ -15,6 +16,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:record_mp3/record_mp3.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -184,133 +186,43 @@ class ChatController extends ChangeNotifier {
     }
   }
 
-  // Future<String?> getLastMessageForUserChats(
-  //     String chatUserId, String currentUserId) async {
-  //   print("This chatUserId $chatUserId - $currentUserId ");
-  //   try {
-  //     if (currentUserId != chatUserId) {
-  //       print(" inside ");
-  //
-  //       QuerySnapshot messagesSnapshot = await firebaseFirestore
-  //           .collection(FirestoreConstants.pathMessageCollection)
-  //           .doc("$chatUserId - $currentUserId")
-  //           .collection("$chatUserId - $currentUserId")
-  //           .orderBy(FirestoreConstants.timestamp, descending: true)
-  //           .limit(1)
-  //           .get();
-  //
-  //       if (messagesSnapshot.docs.isNotEmpty) {
-  //         print(
-  //             " messagesSnapshot.docs.isEmpty: ${messagesSnapshot.docs.isEmpty}");
-  //         Map<String, dynamic> lastMessageData =
-  //             messagesSnapshot.docs.first.data() as Map<String, dynamic>;
-  //
-  //         print("This Message ${lastMessageData['type']}");
-  //         String lastMessage = '';
-  //         if (lastMessageData['type'] == MessageType.text) {
-  //           lastMessage = lastMessageData['text'] as String;
-  //         } else if (lastMessageData['type'] == MessageType.image) {
-  //           lastMessage =
-  //               'Image'; // Or any other appropriate message for images
-  //         } else if (lastMessageData['type'] == MessageType.sticker) {
-  //           lastMessage =
-  //               'Sticker'; // Or any other appropriate message for stickers
-  //         } else if (lastMessageData['type'] == MessageType.audio) {
-  //           lastMessage = 'Audio'; // Or any other appropriate message for audio
-  //         }
-  //         return lastMessage;
-  //       } else if (messagesSnapshot.docs.isEmpty) {
-  //         QuerySnapshot messagesSnapshot = await firebaseFirestore
-  //             .collection(FirestoreConstants.pathMessageCollection)
-  //             .doc("$currentUserId - $chatUserId")
-  //             .collection("$currentUserId - $chatUserId")
-  //             .orderBy(FirestoreConstants.timestamp, descending: true)
-  //             .limit(54)
-  //             .get();
-  //         print(
-  //             " messagesSnapshot.docs.isEmpty: ${messagesSnapshot.docs.isEmpty}");
-  //         Map<String, dynamic> lastMessageData =
-  //             messagesSnapshot.docs.first.data() as Map<String, dynamic>;
-  //
-  //         print("This Message ${lastMessageData['type']}");
-  //         String lastMessage = '';
-  //         if (lastMessageData['type'] == MessageType.text) {
-  //           lastMessage = lastMessageData['text'] as String;
-  //         } else if (lastMessageData['type'] == MessageType.image) {
-  //           lastMessage =
-  //               'Image'; // Or any other appropriate message for images
-  //         } else if (lastMessageData['type'] == MessageType.sticker) {
-  //           lastMessage =
-  //               'Sticker'; // Or any other appropriate message for stickers
-  //         } else if (lastMessageData['type'] == MessageType.audio) {
-  //           lastMessage = 'Audio'; // Or any other appropriate message for audio
-  //         }
-  //         print("else ");
-  //         return lastMessage;
-  //       }
-  //     }
-  //   } catch (error) {
-  //     print("Error fetching last message: $error");
-  //     return null; // Return null on error
-  //   }
-  // }
-
-  // Future<String?> getLastMessageForUserChats(
-  //     String chatUserId, String currentUserId) async {
-  //   try {
-  //     if (currentUserId != chatUserId) {
-  //       QuerySnapshot messagesSnapshot =
-  //           await fetchMessagesSnapshot(chatUserId, currentUserId);
-  //
-  //       if (messagesSnapshot.docs.isEmpty) {
-  //         messagesSnapshot =
-  //             await fetchMessagesSnapshot(currentUserId, chatUserId);
-  //       }
-  //
-  //       if (messagesSnapshot.docs.isNotEmpty) {
-  //         return extractLastMessage(messagesSnapshot.docs.first.data());
-  //       }
-  //     }
-  //   } catch (error) {
-  //     print("Error fetching last message: $error");
-  //   }
-  //   return null; // Return null if no last message found
-  // }
-  Future<Map<String, dynamic>?> getLastMessageForUserChats(
-      String chatUserId, String currentUserId) async {
-    print("chatUserId: $chatUserId - currentUserId: $currentUserId");
-
-    try {
-      if (currentUserId != chatUserId) {
-        QuerySnapshot messagesSnapshot =
-            await fetchMessagesSnapshot(chatUserId, currentUserId);
-        print("First if ${{messagesSnapshot.docs}}");
-        if (messagesSnapshot.docs.isEmpty) {
-          messagesSnapshot =
-              await fetchMessagesSnapshot(currentUserId, chatUserId);
-          print("Second if ${{messagesSnapshot.docs}}");
-        }
-
-        if (messagesSnapshot.docs.isNotEmpty) {
-          return messagesSnapshot.docs.first.data() as Map<String, dynamic>;
-        }
-      }
-    } catch (error) {
-      print("Error fetching last message: $error");
-    }
-    return null; // Return null if no last message found
-  }
-
-  Future<QuerySnapshot> fetchMessagesSnapshot(
-      String firstOrder, String secondOrder) async {
-    print("firstOrder $firstOrder - $secondOrder");
-    return await firebaseFirestore
+  Stream<QuerySnapshot> fetchMessagesSnapshot(
+      String firstOrder, String secondOrder) {
+    // print("firstOrder $firstOrder - $secondOrder");
+    return firebaseFirestore
         .collection(FirestoreConstants.pathMessageCollection)
         .doc("$firstOrder - $secondOrder")
         .collection("$firstOrder - $secondOrder")
         .orderBy(FirestoreConstants.timestamp, descending: true)
         .limit(1)
-        .get();
+        .snapshots();
+  }
+
+  StreamController<Map<String, dynamic>?> lastMessageStreamController =
+      StreamController<Map<String, dynamic>?>.broadcast();
+
+  Stream<Map<String, dynamic>?> getLastMessageForUserChatsStream(
+      String chatUserId, String currentUserId) async* {
+    Stream<QuerySnapshot> messagesSnapshot1 =
+        fetchMessagesSnapshot(chatUserId, currentUserId);
+    Stream<QuerySnapshot> messagesSnapshot2 =
+        fetchMessagesSnapshot(currentUserId, chatUserId);
+
+    Stream<List<QuerySnapshot>> mergedStream = Rx.combineLatest2(
+      messagesSnapshot1,
+      messagesSnapshot2,
+      (snapshot1, snapshot2) => [snapshot1, snapshot2],
+    );
+
+    await for (List<QuerySnapshot> snapshots in mergedStream) {
+      for (QuerySnapshot snapshot in snapshots) {
+        if (snapshot.docs.isNotEmpty) {
+          final lastMessageData =
+              snapshot.docs.first.data() as Map<String, dynamic>;
+          lastMessageStreamController.add(lastMessageData);
+        }
+      }
+    }
   }
 
   String extractLastMessage(Map<String, dynamic> messageData) {
@@ -336,13 +248,25 @@ class ChatController extends ChangeNotifier {
     return lastMessage;
   }
 
+  Future<QuerySnapshot> fetchMessagesSnapshotSeen(
+      String firstOrder, String secondOrder) async {
+    // print("firstOrder $firstOrder - $secondOrder");
+    return await firebaseFirestore
+        .collection(FirestoreConstants.pathMessageCollection)
+        .doc("$firstOrder - $secondOrder")
+        .collection("$firstOrder - $secondOrder")
+        .orderBy(FirestoreConstants.timestamp, descending: true)
+        .limit(1)
+        .get();
+  }
+
   void markMessagesAsSeen(String chatUserId, String currentUserId) async {
     print("markMessagesAsSeen");
 
     try {
       if (currentUserId != chatUserId) {
         QuerySnapshot messagesSnapshot =
-            await fetchMessagesSnapshot(chatUserId, currentUserId);
+            await fetchMessagesSnapshotSeen(chatUserId, currentUserId);
         for (QueryDocumentSnapshot messageSnapshot in messagesSnapshot.docs) {
           await messageSnapshot.reference.update({'seenByReceiver': true});
         }
@@ -436,6 +360,7 @@ class ChatController extends ChangeNotifier {
   }
 
   int i = 0;
+
   Future<String> getFilePath() async {
     Directory storageDirectory = await getApplicationDocumentsDirectory();
     String sdPath = storageDirectory.path + "/record";

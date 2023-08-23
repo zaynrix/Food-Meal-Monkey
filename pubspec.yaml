@@ -44,6 +44,7 @@ dependencies:
   firebase_messaging: ^14.6.5
   awesome_notifications: ^0.6.19
   grouped_list: ^5.1.2
+  rxdart: ^0.27.7
 
 
 dev_dependencies:
