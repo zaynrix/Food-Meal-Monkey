@@ -71,7 +71,6 @@ class ChatController extends ChangeNotifier {
   }
 
   Future<void> loadAndPlay(String url) async {
-    print("play now 1");
     final bytes = await readBytes(Uri.parse(url));
     final dir = await getApplicationDocumentsDirectory();
     final file = File('${dir.path}/audio.mp3');
@@ -198,11 +197,16 @@ class ChatController extends ChangeNotifier {
         .snapshots();
   }
 
+  Map<String, StreamController<Map<String, dynamic>?>>
+      messageStreamControllers = {};
+
   StreamController<Map<String, dynamic>?> lastMessageStreamController =
       StreamController<Map<String, dynamic>?>.broadcast();
-
   Stream<Map<String, dynamic>?> getLastMessageForUserChatsStream(
-      String chatUserId, String currentUserId) async* {
+      String chatUserId, String currentUserId) {
+    final controller = StreamController<Map<String, dynamic>?>.broadcast();
+    messageStreamControllers[chatUserId] = controller;
+
     Stream<QuerySnapshot> messagesSnapshot1 =
         fetchMessagesSnapshot(chatUserId, currentUserId);
     Stream<QuerySnapshot> messagesSnapshot2 =
@@ -214,15 +218,17 @@ class ChatController extends ChangeNotifier {
       (snapshot1, snapshot2) => [snapshot1, snapshot2],
     );
 
-    await for (List<QuerySnapshot> snapshots in mergedStream) {
+    mergedStream.listen((snapshots) {
       for (QuerySnapshot snapshot in snapshots) {
         if (snapshot.docs.isNotEmpty) {
           final lastMessageData =
               snapshot.docs.first.data() as Map<String, dynamic>;
-          lastMessageStreamController.add(lastMessageData);
+          controller.add(lastMessageData);
         }
       }
-    }
+    });
+
+    return controller.stream;
   }
 
   String extractLastMessage(Map<String, dynamic> messageData) {
@@ -250,7 +256,6 @@ class ChatController extends ChangeNotifier {
 
   Future<QuerySnapshot> fetchMessagesSnapshotSeen(
       String firstOrder, String secondOrder) async {
-    // print("firstOrder $firstOrder - $secondOrder");
     return await firebaseFirestore
         .collection(FirestoreConstants.pathMessageCollection)
         .doc("$firstOrder - $secondOrder")
@@ -261,8 +266,6 @@ class ChatController extends ChangeNotifier {
   }
 
   void markMessagesAsSeen(String chatUserId, String currentUserId) async {
-    print("markMessagesAsSeen");
-
     try {
       if (currentUserId != chatUserId) {
         QuerySnapshot messagesSnapshot =
@@ -270,12 +273,10 @@ class ChatController extends ChangeNotifier {
         for (QueryDocumentSnapshot messageSnapshot in messagesSnapshot.docs) {
           await messageSnapshot.reference.update({'seenByReceiver': true});
         }
-        print("First if ${{messagesSnapshot.docs.single}}");
         if (messagesSnapshot.docs.isEmpty) {
           messagesSnapshot =
               await markMessagesAsSeenSub(currentUserId, chatUserId);
 
-          print("Second if ${{messagesSnapshot.docs}}");
           for (QueryDocumentSnapshot messageSnapshot in messagesSnapshot.docs) {
             await messageSnapshot.reference.update({'isSeen': true});
           }
@@ -285,21 +286,17 @@ class ChatController extends ChangeNotifier {
           messagesSnapshot =
               await markMessagesAsSeenSub(currentUserId, chatUserId);
 
-          print("Second if ${{messagesSnapshot.docs}}");
           for (QueryDocumentSnapshot messageSnapshot in messagesSnapshot.docs) {
             await messageSnapshot.reference.update({'seenByReceiver': true});
           }
         }
       }
-    } catch (error) {
-      print("Error fetching last message: $error");
-    }
+    } catch (error) {}
     return null; // Return null if no last message found
   }
 
   Future<QuerySnapshot> markMessagesAsSeenSub(
       String firstOrder, String secondOrder) async {
-    print("firstOrder $firstOrder - $secondOrder");
     return await firebaseFirestore
         .collection(FirestoreConstants.pathMessageCollection)
         .doc("$firstOrder - $secondOrder")
@@ -408,13 +405,9 @@ class ChatController extends ChangeNotifier {
         recordFilePath = await getFilePath();
         RecordMp3.instance.start(recordFilePath!, (type) {
           // Handle different types or events if needed
-          print('Recording event: $type');
           notifyListeners();
         });
-      } catch (e) {
-        print('Error starting recording: $e');
-        // Handle the error as needed, e.g., show a message to the user
-      }
+      } catch (e) {}
     } else {
       // Handle the case where microphone permission is not granted
     }
@@ -427,8 +420,6 @@ class ChatController extends ChangeNotifier {
       isSending = true;
       notifyListeners();
       await uploadAudio(chatArgument: chatArgument);
-      // isPlayingMsg = false;
-      // notifyListeners();
     }
   }
 
@@ -438,7 +429,6 @@ class ChatController extends ChangeNotifier {
         'profilepics/audio${DateTime.now().millisecondsSinceEpoch.toString()}.jpg');
     UploadTask uploadTask = ref.putFile(File(recordFilePath!));
     uploadTask.then((value) async {
-      print('##############done#########');
       var audioURL = await value.ref.getDownloadURL();
       String strVal = audioURL.toString();
       await sendAudioMsg(strVal, chatArgument: chatArgument);
@@ -446,16 +436,6 @@ class ChatController extends ChangeNotifier {
       print(e);
     });
   }
-
-  // // Play audio from local file
-  // Future<void> playAudio() async {
-  //   if (recordFilePath != null && File(recordFilePath!).existsSync()) {
-  //     AudioPlayer audioPlayer = AudioPlayer();
-  //     audioPlayer.play(
-  //       UrlSource(recordFilePath!),
-  //     );
-  //   }
-  // }
 
   void onSendMessage(String content, int type, {String? peerId}) {
     isSending = true;
@@ -482,8 +462,4 @@ class ChatController extends ChangeNotifier {
     isSending = false;
     notifyListeners();
   }
-
-// Rest of the methods...
-
-// Rest of the class...
 }
