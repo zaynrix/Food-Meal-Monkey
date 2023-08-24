@@ -1,10 +1,7 @@
 library pages;
 
-import 'dart:async';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slider_indicator/flutter_slider_indicator.dart';
@@ -51,3 +48,4 @@ part 'entry/menu_pages//menu_page.dart';
 part 'entry/more_pages//main_more_page.dart';
 part 'entry/more_pages/about_as_page.dart';
 part 'entry/more_pages/chat/ui/chat_home_screen.dart';
+part 'entry/more_pages/chat/widgets/chat_item_widget.dart';
