@@ -27,13 +27,13 @@ class _LoginPageState extends State<LoginPage> {
     final authProvider = Provider.of<AuthController>(context);
 
     switch (authProvider.status) {
-      case Status.authenticateError:
+      case AuthStatus.authenticateError:
         Fluttertoast.showToast(msg: 'Sign in failed');
         break;
-      case Status.authenticateCanceled:
+      case AuthStatus.authenticateCanceled:
         Fluttertoast.showToast(msg: 'Sign in cancelled');
         break;
-      case Status.authenticated:
+      case AuthStatus.authenticated:
         Fluttertoast.showToast(msg: 'Sign in successful');
         break;
       default:
