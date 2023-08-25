@@ -14,7 +14,6 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Consumer<ProfileController>(
           builder: (context, value, child) {
-            print("This user id ${value.auth.currentUser?.uid}");
             String? currentUser =
                 value.auth.currentUser?.displayName?.split(' ')[0];
             return Text(
