@@ -14,6 +14,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Consumer<ProfileController>(
           builder: (context, value, child) {
+            print("This user id ${value.auth.currentUser?.uid}");
             String? currentUser =
                 value.auth.currentUser?.displayName?.split(' ')[0];
             return Text(
@@ -23,10 +24,11 @@ class _HomePageState extends State<HomePage> {
           },
         ),
         actions: [
-          IconButton(onPressed: () {
-            ServiceNavigation.serviceNavi
-                .pushNamedWidget(RouteGenerator.cartPage);
-          },
+          IconButton(
+              onPressed: () {
+                ServiceNavigation.serviceNavi
+                    .pushNamedWidget(RouteGenerator.cartPage);
+              },
               icon: const Icon(Icons.shopping_cart)),
         ],
       ),
