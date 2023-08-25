@@ -77,7 +77,7 @@ class DetailsScreen extends StatelessWidget {
                   price: product.price.toDouble(),
                   onPressed: (){
                     debugPrint("This is inside ui");
-                    controller.addItemToCard(product: product);
+                    controller.addItemToCart(product: product);
                     },
                 ),
               ),
