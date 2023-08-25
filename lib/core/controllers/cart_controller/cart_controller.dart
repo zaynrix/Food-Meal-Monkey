@@ -35,13 +35,13 @@ class CartController extends ChangeNotifier {
 
   // Add an item to the cart
   Future<void> addItemToCart({required ProductModel product}) async {
+    print("add item to cart");
     try {
       product.cartQuantity++;
       product.inCart = true;
       final jsonProduct = product.toJson();
       final email = sharedPreferences.getString("email") ?? "null email";
       final userSnapshot = await _getUserSnapshotByEmail(email);
-
       if (userSnapshot.docs.isNotEmpty) {
         final userId = userSnapshot.docs.first.id;
         await _addProductToFirestore(userId, jsonProduct);
@@ -66,7 +66,8 @@ class CartController extends ChangeNotifier {
 
         if (querySnapshot.size == 1) {
           final docId = querySnapshot.docs.first.id;
-          await _updateCartItemQuantity(userId, docId, product.cartQuantity as double);
+          await _updateCartItemQuantity(
+              userId, docId, product.cartQuantity as double);
 
           notifyListeners();
         } else {
@@ -108,11 +109,13 @@ class CartController extends ChangeNotifier {
             .where('name', isEqualTo: product.name)
             .where('resName', isEqualTo: product.resName)
             .get();
-        debugPrint("This is querySnapshot inside delete function in controller $querySnapshot");
+        debugPrint(
+            "This is querySnapshot inside delete function in controller $querySnapshot");
         if (querySnapshot.size == 1) {
           final docId = querySnapshot.docs.first.id;
           debugPrint("This is docIf $docId");
-          await FirebaseFirestore.instance.collection('users')
+          await FirebaseFirestore.instance
+              .collection('users')
               .doc(userId)
               .collection('cartItems')
               .doc(docId)
@@ -122,8 +125,9 @@ class CartController extends ChangeNotifier {
         } else {
           print('Product not found or not unique');
         }
-      }}catch (e){
-    debugPrint("Error in delete item >> $e");
+      }
+    } catch (e) {
+      debugPrint("Error in delete item >> $e");
     }
   }
 
@@ -139,8 +143,9 @@ class CartController extends ChangeNotifier {
       if (item.cartQuantity == 0) {
         debugPrint("This is before call deleteProduct function");
         deleteProduct(item);
+        notifyListeners();
       }
-      notifyListeners();
+      print("out if ");
     }
   }
 
@@ -178,7 +183,9 @@ class CartController extends ChangeNotifier {
     }).toList();
   }
 
-  Future<void> _addProductToFirestore(String userId, Map<String, dynamic> jsonProduct) {
+  Future<void> _addProductToFirestore(
+      String userId, Map<String, dynamic> jsonProduct) {
+    print("Thsis product json  $jsonProduct");
     return FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
@@ -186,7 +193,8 @@ class CartController extends ChangeNotifier {
         .add(jsonProduct);
   }
 
-  Future<QuerySnapshot> _getCartItemQuerySnapshot(String userId, ProductModel product) {
+  Future<QuerySnapshot> _getCartItemQuerySnapshot(
+      String userId, ProductModel product) {
     return FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
@@ -196,7 +204,8 @@ class CartController extends ChangeNotifier {
         .get();
   }
 
-  Future<void> _updateCartItemQuantity(String userId, String docId, double quantity) {
+  Future<void> _updateCartItemQuantity(
+      String userId, String docId, double quantity) {
     return FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
@@ -205,8 +214,6 @@ class CartController extends ChangeNotifier {
         .update({'cartQuantity': quantity});
   }
 }
-
-
 
 // import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:flutter/cupertino.dart';
