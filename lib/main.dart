@@ -50,7 +50,9 @@ class MyApp extends StatelessWidget {
           create: (context) => AppConfig(),
         ),
         ChangeNotifierProvider(
-          create: (context) => CartController(),
+          create: (context) => CartController(
+            sharedPreferences: prefs
+          ),
         ),
         ChangeNotifierProvider(
           create: (context) => AuthController(

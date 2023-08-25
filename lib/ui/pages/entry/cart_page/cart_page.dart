@@ -1,4 +1,5 @@
 part of pages;
+
 class CartPage extends StatefulWidget {
   const CartPage();
 
@@ -7,13 +8,13 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Provider.of<CartController>(context , listen: false).fetchFoodItemsFromFirestore();
+    Provider.of<CartController>(context, listen: false).fetchCartItems();
   }
+
   // final SingleProduct? singleProduct;
   @override
   Widget build(BuildContext context) {
@@ -26,49 +27,54 @@ class _CartPageState extends State<CartPage> {
         child: Padding(
           padding: AppPadding.p20.paddingHorizontal,
           child: Consumer<CartController>(
-            builder: (context , value , child) => Column(
+            builder: (context, value, child) => Column(
               children: [
                 ListView.builder(
                   shrinkWrap: true,
-                  itemCount: value.cartProducts.length ,
+                  itemCount: value.cartItems.length,
                   itemBuilder: (context, index) {
-                    final food = value.cartProducts[index];
+                    final food = value.cartItems[index];
 
-                    return value.cartProducts.isNotEmpty ?
-                    Column(
-                      children: [
-                        CartCard(food: food ,
-                          onIncrement: () async {
-                          value.incrementProduct(food);
-                            await value.updateProductInFirestore(food);
-                          },
-                          onDecrement: () async {
-                            value.decrementProduct(food);
-                            await value.updateProductInFirestore(food);
-                          },),
-                        5.addVerticalSpace,
-                        Divider(
-                          color: secondaryFontColor,
-                        ),
-
-                      ],
-                    )
-                        :
-                         Center(child: Text("No Item In Card", style: TextStyle(
-                           color: Colors.black
-                         ),),);
-
+                    return value.cartItems.isNotEmpty
+                        ? Column(
+                            children: [
+                              CartCard(
+                                food: food,
+                                onIncrement: () async {
+                                  value.incrementProduct(food);
+                                  await value.updateCartItemQuantity(food);
+                                },
+                                onDecrement: () async {
+                                  value.decrementProduct(food);
+                                  await value.updateCartItemQuantity(food);
+                                },
+                              ),
+                              5.addVerticalSpace,
+                              Divider(
+                                color: secondaryFontColor,
+                              ),
+                            ],
+                          )
+                        : Center(
+                            child: Text(
+                              "No Item In Card",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          );
                   },
                 ),
                 50.addVerticalSpace,
                 20.addVerticalSpace,
                 Row(
-                  mainAxisAlignment:
-                  MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Subtotal', style: textTheme.titleMedium!.copyWith(color: Colors.black),),
                     Text(
-                      '\$${calculateSubtotal(value.cartProducts).toStringAsFixed(2)}',
+                      'Subtotal',
+                      style:
+                          textTheme.titleMedium!.copyWith(color: Colors.black),
+                    ),
+                    Text(
+                      '\$${calculateSubtotal(value.cartItems).toStringAsFixed(2)}',
                     ),
                   ],
                 ),
@@ -80,8 +86,6 @@ class _CartPageState extends State<CartPage> {
           ),
         ),
       ),
-
-
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Consumer<CartController>(
         builder: (context, instance, child) => FloatingActionButton(
@@ -103,4 +107,3 @@ class _CartPageState extends State<CartPage> {
     return subtotal;
   }
 }
-
