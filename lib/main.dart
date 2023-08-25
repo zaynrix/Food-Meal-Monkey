@@ -7,6 +7,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_delivery_app/core/controllers/auth_controller/auth_controller.dart';
 import 'package:food_delivery_app/core/controllers/cart_controller/cart_controller.dart';
 import 'package:food_delivery_app/core/controllers/home_Controllers/home_controller.dart';
+import 'package:food_delivery_app/core/controllers/notification_controllers/finrebase_notification_controller.dart';
+import 'package:food_delivery_app/core/controllers/notification_controllers/local_notification_controller.dart';
 import 'package:food_delivery_app/core/controllers/profile_controllers/profile_controller.dart';
 import 'package:food_delivery_app/resources/styles.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
@@ -26,6 +28,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  LocalNotificationController().initLocalNotification();
+  NotificationController().initNotification();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   runApp(MyApp(
     prefs: prefs,
