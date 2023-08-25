@@ -16,4 +16,7 @@ class FirestoreConstants {
   static const address = "address";
   static const isSeen = "isSeen";
   static const seenByReceiver = "seenByReceiver";
+  static const online = "online";
+  static const lastSeen = "lastSeen";
+  static const createdAt = "createdAt";
 }
