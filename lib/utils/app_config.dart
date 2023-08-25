@@ -19,7 +19,7 @@ class AppConfig extends ChangeNotifier {
     // final authProvider = context.read<AuthProvider>();
     if (seen) {
       if (isAuthenticated) {
-        await SharedPrefUtil.emailUser(FirebaseAuth.instance.currentUser!.email ?? "null email");
+        // await SharedPrefUtil.setEmailUser(FirebaseAuth.instance.currentUser!.email ?? "null email");
         ServiceNavigation.serviceNavi
             .pushNamedAndRemoveUtils(RouteGenerator.mainPage);
       } else {
