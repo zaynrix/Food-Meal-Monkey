@@ -24,6 +24,8 @@ class ChatItemWidget extends StatelessWidget {
           KeyboardUtils.closeKeyboard(context);
         }
         ChatArgument chatArgument = ChatArgument(
+          online: userChat.online,
+          lastSeen: userChat.lastSeen,
           peerId: userChat.id,
           peerAvatar: userChat.photoUrl,
           peerNickname: userChat.displayName,
@@ -38,9 +40,22 @@ class ChatItemWidget extends StatelessWidget {
       child: ListTile(
         subtitle: _buildSubtitle(),
         leading: _buildLeading(),
-        title: Text(
-          "${userChat.displayName}",
-          style: const TextStyle(color: Colors.black),
+        title: Row(
+          children: [
+            Text(
+              "${userChat.displayName}",
+              style: const TextStyle(color: Colors.black),
+            ),
+            10.horizontalSpace,
+            Visibility(
+              visible: userChat.online == true,
+              child: Icon(
+                Icons.circle,
+                size: 10,
+                color: Colors.green,
+              ),
+            )
+          ],
         ),
         trailing: _buildTrailing(),
       ),
