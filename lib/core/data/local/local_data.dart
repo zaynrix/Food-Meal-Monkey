@@ -15,7 +15,7 @@ class SharedPrefUtil {
     return prefs.getBool('seen') ?? false;
   }
 
-  static Future<bool> emailUser(String email) async {
+  static Future<bool> setEmailUser(String email) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.setString('email', email);
   }

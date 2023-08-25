@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/core/data/local/local_data.dart';
 import 'package:food_delivery_app/core/data/remote/auth_exception_handler.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
 import 'package:food_delivery_app/routing/router.dart';
@@ -77,6 +78,7 @@ class AuthController extends ChangeNotifier {
         email: email,
         password: password,
       );
+      SharedPrefUtil.setEmailUser(email);
       stopLoading();
       ServiceNavigation.serviceNavi
           .pushNamedAndRemoveUtils(RouteGenerator.mainPage);
@@ -227,6 +229,7 @@ class AuthController extends ChangeNotifier {
   Future logout() async {
     try {
       _status = Status.uninitialized;
+      prefs.clear();
       ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.loginPage);
       await googleSignIn.disconnect();
       await googleSignIn.signOut();
