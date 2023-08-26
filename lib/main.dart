@@ -7,12 +7,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_delivery_app/core/controllers/auth_controller/auth_controller.dart';
 import 'package:food_delivery_app/core/controllers/cart_controller/cart_controller.dart';
 import 'package:food_delivery_app/core/controllers/home_Controllers/home_controller.dart';
-import 'package:food_delivery_app/core/controllers/notification_controllers/finrebase_notification_controller.dart';
 import 'package:food_delivery_app/core/controllers/notification_controllers/local_notification_controller.dart';
 import 'package:food_delivery_app/core/controllers/profile_controllers/profile_controller.dart';
 import 'package:food_delivery_app/resources/styles.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
 import 'package:food_delivery_app/routing/routes.dart';
+import 'package:food_delivery_app/service_locator.dart';
 import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/chat_controllers/chat_controller.dart';
 import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/chat_controllers/singel_chat_controller.dart';
 import 'package:food_delivery_app/ui/pages/pages.dart';
@@ -29,72 +29,105 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   LocalNotificationController().initLocalNotification();
-  NotificationController().initNotification();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  runApp(MyApp(
-    prefs: prefs,
-  ));
+
+  init(); // Call the Service Locator
+
+  runApp(MyApp(prefs: prefs));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   final SharedPreferences prefs;
-  final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-  final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
 
   MyApp({Key? key, required this.prefs}) : super(key: key);
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+
+  final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    final authController = sl<AuthController>();
+    authController.updateUserOnlineStatus(false);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    final authController = sl<AuthController>();
+
+    if (state == AppLifecycleState.resumed) {
+      authController.updateUserOnlineStatus(true);
+    } else if (state == AppLifecycleState.paused) {
+      authController.updateUserOnlineStatus(false);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context) => HomeController(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => AppConfig(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => CartController(
-            sharedPreferences: prefs
+    return Builder(builder: (context) {
+      return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (context) => HomeController(),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => AppConfig(),
+          ),
+          ChangeNotifierProvider(
+            create: (context) =>
+                CartController(sharedPreferences: widget.prefs),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => AuthController(
+                firebaseFirestore: firebaseFirestore,
+                prefs: widget.prefs,
+                googleSignIn: GoogleSignIn(),
+                firebaseAuth: FirebaseAuth.instance),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => ProfileController(),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => ChatController(
+                firebaseFirestore: firebaseFirestore,
+                firebaseStorage: firebaseStorage,
+                prefs: widget.prefs),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => SingleChatController(
+                firebaseFirestore: firebaseFirestore,
+                firebaseStorage: firebaseStorage,
+                prefs: widget.prefs),
+          ),
+        ],
+        child: ScreenUtilInit(
+          designSize: const Size(375, 812),
+          builder: (context, child) => MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Meal Monkey',
+            theme: ThemeManager.lightTheme,
+            navigatorKey: ServiceNavigation.serviceNavi.navKey,
+            onGenerateRoute: RoutsGenerate.generateRoute,
+            // initialRoute: RouteGenerator.splashPage,
+            scaffoldMessengerKey: ServiceNavigation.scaffoldKey,
+            home: const SplashPage(),
           ),
         ),
-        ChangeNotifierProvider(
-          create: (context) => AuthController(
-              firebaseFirestore: firebaseFirestore,
-              prefs: prefs,
-              googleSignIn: GoogleSignIn(),
-              firebaseAuth: FirebaseAuth.instance),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => ProfileController(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => ChatController(
-              firebaseFirestore: firebaseFirestore,
-              firebaseStorage: firebaseStorage,
-              prefs: prefs),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => SingleChatController(
-              firebaseFirestore: firebaseFirestore,
-              firebaseStorage: firebaseStorage,
-              prefs: prefs),
-        ),
-      ],
-      child: ScreenUtilInit(
-        designSize: const Size(375, 812),
-        builder: (context, child) => MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Meal Monkey',
-          theme: ThemeManager.lightTheme,
-          navigatorKey: ServiceNavigation.serviceNavi.navKey,
-          onGenerateRoute: RoutsGenerate.generateRoute,
-          // initialRoute: RouteGenerator.splashPage,
-          scaffoldMessengerKey: ServiceNavigation.scaffoldKey,
-          home: const SplashPage(),
-        ),
-      ),
-    );
+      );
+    });
   }
 }
 //test1@gmail.com

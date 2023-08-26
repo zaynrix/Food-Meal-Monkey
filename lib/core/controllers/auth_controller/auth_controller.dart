@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/core/controllers/cart_controller/cart_controller.dart';
 import 'package:food_delivery_app/core/data/local/local_data.dart';
-
 import 'package:food_delivery_app/core/data/remote/auth_exception_handler.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
 import 'package:food_delivery_app/routing/router.dart';
@@ -182,11 +181,22 @@ class AuthController extends ChangeNotifier {
     }
   }
 
+  Future<void> updateUserOnlineStatus(bool isOnline) async {
+    final user = auth.currentUser;
+    if (user != null) {
+      final userRef = _getUserFirestoreReference(user.uid);
+      userRef.update({
+        FirestoreConstants.online: isOnline,
+        FirestoreConstants.lastSeen:
+            DateTime.now().millisecondsSinceEpoch.toString(),
+      });
+    }
+  }
+
   Future logout() async {
     final userRef = _getUserFirestoreReference(auth.currentUser!.uid);
 
     try {
-
       prefs.clear();
       CartController(sharedPreferences: prefs).disposeCartController();
 
@@ -198,7 +208,6 @@ class AuthController extends ChangeNotifier {
         FirestoreConstants.lastSeen:
             DateTime.now().millisecondsSinceEpoch.toString(),
       });
-
 
       await googleSignIn.disconnect();
       await googleSignIn.signOut();
