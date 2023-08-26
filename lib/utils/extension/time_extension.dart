@@ -63,12 +63,20 @@ extension TimeExtension on String {
   }
 
   String formattedTime() {
-    DateTime timestamp = DateTime.fromMillisecondsSinceEpoch(int.parse(this));
+    if (this.isEmpty) {
+      return ''; // Return empty string for null or empty input
+    }
+    DateTime timestamp =
+        DateTime.fromMillisecondsSinceEpoch(int.tryParse(this) ?? 0);
     return DateFormat('hh:mm a').format(timestamp);
   }
 
   String formattedDate() {
-    DateTime timestamp = DateTime.fromMillisecondsSinceEpoch(int.parse(this));
+    if (this.isEmpty) {
+      return ''; // Return empty string for null or empty input
+    }
+    DateTime timestamp =
+        DateTime.fromMillisecondsSinceEpoch(int.tryParse(this) ?? 0);
     return DateFormat('dd MMM yyyy').format(timestamp);
   }
 }
