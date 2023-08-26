@@ -13,7 +13,7 @@ class ChatArgument {
   final String peerAvatar;
   final String peerNickname;
   final String userAvatar;
-  final String lastSeen;
+  final String? lastSeen;
   final bool online;
 
   const ChatArgument(
@@ -86,7 +86,7 @@ class _ChatPageState extends State<ChatPage> {
             Visibility(
               visible: widget.arguments.online != true,
               child: Text(
-                'Last Seen: ${widget.arguments.lastSeen.formattedTime()} ${widget.arguments.lastSeen.formattedDate()}',
+                'Last Seen: ${widget.arguments.lastSeen?.formattedTime()} ${widget.arguments.lastSeen?.formattedDate()}',
                 style: TextStyle(color: Colors.grey, fontSize: 12),
               ),
             )
