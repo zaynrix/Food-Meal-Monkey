@@ -3,6 +3,7 @@ part of models;
 class ProductModel {
   ProductModel(
       {this.resName,
+        required this.id,
       required this.imagePath,
       required this.name,
       required this.description,
@@ -12,6 +13,8 @@ class ProductModel {
       required this.cartQuantity,
       required this.inCart});
 
+
+  final String id;
   final String imagePath;
   final String name;
   final num price;
@@ -24,7 +27,7 @@ class ProductModel {
 
   //----------------------------------------------------------------------------
 
-  factory ProductModel.fromJson(Map<String , dynamic> data) {
+  factory ProductModel.fromJson(Map<String , dynamic> data ) {
     return ProductModel(
       imagePath: data['imagePath'],
       name: data['name'],
@@ -35,6 +38,7 @@ class ProductModel {
       resName: data['resName'],
       inCart: data["inCart"],
       cartQuantity: (data["cartQuantity"]).toDouble(),
+      id: data["id"]
     );
   }
 
@@ -49,6 +53,7 @@ class ProductModel {
       resName: doc['resName'] == null ? null :  doc['resName'],
       inCart: doc["inCart"],
       cartQuantity: (doc["cartQuantity"]).toDouble(),
+      id: doc["id"]
     );
   }
 
@@ -64,6 +69,7 @@ class ProductModel {
       'ratingCount': ratingCount,
       'inCart': inCart,
       'cartQuantity': cartQuantity,
+      "id" : id
     };
   }
   static List<ProductModel> desserts = [
@@ -74,7 +80,7 @@ class ProductModel {
       description: '',
       price: 20,
       cartQuantity: 0,
-      inCart: false,
+      inCart: false, id: '1',
     ),
     ProductModel(
       imagePath: ImageAssets.darkChocolate,
@@ -83,7 +89,7 @@ class ProductModel {
       description: '',
       price: 30,
       inCart: false,
-      cartQuantity: 0
+      cartQuantity: 0, id: '2'
     ),
     ProductModel(
       imagePath: ImageAssets.fudgyChewy,
@@ -92,7 +98,7 @@ class ProductModel {
       description: '',
       price: 22,
       cartQuantity: 0,
-      inCart: false
+      inCart: false, id: '3'
     ),
     ProductModel(
       imagePath: ImageAssets.streetShake,
@@ -101,7 +107,7 @@ class ProductModel {
       description: '',
       price: 32,
       inCart: false,
-      cartQuantity: 0
+      cartQuantity: 0, id: '4'
     ),
   ];
 }

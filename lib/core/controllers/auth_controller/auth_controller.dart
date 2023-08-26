@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/core/controllers/cart_controller/cart_controller.dart';
 import 'package:food_delivery_app/core/data/local/local_data.dart';
 import 'package:food_delivery_app/core/data/remote/auth_exception_handler.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
@@ -78,7 +79,7 @@ class AuthController extends ChangeNotifier {
         email: email,
         password: password,
       );
-      SharedPrefUtil.setEmailUser(email);
+      SharedPrefUtil.setIdUser(auth.currentUser?.uid ?? "null Id");
       stopLoading();
       ServiceNavigation.serviceNavi
           .pushNamedAndRemoveUtils(RouteGenerator.mainPage);
@@ -198,7 +199,7 @@ class AuthController extends ChangeNotifier {
         // Generate a UUID
         final uuid = Uuid();
         String random = uuid.v4(); // Generates a random UUID
-        //PR
+
         // Store additional user information in Firestore
         await FirebaseFirestore.instance
             .collection(FirestoreConstants.pathUserCollection)
@@ -215,8 +216,6 @@ class AuthController extends ChangeNotifier {
           FirestoreConstants.chattingWith: null
         });
         stopLoading();
-
-        // Navigate to the next screen or perform other actions
         ServiceNavigation.serviceNavi
             .pushNamedReplacement(RouteGenerator.loginPage);
       }
@@ -230,6 +229,7 @@ class AuthController extends ChangeNotifier {
     try {
       _status = Status.uninitialized;
       prefs.clear();
+      CartController(sharedPreferences: prefs).disposeCartController();
       ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.loginPage);
       await googleSignIn.disconnect();
       await googleSignIn.signOut();
@@ -237,7 +237,6 @@ class AuthController extends ChangeNotifier {
     } catch (e) {
       print('Error signing out: $e');
     }
-    await auth.signOut();
   }
 
   Future resetPassword({required String email}) async {
