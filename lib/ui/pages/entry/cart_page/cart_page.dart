@@ -31,6 +31,7 @@ class _CartPageState extends State<CartPage> {
               children: [
                 ListView.builder(
                   shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
                   itemCount: value.cartItems.length,
                   itemBuilder: (context, index) {
                     final food = value.cartItems[index];
@@ -88,11 +89,7 @@ class _CartPageState extends State<CartPage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Consumer<CartController>(
-        builder: (context, instance, child) => FloatingActionButton(
-          backgroundColor: orangeColor,
-          onPressed: () {},
-          child: const Icon(Icons.add),
-        ),
+        builder: (context, instance, child) => ElevatedButton(onPressed: (){}, child: Text("Checkout")),
       ),
     );
   }
