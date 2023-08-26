@@ -31,7 +31,7 @@ void main() async {
   LocalNotificationController().initLocalNotification();
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  init(); // Call the setup function
+  init(); // Call the Service Locator
 
   runApp(MyApp(prefs: prefs));
 }
@@ -49,6 +49,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
   final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+
   @override
   void initState() {
     super.initState();
