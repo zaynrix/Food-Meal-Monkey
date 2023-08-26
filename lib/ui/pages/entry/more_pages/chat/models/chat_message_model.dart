@@ -5,6 +5,7 @@ import 'package:food_delivery_app/utils/extension/time_extension.dart';
 class ChatItemModel extends Equatable {
   final DocumentSnapshot? documentSnapshot;
   final String? lastMessage;
+  final String? lastSeen;
   final dynamic lastMessageType;
   final bool? isSeen;
   final bool? seenByReceiver;
@@ -14,6 +15,7 @@ class ChatItemModel extends Equatable {
   ChatItemModel({
     this.documentSnapshot,
     this.lastMessage,
+    this.lastSeen,
     this.lastMessageType,
     this.isSeen,
     this.seenByReceiver,
@@ -37,6 +39,7 @@ class ChatItemModel extends Equatable {
   factory ChatItemModel.noMessages(DocumentSnapshot documentSnapshot) {
     return ChatItemModel(
       messageTime: "",
+      lastSeen: "",
       lastMessageType: "No Messages Yet",
       lastMessage: "No Messages Yet",
       documentSnapshot: documentSnapshot,
@@ -66,6 +69,7 @@ class ChatItemModel extends Equatable {
         documentSnapshot,
         idTo,
         isSeen,
-        seenByReceiver
+        seenByReceiver,
+        lastSeen
       ];
 }
