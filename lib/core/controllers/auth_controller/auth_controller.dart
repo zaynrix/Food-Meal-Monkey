@@ -14,7 +14,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../ui/pages/entry/more_pages/chat/firestore_constants.dart';
-import '../../data/local/local_data.dart';
 
 enum AuthStatus {
   uninitialized,
@@ -65,7 +64,7 @@ class AuthController extends ChangeNotifier {
         password: password,
       );
 
-      _setEmailUser(email);
+      _setEmailUser(auth.currentUser?.uid ?? "null id");
       _navigateToMainPage();
     } catch (e) {
       stopLoading();
@@ -171,32 +170,11 @@ class AuthController extends ChangeNotifier {
 
       User? user = userCredential.user;
       if (user != null) {
-
-        // Update user profile with name
-        // Store additional user information in Firestore
-        await FirebaseFirestore.instance
-            .collection(FirestoreConstants.pathUserCollection)
-            .doc(user.uid)
-            .set({
-          FirestoreConstants.displayName: userData.displayName,
-          FirestoreConstants.photoUrl: userData.photoUrl,
-          FirestoreConstants.id: random,
-          FirestoreConstants.address: userData.address,
-          FirestoreConstants.email: userData.email,
-          "createdAt": DateTime.now()
-              .millisecondsSinceEpoch
-              .toString(), // Remove the extra colon
-          FirestoreConstants.chattingWith: null
-        });
-
         await _updateUserProfile(user, userData);
-
         final String randomId = Uuid().v4();
         await _createUserInFirestore(user, userData, randomId);
-
         stopLoading();
         _navigateToLoginPage();
-
       }
     } catch (e) {
       stopLoading();
@@ -273,8 +251,8 @@ class AuthController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _setEmailUser(String email) {
-    SharedPrefUtil.setEmailUser(email);
+  void _setEmailUser(String id) {
+    SharedPrefUtil.setIdUser(id);
   }
 
   void _navigateToMainPage() {
