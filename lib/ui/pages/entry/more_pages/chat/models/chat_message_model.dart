@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 import 'package:food_delivery_app/utils/extension/time_extension.dart';
 
-class ChatItemModel
-// extends Equatable
-{
+class ChatItemModel extends Equatable {
   final DocumentSnapshot? documentSnapshot;
   final String? lastMessage;
   final dynamic lastMessageType;
