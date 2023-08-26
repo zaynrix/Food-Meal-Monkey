@@ -37,27 +37,34 @@ class ChatItemWidget extends StatelessWidget {
           args: chatArgument,
         );
       },
-      child: ListTile(
-        subtitle: _buildSubtitle(),
-        leading: _buildLeading(),
-        title: Row(
-          children: [
-            Text(
-              "${userChat.displayName}",
-              style: const TextStyle(color: Colors.black),
-            ),
-            10.horizontalSpace,
-            Visibility(
-              visible: userChat.online == true,
-              child: Icon(
-                Icons.circle,
-                size: 10,
-                color: Colors.green,
+      child: Container(
+        color: chatItemModel.isSeen == null
+            ? chatItemModel.seenByReceiver == true
+                ? Colors.transparent
+                : Colors.grey.shade200
+            : Colors.transparent,
+        child: ListTile(
+          subtitle: _buildSubtitle(),
+          leading: _buildLeading(),
+          title: Row(
+            children: [
+              Text(
+                "${userChat.displayName}",
+                style: const TextStyle(color: Colors.black),
               ),
-            )
-          ],
+              10.horizontalSpace,
+              Visibility(
+                visible: userChat.online == true,
+                child: Icon(
+                  Icons.circle,
+                  size: 10,
+                  color: Colors.green,
+                ),
+              )
+            ],
+          ),
+          trailing: _buildTrailing(),
         ),
-        trailing: _buildTrailing(),
       ),
     );
   }
@@ -152,14 +159,24 @@ class ChatItemWidget extends StatelessWidget {
             style: const TextStyle(color: Colors.grey, fontSize: 12),
           ),
         ),
-        Visibility(
-          visible: chatItemModel.isSeen!,
-          child: Icon(
-            Icons.circle,
-            size: 10,
-            color: Colors.deepOrange,
-          ),
-        ),
+        chatItemModel.isSeen == null
+            ? chatItemModel.seenByReceiver == true
+                ? SizedBox()
+                : Icon(
+                    Icons.circle,
+                    size: 10,
+                    color: Colors.deepOrange,
+                  )
+            : SizedBox(),
+
+        // Visibility(
+        //   visible: chatItemModel.isSeen ?? false,
+        //   child: Icon(
+        //     Icons.circle,
+        //     size: 10,
+        //     color: Colors.deepOrange,
+        //   ),
+        // ),
         chatItemModel.seenByReceiver!
             ? Icon(
                 Icons.done_all,
