@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/core/controllers/cart_controller/cart_controller.dart';
+import 'package:food_delivery_app/core/data/local/local_data.dart';
+
 import 'package:food_delivery_app/core/data/remote/auth_exception_handler.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
 import 'package:food_delivery_app/routing/router.dart';
@@ -61,6 +64,7 @@ class AuthController extends ChangeNotifier {
         email: email,
         password: password,
       );
+
       _setEmailUser(email);
       _navigateToMainPage();
     } catch (e) {
@@ -167,6 +171,24 @@ class AuthController extends ChangeNotifier {
 
       User? user = userCredential.user;
       if (user != null) {
+
+        // Update user profile with name
+        // Store additional user information in Firestore
+        await FirebaseFirestore.instance
+            .collection(FirestoreConstants.pathUserCollection)
+            .doc(user.uid)
+            .set({
+          FirestoreConstants.displayName: userData.displayName,
+          FirestoreConstants.photoUrl: userData.photoUrl,
+          FirestoreConstants.id: random,
+          FirestoreConstants.address: userData.address,
+          FirestoreConstants.email: userData.email,
+          "createdAt": DateTime.now()
+              .millisecondsSinceEpoch
+              .toString(), // Remove the extra colon
+          FirestoreConstants.chattingWith: null
+        });
+
         await _updateUserProfile(user, userData);
 
         final String randomId = Uuid().v4();
@@ -174,6 +196,7 @@ class AuthController extends ChangeNotifier {
 
         stopLoading();
         _navigateToLoginPage();
+
       }
     } catch (e) {
       stopLoading();
@@ -185,8 +208,11 @@ class AuthController extends ChangeNotifier {
     final userRef = _getUserFirestoreReference(auth.currentUser!.uid);
 
     try {
+
+      prefs.clear();
+      CartController(sharedPreferences: prefs).disposeCartController();
+
       _updateStatus(AuthStatus.uninitialized);
-      // prefs.clear();
       _navigateToLoginPage();
 
       userRef.update({
@@ -195,13 +221,13 @@ class AuthController extends ChangeNotifier {
             DateTime.now().millisecondsSinceEpoch.toString(),
       });
 
+
       await googleSignIn.disconnect();
       await googleSignIn.signOut();
       await auth.signOut();
     } catch (e) {
       print('Error signing out: $e');
     }
-    await auth.signOut();
   }
 
   Future resetPassword({required String email}) async {

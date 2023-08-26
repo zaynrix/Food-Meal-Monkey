@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:food_delivery_app/core/model/models.dart';
+import 'package:food_delivery_app/utils/helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CartController extends ChangeNotifier {
@@ -9,24 +10,18 @@ class CartController extends ChangeNotifier {
   final SharedPreferences sharedPreferences;
   List<ProductModel> cartItems = [];
 
-  // Fetch cart items from Firestore
+  String getUserId() {
+    return sharedPreferences.getString("userId") ?? "null id";
+  }
+
   Future<void> fetchCartItems() async {
     try {
-      final email = sharedPreferences.getString("email") ?? "null email";
-      final userSnapshot = await _getUserSnapshotByEmail(email);
-
-      if (userSnapshot.docs.isNotEmpty) {
-        final userId = userSnapshot.docs.first.id;
-        final cartItemsSnapshot = await _getCartItemsSnapshot(userId);
-
-        if (cartItemsSnapshot.docs.isNotEmpty) {
-          cartItems = _mapCartItemsData(cartItemsSnapshot.docs);
-          notifyListeners();
-        } else {
-          print("Cart items not found");
-        }
+      final cartItemsSnapshot = await _getCartItemsSnapshot();
+      if (cartItemsSnapshot.docs.isNotEmpty) {
+        cartItems = _mapCartItemsData(cartItemsSnapshot.docs);
+        notifyListeners();
       } else {
-        print("User document not found");
+        print("Cart items not found");
       }
     } catch (error) {
       print('Error fetching cart items: $error');
@@ -40,39 +35,33 @@ class CartController extends ChangeNotifier {
       product.cartQuantity++;
       product.inCart = true;
       final jsonProduct = product.toJson();
-      final email = sharedPreferences.getString("email") ?? "null email";
-      final userSnapshot = await _getUserSnapshotByEmail(email);
-      if (userSnapshot.docs.isNotEmpty) {
-        final userId = userSnapshot.docs.first.id;
-        await _addProductToFirestore(userId, jsonProduct);
-        print("Item added to cart");
+      final productSnapshot = await _getCartItemQuerySnapshot(product);
+      if (productSnapshot.docs.isEmpty) {
+        await _addProductToFirestore(product.id, jsonProduct);
 
+        print("Item added to cart");
         notifyListeners();
+        Helpers.showSnackBar(message: "Product Added successfully", isSuccess: true);
+      }
+      else{
+        Helpers.showSnackBar(message: "This Product is already added", isSuccess: false);
       }
     } catch (error) {
-      print('Error adding item to Firestore: $error');
+      debugPrint('Error adding item to Firestore: $error');
     }
   }
 
   // Update cart item's quantity
   Future<void> updateCartItemQuantity(ProductModel product) async {
     try {
-      final email = sharedPreferences.getString("email") ?? "null email";
-      final userSnapshot = await _getUserSnapshotByEmail(email);
+      final querySnapshot = await _getCartItemQuerySnapshot(product);
+      if (querySnapshot.size == 1) {
+        await _updateCartItemQuantity(product.id, product.cartQuantity as double);
+        notifyListeners();
+      } else {
+        print('Product not found or not unique');
 
-      if (userSnapshot.docs.isNotEmpty) {
-        final userId = userSnapshot.docs.first.id;
-        final querySnapshot = await _getCartItemQuerySnapshot(userId, product);
-
-        if (querySnapshot.size == 1) {
-          final docId = querySnapshot.docs.first.id;
-          await _updateCartItemQuantity(
-              userId, docId, product.cartQuantity as double);
-
-          notifyListeners();
-        } else {
-          print('Product not found or not unique');
-        }
+    
       }
     } catch (error) {
       print('Error updating product in Firestore: $error');
@@ -91,41 +80,22 @@ class CartController extends ChangeNotifier {
   Future<void> deleteProduct(ProductModel product) async {
     try {
       debugPrint("This is inside delete function");
-      final email = sharedPreferences.getString("email") ?? "null email";
-
-      final userSnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .where('email', isEqualTo: email)
-          .get();
-
-      if (userSnapshot.docs.isNotEmpty) {
-        final userId = userSnapshot.docs.first.id;
-        debugPrint("This is id of user ===>> $userId \n");
-
-        final querySnapshot = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(userId)
-            .collection("cartItems")
-            .where('name', isEqualTo: product.name)
-            .where('resName', isEqualTo: product.resName)
-            .get();
+      final userId = getUserId();
         debugPrint(
-            "This is querySnapshot inside delete function in controller $querySnapshot");
-        if (querySnapshot.size == 1) {
-          final docId = querySnapshot.docs.first.id;
-          debugPrint("This is docIf $docId");
+            "This is querySnapshot inside delete function in controller ");
+        // if (querySnapshot.size == 1) {
+          debugPrint("This is docIf ${product.id}");
+
           await FirebaseFirestore.instance
               .collection('users')
               .doc(userId)
               .collection('cartItems')
-              .doc(docId)
+              .doc(product.id)
               .delete();
           cartItems.remove(product);
           notifyListeners();
-        } else {
-          print('Product not found or not unique');
-        }
-      }
+      Helpers.showSnackBar(message: "Product deleted successfully", isSuccess: false);
+
     } catch (e) {
       debugPrint("Error in delete item >> $e");
     }
@@ -149,16 +119,10 @@ class CartController extends ChangeNotifier {
     }
   }
 
-  // Private helper methods
 
-  Future<QuerySnapshot> _getUserSnapshotByEmail(String email) {
-    return FirebaseFirestore.instance
-        .collection('users')
-        .where('email', isEqualTo: email)
-        .get();
-  }
+  Future<QuerySnapshot> _getCartItemsSnapshot() {
+    final userId = getUserId();
 
-  Future<QuerySnapshot> _getCartItemsSnapshot(String userId) {
     return FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
@@ -170,42 +134,45 @@ class CartController extends ChangeNotifier {
     return docs.map((itemData) {
       final data = itemData.data() as Map;
       return ProductModel(
-        name: data['name'],
-        imagePath: data['imagePath'],
-        price: data['price'],
-        rating: data['rating'],
-        ratingCount: data["ratingCount"],
-        inCart: data["inCart"],
-        cartQuantity: data["cartQuantity"],
-        description: data["description"],
-        resName: data["resName"],
-      );
+          name: data['name'],
+          imagePath: data['imagePath'],
+          price: data['price'],
+          rating: data['rating'],
+          ratingCount: data["ratingCount"],
+          inCart: data["inCart"],
+          cartQuantity: data["cartQuantity"],
+          description: data["description"],
+          resName: data["resName"],
+          id: data["id"]);
     }).toList();
   }
 
   Future<void> _addProductToFirestore(
-      String userId, Map<String, dynamic> jsonProduct) {
-    print("Thsis product json  $jsonProduct");
+      String productId, Map<String, dynamic> jsonProduct) {
+    final userId = getUserId();
+
     return FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
         .collection("cartItems")
-        .add(jsonProduct);
+        .doc(productId)
+        .set(jsonProduct);
   }
 
-  Future<QuerySnapshot> _getCartItemQuerySnapshot(
-      String userId, ProductModel product) {
+  Future<QuerySnapshot> _getCartItemQuerySnapshot(ProductModel product) {
+    final userId = getUserId();
+
+
     return FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
         .collection("cartItems")
-        .where('name', isEqualTo: product.name)
-        .where('resName', isEqualTo: product.resName)
+        .where('id', isEqualTo: product.id)
         .get();
   }
 
-  Future<void> _updateCartItemQuantity(
-      String userId, String docId, double quantity) {
+  Future<void> _updateCartItemQuantity(String docId, double quantity) {
+    final userId = getUserId();
     return FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
@@ -213,245 +180,21 @@ class CartController extends ChangeNotifier {
         .doc(docId)
         .update({'cartQuantity': quantity});
   }
+
+
+  @override
+  dispose(){
+    super.dispose();
+    cartItems = [];
+    notifyListeners();
+  }
+
+  disposeCartController(){
+    cartItems = [];
+    notifyListeners();
+  }
 }
 
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:flutter/cupertino.dart';
-// import 'package:food_delivery_app/core/model/models.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-//
-// class CartController extends ChangeNotifier {
-//   CartController({required this.sharedPreferences});
-//
-//   final SharedPreferences sharedPreferences;
-//   List<ProductModel> cartItems = [];
-//
-//   Future<void> fetchCartItems() async {
-//     try {
-//       final email = sharedPreferences.getString("email") ?? "null email";
-//
-//       final userSnapshot = await FirebaseFirestore.instance
-//           .collection('users')
-//           .where('email', isEqualTo: email)
-//           .get();
-//
-//       if (userSnapshot.docs.isNotEmpty) {
-//         final userId = userSnapshot.docs.first.id;
-//         debugPrint("This is id of user ===>> $userId \n");
-//
-//         final cartItemsSnapshot = await FirebaseFirestore.instance
-//             .collection('users')
-//             .doc(userId)
-//             .collection("cartItems")
-//             .get();
-//
-//         debugPrint("This is snapshot ==>>>> ${cartItemsSnapshot.docs.length}");
-//
-//         if (cartItemsSnapshot.docs.isNotEmpty) {
-//           final cartItemsData = cartItemsSnapshot.docs;
-//           debugPrint(
-//               "This is cartItemsData ==>>>> ${cartItemsData.first.data()}");
-//
-//           cartItems = cartItemsData.map((itemData) {
-//             final data = itemData.data();
-//             return ProductModel(
-//               name: data['name'],
-//               imagePath: data['imagePath'],
-//               price: data['price'],
-//               rating: data['rating'],
-//               ratingCount: data["ratingCount"],
-//               inCart: data["inCart"],
-//               cartQuantity: data["cartQuantity"],
-//               description: data["description"],
-//               resName: data["resName"],
-//             );
-//           }).toList();
-//
-//           notifyListeners();
-//         } else {
-//           debugPrint("Cart items not found");
-//         }
-//       } else {
-//         debugPrint("User document not found");
-//       }
-//     } catch (error) {
-//       print('Error fetching cart items: $error');
-//     }
-//   }
-//
-//   Future<void> addItemToCard({required ProductModel product}) async {
-//     try {
-//       product.cartQuantity++;
-//       product.inCart = true;
-//       final jsonProduct = product.toJson();
-//       debugPrint("This is jsonProduct in controller >>>>> $jsonProduct");
-//       final email = sharedPreferences.getString("email") ?? "null email";
-//
-//       final userSnapshot = await FirebaseFirestore.instance
-//           .collection('users')
-//           .where('email', isEqualTo: email)
-//           .get();
-//
-//       if (userSnapshot.docs.isNotEmpty) {
-//         final userId = userSnapshot.docs.first.id;
-//         debugPrint("This is id of user ===>> $userId \n");
-//
-//         await FirebaseFirestore.instance
-//             .collection('users')
-//             .doc(userId)
-//             .collection("cartItems")
-//             .add(jsonProduct);
-//         debugPrint("This is inside add function in controller");
-//       }
-//     } catch (error) {
-//       print('Error adding item to Firestore: $error');
-//     }
-//   }
-//
-//   // Future<void> updateProductInFirestore(ProductModel product) async {
-//   //   try {
-//   //     final email = sharedPreferences.getString("email") ?? "null email";
-//   //
-//   //     final userSnapshot = await FirebaseFirestore.instance
-//   //         .collection('users')
-//   //         .where('email', isEqualTo: email)
-//   //         .get();
-//   //
-//   //     if (userSnapshot.docs.isNotEmpty) {
-//   //       final userId = userSnapshot.docs.first.id;
-//   //       debugPrint("This is id of user ===>> $userId \n");
-//   //
-//   //       final querySnapshot = await FirebaseFirestore.instance
-//   //           .collection('users')
-//   //           .doc(userId)
-//   //           .collection("cartItems").where('name', isEqualTo: product.name)
-//   //           .where('resName', isEqualTo: product.resName)
-//   //           .get();
-//   //       debugPrint("This is inside add function in controller");
-//   //     if (querySnapshot.size == 1) {
-//   //       final docId = querySnapshot.docs.first.id;
-//   //       await FirebaseFirestore.instance
-//   //           .collection('users')
-//   //           .doc(docId).collection("cartItems")
-//   //           .update({'cartQuantity': product.cartQuantity});
-//   //     } else {
-//   //       print('Product not found or not unique');
-//   //     }
-//   //   }} catch (error) {
-//   //     print('Error updating product in Firestore: $error');
-//   //   }
-//   // }
-//   Future<void> updateProductInFirestore(ProductModel product) async {
-//     try {
-//       final email = sharedPreferences.getString("email") ?? "null email";
-//
-//       final userSnapshot = await FirebaseFirestore.instance
-//           .collection('users')
-//           .where('email', isEqualTo: email)
-//           .get();
-//
-//       if (userSnapshot.docs.isNotEmpty) {
-//         final userId = userSnapshot.docs.first.id;
-//         debugPrint("This is id of user ===>> $userId \n");
-//
-//         final querySnapshot = await FirebaseFirestore.instance
-//             .collection('users')
-//             .doc(userId)
-//             .collection("cartItems")
-//             .where('name', isEqualTo: product.name)
-//             .where('resName', isEqualTo: product.resName)
-//             .get();
-//
-//         if (querySnapshot.size == 1) {
-//           final docId = querySnapshot.docs.first.id;
-//           await FirebaseFirestore.instance
-//               .collection('users')
-//               .doc(userId)
-//               .collection("cartItems")
-//               .doc(docId)
-//               .update({'cartQuantity': product.cartQuantity});
-//
-//           // Notify listeners to reflect the changes in the UI
-//           notifyListeners();
-//         } else {
-//           print('Product not found or not unique');
-//         }
-//       }
-//     } catch (error) {
-//       print('Error updating product in Firestore: $error');
-//     }
-//   }
-//
-//   Future<void> deleteProduct(ProductModel product) async {
-//     try {
-//       final email = sharedPreferences.getString("email") ?? "null email";
-//
-//       final userSnapshot = await FirebaseFirestore.instance
-//           .collection('users')
-//           .where('email', isEqualTo: email)
-//           .get();
-//
-//       if (userSnapshot.docs.isNotEmpty) {
-//         final userId = userSnapshot.docs.first.id;
-//         debugPrint("This is id of user ===>> $userId \n");
-//
-//         final querySnapshot = await FirebaseFirestore.instance
-//             .collection('users')
-//             .doc(userId)
-//             .collection("cartItems")
-//             .where('name', isEqualTo: product.name)
-//             .where('resName', isEqualTo: product.resName)
-//             .get();
-//         debugPrint("This is inside add function in controller");
-//         if (querySnapshot.size == 1) {
-//           final docId = querySnapshot.docs.first.id;
-//           await FirebaseFirestore.instance
-//               .collection('cartItems')
-//               .doc(docId)
-//               .delete();
-//         } else {
-//           print('Product not found or not unique');
-//         }
-//       }
-//
-//       final querySnapshot = await FirebaseFirestore.instance
-//           .collection('cart')
-//           .where('name', isEqualTo: product.name)
-//           .where('resName', isEqualTo: product.resName)
-//           .get();
-//       if (querySnapshot.size == 1) {
-//         final docId = querySnapshot.docs.first.id;
-//         await FirebaseFirestore.instance.collection('cart').doc(docId).delete();
-//
-//         final index = cartItems.indexOf(product);
-//         cartItems.removeAt(index);
-//         notifyListeners();
-//       } else {
-//         print('Product not found or not unique');
-//       }
-//     } catch (error) {
-//       print('Error updating product in Firestore: $error');
-//     }
-//   }
-//
-//   incrementProduct(ProductModel item) {
-//     final index = cartItems.indexOf(item);
-//     if (index != -1) {
-//       final newCartQuantity = (item.cartQuantity) + 1;
-//       cartItems[index].cartQuantity = newCartQuantity;
-//       notifyListeners();
-//     }
-//   }
-//
-//   decrementProduct(ProductModel item) {
-//     final index = cartItems.indexOf(item);
-//     if (index != -1 && item.cartQuantity > 0) {
-//       final newCartQuantity = (item.cartQuantity) - 1;
-//       cartItems[index].cartQuantity = newCartQuantity;
-//       notifyListeners();
-//     }
-//     if (item.cartQuantity == 0) {
-//       deleteProduct(item);
-//     }
-//   }
-// }
+}
+
+
