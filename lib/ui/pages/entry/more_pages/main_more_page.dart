@@ -42,7 +42,9 @@ class _MorePageState extends State<MorePage> {
             MoreTile(
               title: 'My Orders',
               iconPath: IconAssets.myOrderIcon,
-              onTap: () {},
+              onTap: () {
+                ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.ordersPage);
+              },
             ),
             vSpace20,
             MoreTile(
