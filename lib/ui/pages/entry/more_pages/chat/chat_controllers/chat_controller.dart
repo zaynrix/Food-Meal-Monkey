@@ -122,7 +122,7 @@ class ChatController extends ChangeNotifier {
         .collection(groupChatId)
         .doc(DateTime.now().millisecondsSinceEpoch.toString());
     ChatMessages chatMessages = ChatMessages(
-      isSeen: false,
+      // isSeen: false,
       seenByReceiver: false,
       idFrom: currentUserId,
       idTo: peerId,
@@ -130,8 +130,11 @@ class ChatController extends ChangeNotifier {
       content: content,
       type: type,
     );
+    print("is Seend dddd${chatMessages.isSeen}");
 
     FirebaseFirestore.instance.runTransaction((transaction) async {
+      print("is Seend dddd${chatMessages.isSeen}");
+
       transaction.set(documentReference, chatMessages.toJson());
     });
   }
@@ -202,6 +205,7 @@ class ChatController extends ChangeNotifier {
 
   StreamController<Map<String, dynamic>?> lastMessageStreamController =
       StreamController<Map<String, dynamic>?>.broadcast();
+
   Stream<Map<String, dynamic>?> getLastMessageForUserChatsStream(
       String chatUserId, String currentUserId) {
     final controller = StreamController<Map<String, dynamic>?>.broadcast();
@@ -271,14 +275,20 @@ class ChatController extends ChangeNotifier {
         QuerySnapshot messagesSnapshot =
             await fetchMessagesSnapshotSeen(chatUserId, currentUserId);
         for (QueryDocumentSnapshot messageSnapshot in messagesSnapshot.docs) {
-          await messageSnapshot.reference.update({'seenByReceiver': true});
+          await messageSnapshot.reference.update({
+            FirestoreConstants.seenByReceiver: true,
+            FirestoreConstants.isSeen: true
+          });
         }
         if (messagesSnapshot.docs.isEmpty) {
           messagesSnapshot =
               await markMessagesAsSeenSub(currentUserId, chatUserId);
 
           for (QueryDocumentSnapshot messageSnapshot in messagesSnapshot.docs) {
-            await messageSnapshot.reference.update({'isSeen': true});
+            await messageSnapshot.reference.update({
+              FirestoreConstants.seenByReceiver: true,
+              FirestoreConstants.isSeen: true
+            });
           }
         }
 
@@ -287,7 +297,10 @@ class ChatController extends ChangeNotifier {
               await markMessagesAsSeenSub(currentUserId, chatUserId);
 
           for (QueryDocumentSnapshot messageSnapshot in messagesSnapshot.docs) {
-            await messageSnapshot.reference.update({'seenByReceiver': true});
+            await messageSnapshot.reference.update({
+              FirestoreConstants.seenByReceiver: true,
+              FirestoreConstants.isSeen: true
+            });
           }
         }
       }
@@ -379,7 +392,7 @@ class ChatController extends ChangeNotifier {
         await transaction.set(ref, {
           FirestoreConstants.idFrom: auth.currentUser!.uid,
           FirestoreConstants.idTo: chatArgument!.peerId,
-          FirestoreConstants.isSeen: false,
+          FirestoreConstants.isSeen: null,
           FirestoreConstants.seenByReceiver: false,
           FirestoreConstants.timestamp:
               DateTime.now().millisecondsSinceEpoch.toString(),
