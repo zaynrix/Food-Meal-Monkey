@@ -30,6 +30,7 @@ class CartController extends ChangeNotifier {
 
   // Add an item to the cart
   Future<void> addItemToCart({required ProductModel product}) async {
+    print("add item to cart");
     try {
       product.cartQuantity++;
       product.inCart = true;
@@ -37,6 +38,7 @@ class CartController extends ChangeNotifier {
       final productSnapshot = await _getCartItemQuerySnapshot(product);
       if (productSnapshot.docs.isEmpty) {
         await _addProductToFirestore(product.id, jsonProduct);
+
         print("Item added to cart");
         notifyListeners();
         Helpers.showSnackBar(message: "Product Added successfully", isSuccess: true);
@@ -58,6 +60,8 @@ class CartController extends ChangeNotifier {
         notifyListeners();
       } else {
         print('Product not found or not unique');
+
+    
       }
     } catch (error) {
       print('Error updating product in Firestore: $error');
@@ -81,6 +85,7 @@ class CartController extends ChangeNotifier {
             "This is querySnapshot inside delete function in controller ");
         // if (querySnapshot.size == 1) {
           debugPrint("This is docIf ${product.id}");
+
           await FirebaseFirestore.instance
               .collection('users')
               .doc(userId)
@@ -90,6 +95,7 @@ class CartController extends ChangeNotifier {
           cartItems.remove(product);
           notifyListeners();
       Helpers.showSnackBar(message: "Product deleted successfully", isSuccess: false);
+
     } catch (e) {
       debugPrint("Error in delete item >> $e");
     }
@@ -107,8 +113,9 @@ class CartController extends ChangeNotifier {
       if (item.cartQuantity == 0) {
         debugPrint("This is before call deleteProduct function");
         deleteProduct(item);
+        notifyListeners();
       }
-      notifyListeners();
+      print("out if ");
     }
   }
 
@@ -143,6 +150,7 @@ class CartController extends ChangeNotifier {
   Future<void> _addProductToFirestore(
       String productId, Map<String, dynamic> jsonProduct) {
     final userId = getUserId();
+
     return FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
@@ -153,6 +161,8 @@ class CartController extends ChangeNotifier {
 
   Future<QuerySnapshot> _getCartItemQuerySnapshot(ProductModel product) {
     final userId = getUserId();
+
+
     return FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
@@ -171,6 +181,7 @@ class CartController extends ChangeNotifier {
         .update({'cartQuantity': quantity});
   }
 
+
   @override
   dispose(){
     super.dispose();
@@ -183,3 +194,7 @@ class CartController extends ChangeNotifier {
     notifyListeners();
   }
 }
+
+}
+
+

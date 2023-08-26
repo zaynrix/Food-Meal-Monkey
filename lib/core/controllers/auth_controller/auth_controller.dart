@@ -3,17 +3,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/core/controllers/cart_controller/cart_controller.dart';
 import 'package:food_delivery_app/core/data/local/local_data.dart';
+
 import 'package:food_delivery_app/core/data/remote/auth_exception_handler.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
 import 'package:food_delivery_app/routing/router.dart';
-import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/firestore_constants.dart';
 import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/models/chat_user.dart';
 import 'package:food_delivery_app/utils/helper.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
-enum Status {
+import '../../../ui/pages/entry/more_pages/chat/firestore_constants.dart';
+import '../../data/local/local_data.dart';
+
+enum AuthStatus {
   uninitialized,
   authenticated,
   authenticating,
@@ -26,84 +29,54 @@ class AuthController extends ChangeNotifier {
   final FirebaseAuth firebaseAuth;
   final FirebaseFirestore firebaseFirestore;
   final SharedPreferences prefs;
-  Status _status = Status.uninitialized;
+  AuthStatus _status = AuthStatus.uninitialized;
 
-  Status get status => _status;
+  AuthStatus get status => _status;
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final FirebaseAuth auth = FirebaseAuth.instance;
-
   final TextEditingController nameController = TextEditingController();
   final TextEditingController mobileController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
-  AuthController(
-      {required this.googleSignIn,
-      required this.firebaseAuth,
-      required this.firebaseFirestore,
-      required this.prefs});
-
-  void clearControllers() {
-    nameController.clear();
-    emailController.clear();
-    mobileController.clear();
-    addressController.clear();
-    passwordController.clear();
-    confirmPasswordController.clear();
-  }
+  AuthController({
+    required this.googleSignIn,
+    required this.firebaseAuth,
+    required this.firebaseFirestore,
+    required this.prefs,
+  });
 
   bool isLoading = false;
+  bool googleLoading = false;
 
-  startLoading() {
-    isLoading = true;
-    notifyListeners();
-  }
+  String? getFirebaseUserId() => prefs.getString(FirestoreConstants.id);
 
-  stopLoading() {
-    isLoading = false;
-    notifyListeners();
-  }
-
-  String? getFirebaseUserId() {
-    return prefs.getString(FirestoreConstants.id);
-  }
-
-  Future signInWithEmailAndPassword(
-      {required String email, required String password}) async {
+  Future signInWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
     try {
       startLoading();
       await auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      SharedPrefUtil.setIdUser(auth.currentUser?.uid ?? "null Id");
-      stopLoading();
-      ServiceNavigation.serviceNavi
-          .pushNamedAndRemoveUtils(RouteGenerator.mainPage);
+
+      _setEmailUser(email);
+      _navigateToMainPage();
     } catch (e) {
       stopLoading();
-      print('Error: $e');
       AuthExceptionHandler.handleException(e);
     }
   }
 
-  bool googleLoading = false;
-  startGoogleLoading(){
-    googleLoading = true;
-    notifyListeners();
-  }
-
-  stopGoogleLoading(){
-    googleLoading = false;
-    notifyListeners();
-  }
   Future<void> signInWithGoogle() async {
     try {
       startGoogleLoading();
-      _status = Status.authenticating;
+      _status = AuthStatus.authenticating;
       notifyListeners();
 
       final googleUser = await googleSignIn.signIn();
@@ -125,16 +98,18 @@ class AuthController extends ChangeNotifier {
               .get();
           final List<DocumentSnapshot> document = result.docs;
           if (document.isEmpty) {
-            firebaseFirestore
+            final String randomId = Uuid().v4();
+            await firebaseFirestore
                 .collection(FirestoreConstants.pathUserCollection)
                 .doc(firebaseUser.uid)
                 .set({
               FirestoreConstants.displayName: firebaseUser.displayName,
               FirestoreConstants.photoUrl: firebaseUser.photoURL,
-              FirestoreConstants.id: firebaseUser.uid,
+              FirestoreConstants.id: randomId,
               FirestoreConstants.email: firebaseUser.email,
-              "createdAt: ": DateTime.now().millisecondsSinceEpoch.toString(),
-              FirestoreConstants.chattingWith: null
+              FirestoreConstants.createdAt:
+                  DateTime.now().millisecondsSinceEpoch.toString(),
+              FirestoreConstants.chattingWith: null,
             });
 
             User? currentUser = firebaseUser;
@@ -145,7 +120,6 @@ class AuthController extends ChangeNotifier {
                 FirestoreConstants.photoUrl, currentUser.photoURL ?? "");
             await prefs.setString(
                 FirestoreConstants.email, currentUser.email ?? "");
-
             await prefs.setString(
                 FirestoreConstants.phoneNumber, currentUser.phoneNumber ?? "");
           } else {
@@ -158,22 +132,26 @@ class AuthController extends ChangeNotifier {
             await prefs.setString(
                 FirestoreConstants.phoneNumber, userChat.phoneNumber);
           }
-          _status = Status.authenticated;
+          final userRef = FirebaseFirestore.instance
+              .collection(FirestoreConstants.pathUserCollection)
+              .doc(firebaseUser.uid);
+          userRef.update({
+            FirestoreConstants.online: true,
+          });
+          _status = AuthStatus.authenticated;
+
           stopGoogleLoading();
           notifyListeners();
-          ServiceNavigation.serviceNavi
-              .pushNamedAndRemoveUtils(RouteGenerator.mainPage);
-          // return true;
+          _navigateToMainPage();
         } else {
-          _status = Status.authenticateError;
+          _status = AuthStatus.authenticateError;
           notifyListeners();
           stopLoading();
-          // return false;
         }
       } else {
-        _status = Status.authenticateCanceled;
+        _status = AuthStatus.authenticateCanceled;
         notifyListeners();
-        stopLoading(); // return false;
+        stopLoading();
       }
     } catch (e) {
       stopGoogleLoading();
@@ -193,13 +171,8 @@ class AuthController extends ChangeNotifier {
 
       User? user = userCredential.user;
       if (user != null) {
+
         // Update user profile with name
-        await user.updateDisplayName(userData.displayName);
-
-        // Generate a UUID
-        final uuid = Uuid();
-        String random = uuid.v4(); // Generates a random UUID
-
         // Store additional user information in Firestore
         await FirebaseFirestore.instance
             .collection(FirestoreConstants.pathUserCollection)
@@ -215,9 +188,15 @@ class AuthController extends ChangeNotifier {
               .toString(), // Remove the extra colon
           FirestoreConstants.chattingWith: null
         });
+
+        await _updateUserProfile(user, userData);
+
+        final String randomId = Uuid().v4();
+        await _createUserInFirestore(user, userData, randomId);
+
         stopLoading();
-        ServiceNavigation.serviceNavi
-            .pushNamedReplacement(RouteGenerator.loginPage);
+        _navigateToLoginPage();
+
       }
     } catch (e) {
       stopLoading();
@@ -226,11 +205,23 @@ class AuthController extends ChangeNotifier {
   }
 
   Future logout() async {
+    final userRef = _getUserFirestoreReference(auth.currentUser!.uid);
+
     try {
-      _status = Status.uninitialized;
+
       prefs.clear();
       CartController(sharedPreferences: prefs).disposeCartController();
-      ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.loginPage);
+
+      _updateStatus(AuthStatus.uninitialized);
+      _navigateToLoginPage();
+
+      userRef.update({
+        FirestoreConstants.online: false,
+        FirestoreConstants.lastSeen:
+            DateTime.now().millisecondsSinceEpoch.toString(),
+      });
+
+
       await googleSignIn.disconnect();
       await googleSignIn.signOut();
       await auth.signOut();
@@ -244,14 +235,85 @@ class AuthController extends ChangeNotifier {
       startLoading();
       await auth.sendPasswordResetEmail(email: email);
       stopLoading();
-      ServiceNavigation.serviceNavi
-          .pushNamedReplacement(RouteGenerator.loginPage);
+      _navigateToLoginPage();
       Helpers.showSnackBar(
-          message: "Password reset link sent: Check your email",
-          isSuccess: true);
+        message: "Password reset link sent: Check your email",
+        isSuccess: true,
+      );
     } catch (e) {
       stopLoading();
       AuthExceptionHandler.handleException(e);
     }
+  }
+
+  // Utility methods...
+
+  void startLoading() {
+    isLoading = true;
+    notifyListeners();
+  }
+
+  void stopLoading() {
+    isLoading = false;
+    notifyListeners();
+  }
+
+  void startGoogleLoading() {
+    googleLoading = true;
+    notifyListeners();
+  }
+
+  void stopGoogleLoading() {
+    googleLoading = false;
+    notifyListeners();
+  }
+
+  void _updateStatus(AuthStatus newStatus) {
+    _status = newStatus;
+    notifyListeners();
+  }
+
+  void _setEmailUser(String email) {
+    SharedPrefUtil.setEmailUser(email);
+  }
+
+  void _navigateToMainPage() {
+    ServiceNavigation.serviceNavi
+        .pushNamedAndRemoveUtils(RouteGenerator.mainPage);
+  }
+
+  _updateUserProfile(User user, ChatUser userData) async {
+    await user.updateDisplayName(userData.displayName);
+  }
+
+  Future<void> _createUserInFirestore(
+    User user,
+    ChatUser userData,
+    String randomId,
+  ) async {
+    await firebaseFirestore
+        .collection(FirestoreConstants.pathUserCollection)
+        .doc(user.uid)
+        .set({
+      FirestoreConstants.displayName: userData.displayName,
+      FirestoreConstants.photoUrl: userData.photoUrl,
+      FirestoreConstants.id: randomId,
+      FirestoreConstants.address: userData.address,
+      FirestoreConstants.email: userData.email,
+      FirestoreConstants.createdAt:
+          DateTime.now().millisecondsSinceEpoch.toString(),
+      FirestoreConstants.chattingWith: null,
+    });
+  }
+
+  DocumentReference _getUserFirestoreReference(String uid) {
+    return firebaseFirestore
+        .collection(FirestoreConstants.pathUserCollection)
+        .doc(uid);
+  }
+
+  void _navigateToLoginPage() {
+    ServiceNavigation.serviceNavi
+        .pushNamedReplacement(RouteGenerator.loginPage);
   }
 }

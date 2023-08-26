@@ -5,6 +5,7 @@ import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/chat_controller
 import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/widgets/message_input.dart';
 import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/widgets/messeges_list.dart';
 import 'package:food_delivery_app/utils/extension/responsive_extension.dart';
+import 'package:food_delivery_app/utils/extension/time_extension.dart';
 import 'package:provider/provider.dart';
 
 class ChatArgument {
@@ -12,12 +13,16 @@ class ChatArgument {
   final String peerAvatar;
   final String peerNickname;
   final String userAvatar;
+  final String lastSeen;
+  final bool online;
 
   const ChatArgument(
       {Key? key,
       required this.peerNickname,
       required this.peerAvatar,
       required this.peerId,
+      required this.online,
+      required this.lastSeen,
       this.userAvatar = ""})
       : super();
 }
@@ -66,7 +71,27 @@ class _ChatPageState extends State<ChatPage> {
           },
           icon: const Icon(Icons.arrow_back_ios_new_outlined),
         ),
-        title: Text('${widget.arguments.peerNickname}'.trim()),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('${widget.arguments.peerNickname}'.trim()),
+            4.addVerticalSpace,
+            Visibility(
+              visible: widget.arguments.online == true,
+              child: Text(
+                'Online',
+                style: TextStyle(color: Colors.green, fontSize: 12),
+              ),
+            ),
+            Visibility(
+              visible: widget.arguments.online != true,
+              child: Text(
+                'Last Seen: ${widget.arguments.lastSeen.formattedTime()} ${widget.arguments.lastSeen.formattedDate()}',
+                style: TextStyle(color: Colors.grey, fontSize: 12),
+              ),
+            )
+          ],
+        ),
         actions: [
           IconButton(
             onPressed: () {},

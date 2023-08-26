@@ -106,6 +106,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   onPress: () {
                     if (formKey.currentState!.validate()) {
                       ChatUser user = ChatUser(
+                          lastSeen: DateTime.now().millisecond.toString(),
+                          online: false,
                           id: "",
                           photoUrl: "",
                           email: emailController.text,

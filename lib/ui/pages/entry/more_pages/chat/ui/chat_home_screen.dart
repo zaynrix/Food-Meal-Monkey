@@ -95,8 +95,8 @@ class _InboxPageState extends State<InboxPage> {
       itemCount: chatDocs.length,
       itemBuilder: (context, index) {
         final chatData = chatDocs[index];
-        final userChat = ChatUser.fromDocument(chatData);
 
+        final userChat = ChatUser.fromDocument(chatData);
         chatController
             .getLastMessageForUserChatsStream(
               ChatUser.fromDocument(chatData).id,
