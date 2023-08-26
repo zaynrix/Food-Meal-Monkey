@@ -38,11 +38,12 @@ class ThemeManager {
           headlineSmall: TextStyle(fontSize: 14.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.w600, color: primaryFontColor ),
           titleLarge: TextStyle(fontSize: 11.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.normal, color: secondaryFontColor),
           titleSmall: TextStyle(fontSize: 14.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.w500, color: primaryFontColor),
-          bodyLarge: TextStyle(fontSize: 12.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.normal, color: whiteColor ),
+          bodyLarge: TextStyle(fontSize: 15.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.bold, color: blackColor ),
           // bodyText2: TextStyle(fontSize: 12.0.sp,fontFamily: 'Open Sans', fontWeight: FontWeight.normal, color: blackColor ),
           titleMedium: TextStyle(fontSize: 16.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.bold, color: blackColor),
-
-          labelMedium: TextStyle(fontSize: 14.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.normal, color: secondaryFontColor )
+          bodyMedium: TextStyle(fontSize: AppSize.s15 , fontFamily: 'Metropolis', fontWeight: FontWeight.normal, color: primaryFontColor),
+          labelMedium: TextStyle(fontSize: 14.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.normal, color: secondaryFontColor ),
+          bodySmall: TextStyle(fontSize: 11.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.normal, color: primaryFontColor )
         ),
 
 //-------------------------------ElevatedButtonTheme----------------------------

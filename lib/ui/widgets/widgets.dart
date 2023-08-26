@@ -30,3 +30,4 @@ part 'more_widgets/more_tile.dart';
 part 'splash_logo.dart';
 part 'text_field.dart';
 part 'cart_widgets/cart_widget.dart';
+part 'more_widgets/order_card.dart';
