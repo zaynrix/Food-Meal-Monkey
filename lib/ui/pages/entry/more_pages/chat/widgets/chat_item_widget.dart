@@ -38,7 +38,8 @@ class ChatItemWidget extends StatelessWidget {
         );
       },
       child: Container(
-        color: chatItemModel.isSeen == null
+        color: chatItemModel.isSeen == null &&
+                authController.auth.currentUser!.uid == chatItemModel.idTo
             ? chatItemModel.seenByReceiver == true
                 ? Colors.transparent
                 : Colors.grey.shade200
@@ -159,7 +160,8 @@ class ChatItemWidget extends StatelessWidget {
             style: const TextStyle(color: Colors.grey, fontSize: 12),
           ),
         ),
-        chatItemModel.isSeen == null
+        chatItemModel.isSeen == null &&
+                authController.auth.currentUser!.uid == chatItemModel.idTo
             ? chatItemModel.seenByReceiver == true
                 ? SizedBox()
                 : Icon(
