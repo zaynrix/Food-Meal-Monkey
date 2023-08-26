@@ -219,7 +219,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                 data.label!,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodyText1!
+                                    .bodySmall!
                                     .copyWith(
                                         color: currentIndex == data.index
                                             ? orangeColor
