@@ -89,7 +89,10 @@ class _CartPageState extends State<CartPage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Consumer<CartController>(
-        builder: (context, instance, child) => ElevatedButton(onPressed: (){}, child: Text("Checkout")),
+        builder: (context, instance, child) => Padding(
+          padding: AppPadding.p24.paddingHorizontal,
+          child: ElevatedButton(onPressed: (){}, child: Text("Checkout")),
+        ),
       ),
     );
   }
@@ -103,4 +106,6 @@ class _CartPageState extends State<CartPage> {
     }
     return subtotal;
   }
+
+
 }

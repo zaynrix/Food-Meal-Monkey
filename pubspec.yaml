@@ -46,6 +46,8 @@ dependencies:
   grouped_list: ^5.1.2
   rxdart: ^0.27.7
   get_it: ^7.6.0
+  flutter_stripe: ^9.3.0
+  flutter_dotenv: ^5.1.0
 
 
 dev_dependencies:
@@ -69,6 +71,7 @@ flutter:
     - assets/images/desserts/
     - assets/icons/more/
     - assets/icons/
+    - .env
   fonts:
     - family: Metropolis
       fonts:
