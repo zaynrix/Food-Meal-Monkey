@@ -3,11 +3,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:food_delivery_app/core/controllers/auth_controller/auth_controller.dart';
 import 'package:food_delivery_app/core/controllers/cart_controller/cart_controller.dart';
 import 'package:food_delivery_app/core/controllers/home_Controllers/home_controller.dart';
 import 'package:food_delivery_app/core/controllers/notification_controllers/local_notification_controller.dart';
+import 'package:food_delivery_app/core/controllers/payment_controller/payment_controller.dart';
 import 'package:food_delivery_app/core/controllers/profile_controllers/profile_controller.dart';
 import 'package:food_delivery_app/resources/styles.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
@@ -22,9 +25,12 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'firebase_options.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
+  Stripe.publishableKey = dotenv.get("stripePublishKey");
+  debugPrint("This is stripe key >>>> ${dotenv.get("stripePublishKey")}");
+  // await Stripe.instance.applySettings();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -89,6 +95,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           ChangeNotifierProvider(
             create: (context) =>
                 CartController(sharedPreferences: widget.prefs),
+          ),
+          ChangeNotifierProvider(
+            create: (context) =>
+                PaymentController(
+                  sharedPreferences: widget.prefs
+                ),
           ),
           ChangeNotifierProvider(
             create: (context) => AuthController(
