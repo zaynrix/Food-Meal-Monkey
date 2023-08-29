@@ -9,6 +9,11 @@ class IconAssets {
   static const String notificationIcon = '$iconPath/more/notification.svg';
   static const String paymentIcon = '$iconPath/more/payment_details.svg';
   static const String logoutIcon = '$iconPath/logout_icon.svg';
+  static const String calenderIcon = '$iconPath/calender.svg';
+  static const String cardIcon = '$iconPath/card.svg';
+  static const String cvvIcon = '$iconPath/Cvv.svg';
+  static const String scanIcon = '$iconPath/scan.svg';
+  static const String userIcon = '$iconPath/user.svg';
 }
 
 const String svgPath = 'assets/svg';
@@ -40,4 +45,13 @@ class ImageAssets {
       '$imagePath/desserts/fudgy_chewy_brownies.png';
   static const String streetShake = '$imagePath/desserts/street_shake.png';
   static const String app_icon = '$imagePath/app_icon.png';
+  static const String americanExpress = '$imagePath/card_images/american_express.png';
+  static const String calenderIcon = '$imagePath/card_images/calender.png';
+  static const String cardCvvIcon = '$imagePath/card_images/card_cvv.png';
+  static const String dinnersClubIcon = '$imagePath/card_images/dinners_club.png';
+  static const String discoverIcon = '$imagePath/card_images/discover.png';
+  static const String jcdIcon = '$imagePath/card_images/jcd.png';
+  static const String mastercardIcon = '$imagePath/card_images/mastercard.png';
+  static const String verveIcon = '$imagePath/card_images/verve.png';
+  static const String visaIcon = '$imagePath/card_images/visa.png';
 }

@@ -162,7 +162,6 @@ class CartController extends ChangeNotifier {
   Future<QuerySnapshot> _getCartItemQuerySnapshot(ProductModel product) {
     final userId = getUserId();
 
-
     return FirebaseFirestore.instance
         .collection('users')
         .doc(userId)

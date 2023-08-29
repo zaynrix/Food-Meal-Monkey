@@ -3,6 +3,9 @@ part of widgets;
 class MainTextField extends StatelessWidget {
   const MainTextField(
       {Key? key,
+        this.inputFormatters,
+        this.prefixIcon,
+        this.suffixIcon,
       required this.validator,
       required this.text,
       required this.type,
@@ -16,6 +19,9 @@ class MainTextField extends StatelessWidget {
   final bool obscure;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
+  final Widget? prefixIcon;
+  final Widget? suffixIcon;
+  final List<TextInputFormatter>? inputFormatters;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +31,10 @@ class MainTextField extends StatelessWidget {
           fontSize: 18, color: Colors.black, fontWeight: FontWeight.normal),
       cursorColor: orangeColor,
       controller: controller,
+      inputFormatters: inputFormatters,
       decoration: InputDecoration(
+        prefixIcon: prefixIcon,
+          suffixIcon: suffixIcon,
           border: InputBorder.none,
           hintText: text,
           hintStyle: const TextStyle(
