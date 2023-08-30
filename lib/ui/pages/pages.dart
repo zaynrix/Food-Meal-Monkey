@@ -1,13 +1,20 @@
 library pages;
 
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slider_indicator/flutter_slider_indicator.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:food_delivery_app/core/controllers/auth_controller/auth_controller.dart';
 import 'package:food_delivery_app/core/controllers/cart_controller/cart_controller.dart';
+import 'package:food_delivery_app/core/controllers/payment_controller/payment_controller.dart';
 import 'package:food_delivery_app/core/controllers/profile_controllers/profile_controller.dart';
 import 'package:food_delivery_app/core/model/menu_model.dart';
 import 'package:food_delivery_app/core/model/models.dart';
@@ -20,15 +27,20 @@ import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/models/chat_mes
 import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/models/chat_user.dart';
 import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/ui/chat_screen.dart';
 import 'package:food_delivery_app/utils/app_config.dart';
+import 'package:food_delivery_app/utils/card/card_type.dart';
+import 'package:food_delivery_app/utils/card/card_utilis.dart';
+import 'package:food_delivery_app/utils/card/input_formatters.dart';
 import 'package:food_delivery_app/utils/extension/responsive_extension.dart';
-import 'package:food_delivery_app/utils/extension/time_extension.dart';
+import 'package:food_delivery_app/utils/extension/string_extensions.dart';
 import 'package:food_delivery_app/utils/extension/validate_extension.dart';
 import 'package:food_delivery_app/utils/keyboard_utils.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 import '../../core/controllers/home_Controllers/home_controller.dart';
+import '../../core/model/payment_card.dart';
 import '../../resources/styles.dart';
 import '../widgets/conrainer_side.dart';
 import '../widgets/homeWidgets/home_category.dart';
@@ -53,3 +65,4 @@ part 'entry/more_pages/about_as_page.dart';
 part 'entry/more_pages/chat/ui/chat_home_screen.dart';
 part 'entry/more_pages/chat/widgets/chat_item_widget.dart';
 part 'entry/more_pages/orders_page.dart';
+part 'entry/cart_page/payment_page.dart';
