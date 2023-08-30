@@ -1,34 +1,37 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/core/model/models.dart';
+import 'package:food_delivery_app/core/model/resturant_model.dart';
 import 'package:food_delivery_app/routing/router.dart';
-
-class DetailsScreenArguments {
-  final String title;
-  final String rating;
-  final String description;
-  final String imagePath;
-  final String ratingCount;
-  final String prices;
-
-  DetailsScreenArguments({
-    this.title = "",
-    this.rating = "",
-    this.description = "",
-    this.imagePath = "",
-    this.ratingCount = "",
-    required this.prices,
-  });
-}
+import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/firestore_constants.dart';
 
 class HomeController extends ChangeNotifier {
-
+  List<FoodItem>? foodList;
 
   void navigateToDetailsPage(BuildContext context, ProductModel productModel) {
-    Navigator.pushNamed(
-      context,
-      RouteGenerator.detailsPage,
-      arguments: productModel);
+    Navigator.pushNamed(context, RouteGenerator.detailsPage,
+        arguments: productModel);
+  }
+
+  Future<List<FoodItem>> fetchFoodItemsFromFirestore() async {
+    try {
+      final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection(FirestoreConstants.latest_offers)
+          .get();
+
+      final restaurants = querySnapshot.docs
+          .map(
+            (doc) => FoodItem.fromFirestore(doc.data() as Map<String, dynamic>),
+          )
+          .toList();
+
+      foodList = restaurants;
+      notifyListeners();
+      return restaurants;
+    } catch (error) {
+      print("Error getting restaurants: $error");
+      rethrow; // Rethrow the error for better error handling
+    }
   }
 
   Stream<QuerySnapshot> getMostPopularFoodStream() {
@@ -60,4 +63,22 @@ class HomeController extends ChangeNotifier {
   String getPrice(DocumentSnapshot doc) {
     return doc['price'].toString();
   }
+}
+
+class DetailsScreenArguments {
+  final String title;
+  final String rating;
+  final String description;
+  final String imagePath;
+  final String ratingCount;
+  final String prices;
+
+  DetailsScreenArguments({
+    required this.title,
+    required this.rating,
+    required this.description,
+    required this.imagePath,
+    required this.ratingCount,
+    required this.prices,
+  });
 }

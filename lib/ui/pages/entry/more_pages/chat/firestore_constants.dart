@@ -19,4 +19,6 @@ class FirestoreConstants {
   static const online = "online";
   static const lastSeen = "lastSeen";
   static const createdAt = "createdAt";
+  static const latest_offers = "latest_offers";
+  static const recent_items = "recent_items";
 }

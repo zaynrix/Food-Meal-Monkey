@@ -25,11 +25,12 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'firebase_options.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   Stripe.publishableKey = dotenv.get("stripePublishKey");
-  debugPrint("This is stripe key >>>> ${dotenv.get("stripePublishKey")}");
+  // debugPrint("This is stripe key >>>> ${dotenv.get("stripePublishKey")}");
   // await Stripe.instance.applySettings();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -86,8 +87,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     return Builder(builder: (context) {
       return MultiProvider(
         providers: [
-          ChangeNotifierProvider(
-            create: (context) => HomeController(),
+          ChangeNotifierProvider.value(
+            value: sl<HomeController>(),
           ),
           ChangeNotifierProvider(
             create: (context) => AppConfig(),
@@ -98,9 +99,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           ),
           ChangeNotifierProvider(
             create: (context) =>
-                PaymentController(
-                  sharedPreferences: widget.prefs
-                ),
+                PaymentController(sharedPreferences: widget.prefs),
           ),
           ChangeNotifierProvider(
             create: (context) => AuthController(
