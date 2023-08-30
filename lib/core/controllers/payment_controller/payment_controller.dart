@@ -32,7 +32,7 @@ class PaymentController extends ChangeNotifier {
     return sharedPreferences.getString("userId") ?? "null id";
   }
 
-  Future<void> addItemToCart({required PaymentCard card}) async {
+  Future<void> addNewCard({required PaymentCard card}) async {
     print("add item to cart");
     try {
       final String randomId = Uuid().v4();
@@ -63,8 +63,7 @@ class PaymentController extends ChangeNotifier {
           type: data["type"],
           number: data["number"],
           name: data["name"],
-          month: data["month"],
-          year: data["year"],
+          date: data["date"],
           cvv: data["cvv"]);
     }).toList();
   }
