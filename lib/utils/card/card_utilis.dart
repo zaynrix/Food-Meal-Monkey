@@ -157,36 +157,73 @@ class CardUtils {
 
   /// With the card number with Luhn Algorithm
   /// https://en.wikipedia.org/wiki/Luhn_algorithm
+
+
+
   static String? validateCardNum(String? input) {
     if (input == null || input.isEmpty) {
       return Strings.fieldReq;
     }
 
     input = getCleanedNumber(input);
-
-    if (input.length < 8) {
-      return Strings.numberIsInvalid;
+    isValidCardNumber(input);
+    if (!isValidCardNumber(input)) {
+      return 'Invalid card number';
     }
+    return null;
+    // if (input.length < 8) {
+    //   return Strings.numberIsInvalid;
+    // }
+    //
+    // int sum = 0;
+    // int length = input.length;
+    // for (var i = 0; i < length; i++) {
+    //   // get digits in reverse order
+    //   int digit = int.parse(input[length - i - 1]);
+    //
+    //   // every 2nd number multiply with 2
+    //   if (i % 2 == 1) {
+    //     digit *= 2;
+    //   }
+    //   sum += digit > 9 ? (digit - 9) : digit;
+    // }
+    //
+    // if (sum % 10 == 0) {
+    //   return null;
+    // }
 
-    int sum = 0;
-    int length = input.length;
-    for (var i = 0; i < length; i++) {
-      // get digits in reverse order
-      int digit = int.parse(input[length - i - 1]);
-
-      // every 2nd number multiply with 2
-      if (i % 2 == 1) {
-        digit *= 2;
-      }
-      sum += digit > 9 ? (digit - 9) : digit;
-    }
-
-    if (sum % 10 == 0) {
-      return null;
-    }
-
-    return Strings.numberIsInvalid;
+    // return Strings.numberIsInvalid;
   }
+
+
+  static bool isValidCardNumber(String cardNumber) {
+    // Remove any spaces or dashes from the input
+    String sanitizedCardNumber = cardNumber.replaceAll(RegExp(r'\s+|-'), '');
+
+    // Check if the card number contains only digits and has a valid length
+    if (!RegExp(r'^[0-9]+$').hasMatch(sanitizedCardNumber) ||
+        sanitizedCardNumber.length < 13 ||
+        sanitizedCardNumber.length > 19) {
+      return false;
+    }
+
+    // Perform Luhn's algorithm to check the validity of the card number
+    int sum = 0;
+    bool isAlternate = false;
+    for (int i = sanitizedCardNumber.length - 1; i >= 0; i--) {
+      int digit = int.parse(sanitizedCardNumber[i]);
+      if (isAlternate) {
+        digit *= 2;
+        if (digit > 9) {
+          digit -= 9;
+        }
+      }
+      sum += digit;
+      isAlternate = !isAlternate;
+    }
+    return sum % 10 == 0;
+  }
+
 
   static CardType getCardTypeFrmNumber(String input) {
     CardType cardType;

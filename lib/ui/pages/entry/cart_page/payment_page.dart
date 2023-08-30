@@ -16,18 +16,19 @@ class _PaymentPageState extends State<PaymentPage> {
 
   CardType cardType = CardType.Invalid;
 
-
   @override
   void initState() {
     super.initState();
     cardNumberController.addListener(() {
-      Provider.of<PaymentController>(context , listen: false).getCardTypeFrmNum(cardNumber: cardNumberController.text);
+      Provider.of<PaymentController>(context, listen: false)
+          .getCardTypeFrmNum(cardNumber: cardNumberController.text);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text("Payment"),
       ),
@@ -40,7 +41,7 @@ class _PaymentPageState extends State<PaymentPage> {
               children: [
                 AppSize.s40.addVerticalSpace,
                 Consumer<PaymentController>(
-                  builder: (context, controller , child) => MainTextField(
+                  builder: (context, controller, child) => MainTextField(
                     controller: cardNumberController,
                     validator: (value) => CardUtils.validateCardNum(value),
                     text: "Card Number",
@@ -111,11 +112,22 @@ class _PaymentPageState extends State<PaymentPage> {
                   ],
                 ),
                 AppSize.s40.addVerticalSpace,
-                CustomButton(text: "Add Card", onPress: (){
-                  if (formKey.currentState!.validate()) {
-                    debugPrint("This is ok");
-                  }
-                }),
+                Consumer<PaymentController>(
+                  builder: (context, controller, child) => CustomButton(
+                      text: "Add Card",
+                      onPress: () {
+                        if (formKey.currentState!.validate()) {
+                          controller.addNewCard(card: PaymentCard(
+                            number: cardNumberController.text,
+                            name: fullNameController.text,
+                            cvv: cvvController.text,
+                            type: controller.cardType.name.toString(),
+                            date: dateController.text.cardSyntaxToFullDate(),
+
+                          ));
+                        }
+                      }),
+                ),
                 AppSize.s40.addVerticalSpace,
               ],
             ),
@@ -124,7 +136,4 @@ class _PaymentPageState extends State<PaymentPage> {
       ),
     );
   }
-
-
 }
-
