@@ -7,13 +7,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:food_delivery_app/core/controllers/home_Controllers/home_controller.dart';
+import 'package:food_delivery_app/core/controllers/profile_controllers/profile_controller.dart';
 import 'package:food_delivery_app/core/model/models.dart';
 import 'package:food_delivery_app/core/model/resturant_model.dart';
 import 'package:food_delivery_app/resources/values_manager.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
 import 'package:food_delivery_app/routing/router.dart';
-import 'package:food_delivery_app/ui/pages/entry/home_pages/search_page.dart';
 import 'package:food_delivery_app/utils/extension/responsive_extension.dart';
 import 'package:provider/provider.dart';
 

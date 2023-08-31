@@ -14,10 +14,10 @@ import 'package:food_delivery_app/core/controllers/payment_controller/payment_co
 import 'package:food_delivery_app/core/controllers/profile_controllers/profile_controller.dart';
 import 'package:food_delivery_app/core/model/menu_model.dart';
 import 'package:food_delivery_app/core/model/models.dart';
+import 'package:food_delivery_app/resources/strings_manager.dart';
 import 'package:food_delivery_app/resources/values_manager.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
 import 'package:food_delivery_app/routing/router.dart';
-import 'package:food_delivery_app/service_locator.dart';
 import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/chat_controllers/chat_controller.dart';
 import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/firestore_constants.dart';
 import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/models/chat_message_model.dart';
