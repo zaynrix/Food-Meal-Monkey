@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/core/model/models.dart';
 import 'package:food_delivery_app/core/model/resturant_model.dart';
 import 'package:food_delivery_app/routing/router.dart';
-import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/firestore_constants.dart';
 
 class HomeController extends ChangeNotifier {
   List<FoodItem>? foodList;
@@ -11,27 +10,6 @@ class HomeController extends ChangeNotifier {
   void navigateToDetailsPage(BuildContext context, ProductModel productModel) {
     Navigator.pushNamed(context, RouteGenerator.detailsPage,
         arguments: productModel);
-  }
-
-  Future<List<FoodItem>> fetchFoodItemsFromFirestore() async {
-    try {
-      final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection(FirestoreConstants.latest_offers)
-          .get();
-
-      final restaurants = querySnapshot.docs
-          .map(
-            (doc) => FoodItem.fromFirestore(doc.data() as Map<String, dynamic>),
-          )
-          .toList();
-
-      foodList = restaurants;
-      notifyListeners();
-      return restaurants;
-    } catch (error) {
-      print("Error getting restaurants: $error");
-      rethrow; // Rethrow the error for better error handling
-    }
   }
 
   Stream<QuerySnapshot> getMostPopularFoodStream() {
@@ -43,6 +21,8 @@ class HomeController extends ChangeNotifier {
   String getTitle(DocumentSnapshot doc) {
     return doc['name'];
   }
+
+  void fetchFoodItemsFromFirestore2() {}
 
   String getRating(DocumentSnapshot doc) {
     return doc['rating'].toString();
