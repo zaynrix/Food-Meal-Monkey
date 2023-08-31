@@ -36,7 +36,10 @@ class _MorePageState extends State<MorePage> {
             MoreTile(
               title: 'Payment Details',
               iconPath: IconAssets.paymentIcon,
-              onTap: () {},
+              onTap: () {
+                ServiceNavigation.serviceNavi
+                    .pushNamedWidget(RouteGenerator.paymentDetailsPage);
+              },
             ),
             vSpace20,
             MoreTile(

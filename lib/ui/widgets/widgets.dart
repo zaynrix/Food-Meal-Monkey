@@ -35,3 +35,5 @@ part 'more_widgets/more_tile.dart';
 part 'more_widgets/order_card.dart';
 part 'splash_logo.dart';
 part 'text_field.dart';
+
+part 'payment_widgets/payment_card_widget.dart';

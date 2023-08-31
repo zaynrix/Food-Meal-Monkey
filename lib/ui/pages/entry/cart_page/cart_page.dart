@@ -93,11 +93,10 @@ class _CartPageState extends State<CartPage> {
       floatingActionButton: Consumer<CartController>(
         builder: (context, instance, child) => Padding(
           padding: AppPadding.p24.paddingHorizontal,
-          child: ElevatedButton(
-              onPressed: () {
-                // ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.paymentPage);
-              },
-              child: Text("Checkout")),
+          child: ElevatedButton(onPressed: (){
+            ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.addPaymentPage);
+          }, child: Text("Checkout")),
+
         ),
       ),
     );

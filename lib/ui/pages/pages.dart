@@ -62,3 +62,4 @@ part 'entry/more_pages/about_as_page.dart';
 part 'entry/more_pages/chat/ui/chat_home_screen.dart';
 part 'entry/more_pages/chat/widgets/chat_item_widget.dart';
 part 'entry/more_pages/orders_page.dart';
+

@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:food_delivery_app/core/model/payment_card.dart';
+import 'package:food_delivery_app/routing/navigations.dart';
+import 'package:food_delivery_app/routing/router.dart';
 import 'package:food_delivery_app/utils/card/card_type.dart';
 import 'package:food_delivery_app/utils/card/card_utilis.dart';
 import 'package:food_delivery_app/utils/helper.dart';
@@ -44,6 +46,8 @@ class PaymentController extends ChangeNotifier {
 
         print("Item added to cart");
         notifyListeners();
+        fetchPaymentCards();
+        ServiceNavigation.serviceNavi.back();
         Helpers.showSnackBar(
             message: "Card Added successfully", isSuccess: true);
       } else {
@@ -54,6 +58,45 @@ class PaymentController extends ChangeNotifier {
       debugPrint('Error adding item to Firestore: $error');
     }
   }
+
+  Future<void> fetchPaymentCards() async {
+    try {
+      final paymentsCardSnapshot = await _getPaymentCardsSnapshot();
+      if (paymentsCardSnapshot.docs.isNotEmpty) {
+        paymentCards = _mapPaymentCardsData(paymentsCardSnapshot.docs);
+        notifyListeners();
+      } else {
+        print("Cart items not found");
+      }
+    } catch (error) {
+      print('Error fetching cart items: $error');
+    }
+  }
+
+  Future<void> deleteCard(PaymentCard card) async {
+    try {
+      debugPrint("This is inside delete function");
+      final userId = getUserId();
+      debugPrint(
+          "This is querySnapshot inside delete function in controller ");
+      // if (querySnapshot.size == 1) {
+      debugPrint("This is docIf ${card.id}");
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('paymentMethods')
+          .doc(card.id)
+          .delete();
+      paymentCards.remove(card);
+      notifyListeners();
+      Helpers.showSnackBar(message: "Product deleted successfully", isSuccess: false);
+
+    } catch (e) {
+      debugPrint("Error in delete item >> $e");
+    }
+  }
+
 
   List<PaymentCard> _mapPaymentCardsData(List<QueryDocumentSnapshot> docs) {
     return docs.map((itemData) {

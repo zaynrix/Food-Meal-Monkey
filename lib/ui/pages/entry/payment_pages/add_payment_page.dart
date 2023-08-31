@@ -14,8 +14,6 @@ class _PaymentPageState extends State<PaymentPage> {
   final TextEditingController dateController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  CardType cardType = CardType.Invalid;
-
   @override
   void initState() {
     super.initState();
