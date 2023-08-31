@@ -20,7 +20,8 @@ class RouteGenerator {
   static const String profilePage = '/profilePage';
   static const String cartPage = '/cartPage';
   static const String ordersPage = '/ordersPage';
-  static const String paymentPage = '/paymentPage';
+  static const String addPaymentPage = '/addPaymentPage';
+  static const String paymentDetailsPage = '/paymentDetailsPage';
 
   RouteGenerator._();
 }

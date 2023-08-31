@@ -43,7 +43,7 @@ class ThemeManager {
           titleMedium: TextStyle(fontSize: 16.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.bold, color: blackColor),
           bodyMedium: TextStyle(fontSize: AppSize.s15 , fontFamily: 'Metropolis', fontWeight: FontWeight.normal, color: primaryFontColor),
           labelMedium: TextStyle(fontSize: 14.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.normal, color: secondaryFontColor ),
-          bodySmall: TextStyle(fontSize: 11.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.normal, color: primaryFontColor )
+          bodySmall: TextStyle(fontSize: 11.0.sp,fontFamily: 'Metropolis', fontWeight: FontWeight.normal, color: primaryFontColor  )
         ),
 
 //-------------------------------ElevatedButtonTheme----------------------------

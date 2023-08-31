@@ -55,8 +55,10 @@ class RoutsGenerate {
         return MaterialPageRoute(builder: (_) => CartPage());
       case RouteGenerator.ordersPage:
         return MaterialPageRoute(builder: (_) => OrdersPage());
-      case RouteGenerator.paymentPage:
+      case RouteGenerator.addPaymentPage:
         return MaterialPageRoute(builder: (_) => PaymentPage());
+      case RouteGenerator.paymentDetailsPage:
+        return MaterialPageRoute(builder: (_) => PaymentDetailsPage());
       default:
         throw const FormatException("Route not found");
     }

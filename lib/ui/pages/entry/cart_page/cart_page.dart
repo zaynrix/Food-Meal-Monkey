@@ -94,7 +94,7 @@ class _CartPageState extends State<CartPage> {
         builder: (context, instance, child) => Padding(
           padding: AppPadding.p24.paddingHorizontal,
           child: ElevatedButton(onPressed: (){
-            ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.paymentPage);
+            ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.addPaymentPage);
           }, child: Text("Checkout")),
         ),
       ),
