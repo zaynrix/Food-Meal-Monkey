@@ -22,6 +22,7 @@ class HomeCategory extends StatelessWidget {
         }
 
         return ListView.builder(
+          shrinkWrap: true,
           scrollDirection: Axis.horizontal,
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {

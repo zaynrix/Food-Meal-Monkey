@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/core/model/resturant_model.dart';
+import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/firestore_constants.dart';
 import 'package:food_delivery_app/utils/helper.dart';
 
 class ProfileController extends ChangeNotifier {
@@ -12,6 +14,35 @@ class ProfileController extends ChangeNotifier {
   TextEditingController mobileController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   bool isSaving = false; // Variable to track the saving state
+
+  List? foodList;
+  String searchWord = "";
+
+  void search(String value) {
+    searchWord = value;
+    notifyListeners();
+  }
+
+  Future<List<FoodItem>> fetchFoodItemsFromFirestore() async {
+    try {
+      final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection(FirestoreConstants.latest_offers)
+          .get();
+
+      final restaurants = querySnapshot.docs
+          .map(
+            (doc) => FoodItem.fromFirestore(doc.data() as Map<String, dynamic>),
+          )
+          .toList();
+
+      foodList = restaurants;
+      notifyListeners();
+      return restaurants;
+    } catch (error) {
+      print("Error getting restaurants: $error");
+      rethrow; // Rethrow the error for better error handling
+    }
+  }
 
   Future<void> updateProfile(BuildContext context) async {
     isSaving = true; // Start saving state

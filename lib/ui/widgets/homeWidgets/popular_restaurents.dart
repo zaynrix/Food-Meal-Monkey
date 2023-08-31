@@ -23,8 +23,8 @@ class PupularResturent extends StatelessWidget {
           shrinkWrap: true,
           itemCount: restaurantDocs.length,
           itemBuilder: (context, index) {
-            Map<String, dynamic> restaurantData =
-                restaurantDocs[index].data() as Map<String, dynamic>;
+            FoodItem restaurant = FoodItem.fromFirestore(
+                restaurantDocs[index].data() as Map<String, dynamic>);
 
             return Column(
               mainAxisSize: MainAxisSize.max,
@@ -32,7 +32,7 @@ class PupularResturent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CachedNetworkImage(
-                  imageUrl: restaurantData['imagePath'],
+                  imageUrl: restaurant.imagePath,
                   fit: BoxFit.fitWidth,
                   width: double.infinity,
                   placeholder: (context, url) =>
@@ -43,7 +43,7 @@ class PupularResturent extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
                   child: Text(
-                    restaurantData['name'],
+                    restaurant.name,
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: primaryFontColor, fontWeight: FontWeight.bold),
                   ),
@@ -53,11 +53,11 @@ class PupularResturent extends StatelessWidget {
                   child: Row(
                     children: [
                       ItemRating(
-                        rating: restaurantData['rating'].toString(),
+                        rating: restaurant.rating.toString(),
                       ),
                       addHorizontalSpace(AppSize.s5.w),
                       Text(
-                        '(${restaurantData['ratingCount']} rating)',
+                        '(${restaurant.ratingCount} rating)',
                         style: Theme.of(context).textTheme.bodySmall!.copyWith(
                             color: secondaryFontColor,
                             fontWeight: FontWeight.bold),

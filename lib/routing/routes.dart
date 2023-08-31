@@ -40,8 +40,9 @@ class RoutsGenerate {
 
       case RouteGenerator.detailsPage:
         return MaterialPageRoute(
-            builder: (_) =>
-                DetailsScreen( product: args as ProductModel,));
+            builder: (_) => DetailsScreen(
+                  product: args as ProductModel,
+                ));
 
       case RouteGenerator.chatPage:
         return MaterialPageRoute(
@@ -55,8 +56,10 @@ class RoutsGenerate {
         return MaterialPageRoute(builder: (_) => CartPage());
       case RouteGenerator.ordersPage:
         return MaterialPageRoute(builder: (_) => OrdersPage());
-      case RouteGenerator.paymentPage:
-        return MaterialPageRoute(builder: (_) => PaymentPage());
+      case RouteGenerator.ordersPage:
+        return MaterialPageRoute(builder: (_) => OrdersPage());
+      // case RouteGenerator.paymentPage:
+      //   return MaterialPageRoute(builder: (_) => PaymentPage());
       default:
         throw const FormatException("Route not found");
     }
