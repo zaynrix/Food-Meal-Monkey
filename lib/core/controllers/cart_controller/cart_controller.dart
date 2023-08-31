@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:food_delivery_app/core/controllers/auth_controller/auth_controller.dart';
 import 'package:food_delivery_app/core/model/models.dart';
+import 'package:food_delivery_app/service_locator.dart';
 import 'package:food_delivery_app/utils/helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,7 +13,7 @@ class CartController extends ChangeNotifier {
   List<ProductModel> cartItems = [];
 
   String getUserId() {
-    return sharedPreferences.getString("userId") ?? "null id";
+    return sl<AuthController>().auth.currentUser!.uid;
   }
 
   Future<void> fetchCartItems() async {
@@ -32,19 +34,21 @@ class CartController extends ChangeNotifier {
   Future<void> addItemToCart({required ProductModel product}) async {
     print("add item to cart");
     try {
-      product.cartQuantity++;
       product.inCart = true;
+      product.cartQuantity++;
       final jsonProduct = product.toJson();
+
       final productSnapshot = await _getCartItemQuerySnapshot(product);
       if (productSnapshot.docs.isEmpty) {
         await _addProductToFirestore(product.id, jsonProduct);
 
         print("Item added to cart");
         notifyListeners();
-        Helpers.showSnackBar(message: "Product Added successfully", isSuccess: true);
-      }
-      else{
-        Helpers.showSnackBar(message: "This Product is already added", isSuccess: false);
+        Helpers.showSnackBar(
+            message: "Product Added successfully", isSuccess: true);
+      } else {
+        Helpers.showSnackBar(
+            message: "This Product is already added", isSuccess: false);
       }
     } catch (error) {
       debugPrint('Error adding item to Firestore: $error');
@@ -56,12 +60,11 @@ class CartController extends ChangeNotifier {
     try {
       final querySnapshot = await _getCartItemQuerySnapshot(product);
       if (querySnapshot.size == 1) {
-        await _updateCartItemQuantity(product.id, product.cartQuantity as double);
+        await _updateCartItemQuantity(
+            product.id, product.cartQuantity as double);
         notifyListeners();
       } else {
         print('Product not found or not unique');
-
-    
       }
     } catch (error) {
       print('Error updating product in Firestore: $error');
@@ -81,21 +84,20 @@ class CartController extends ChangeNotifier {
     try {
       debugPrint("This is inside delete function");
       final userId = getUserId();
-        debugPrint(
-            "This is querySnapshot inside delete function in controller ");
-        // if (querySnapshot.size == 1) {
-          debugPrint("This is docIf ${product.id}");
+      debugPrint("This is querySnapshot inside delete function in controller ");
+      // if (querySnapshot.size == 1) {
+      debugPrint("This is docIf ${product.id}");
 
-          await FirebaseFirestore.instance
-              .collection('users')
-              .doc(userId)
-              .collection('cartItems')
-              .doc(product.id)
-              .delete();
-          cartItems.remove(product);
-          notifyListeners();
-      Helpers.showSnackBar(message: "Product deleted successfully", isSuccess: false);
-
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('cartItems')
+          .doc(product.id)
+          .delete();
+      cartItems.remove(product);
+      notifyListeners();
+      Helpers.showSnackBar(
+          message: "Product deleted successfully", isSuccess: false);
     } catch (e) {
       debugPrint("Error in delete item >> $e");
     }
@@ -118,7 +120,6 @@ class CartController extends ChangeNotifier {
       print("out if ");
     }
   }
-
 
   Future<QuerySnapshot> _getCartItemsSnapshot() {
     final userId = getUserId();
@@ -180,20 +181,15 @@ class CartController extends ChangeNotifier {
         .update({'cartQuantity': quantity});
   }
 
-
   @override
-  dispose(){
+  dispose() {
     super.dispose();
     cartItems = [];
     notifyListeners();
   }
 
-  disposeCartController(){
+  disposeCartController() {
     cartItems = [];
     notifyListeners();
   }
 }
-
-
-
-

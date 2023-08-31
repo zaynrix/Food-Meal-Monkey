@@ -1,15 +1,11 @@
 library pages;
 
-import 'dart:convert';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slider_indicator/flutter_slider_indicator.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:food_delivery_app/core/controllers/auth_controller/auth_controller.dart';
@@ -18,6 +14,7 @@ import 'package:food_delivery_app/core/controllers/payment_controller/payment_co
 import 'package:food_delivery_app/core/controllers/profile_controllers/profile_controller.dart';
 import 'package:food_delivery_app/core/model/menu_model.dart';
 import 'package:food_delivery_app/core/model/models.dart';
+import 'package:food_delivery_app/resources/strings_manager.dart';
 import 'package:food_delivery_app/resources/values_manager.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
 import 'package:food_delivery_app/routing/router.dart';
@@ -37,7 +34,6 @@ import 'package:food_delivery_app/utils/keyboard_utils.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 
 import '../../core/controllers/home_Controllers/home_controller.dart';
 import '../../core/model/payment_card.dart';
@@ -55,6 +51,7 @@ part 'entry/auth_pages/on_boarding_page.dart';
 part 'entry/auth_pages/splash_page.dart';
 part 'entry/auth_pages/starter_page.dart';
 part 'entry/cart_page/cart_page.dart';
+part 'entry/cart_page/payment_page.dart';
 part 'entry/home_pages//home_page.dart';
 part 'entry/home_pages//main_page.dart';
 part 'entry/home_pages/offers_page.dart';
@@ -65,5 +62,4 @@ part 'entry/more_pages/about_as_page.dart';
 part 'entry/more_pages/chat/ui/chat_home_screen.dart';
 part 'entry/more_pages/chat/widgets/chat_item_widget.dart';
 part 'entry/more_pages/orders_page.dart';
-part 'entry/payment_pages/add_payment_page.dart';
-part 'entry/payment_pages/payment_details.dart';
+

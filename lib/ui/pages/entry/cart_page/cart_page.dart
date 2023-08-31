@@ -16,7 +16,7 @@ class _CartPageState extends State<CartPage> {
     initPaymentSheet();
   }
 
-  Map<String , dynamic>? paymentIntent;
+  Map<String, dynamic>? paymentIntent;
   // final SingleProduct? singleProduct;
   @override
   Widget build(BuildContext context) {
@@ -96,6 +96,7 @@ class _CartPageState extends State<CartPage> {
           child: ElevatedButton(onPressed: (){
             ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.addPaymentPage);
           }, child: Text("Checkout")),
+
         ),
       ),
     );
@@ -111,73 +112,73 @@ class _CartPageState extends State<CartPage> {
     return subtotal;
   }
 
-  calculateAmount(String amount){
+  calculateAmount(String amount) {
     final calculatedAmount = (int.parse(amount) * 100);
     return calculatedAmount.toString();
   }
 
-  createPaymentIntent(String amount , String currency) async {
-    await dotenv.load(fileName: ".env");
-    final String secretKey = dotenv.get("stripePublishKey");
-
-    try {
-      Map<String, dynamic> body = {
-        "amount": calculateAmount(amount),
-        "currency": currency
-      };
-
-      var response = await http.post(
-          Uri.parse("https://api.stripe.com/v1/payment_intents"),
-          body: body,
-          headers: {
-            "Authorization": "Bearer $secretKey",
-            "Content-Type": "application/x-www-form-urlencoded"
-          });
-
-      return jsonDecode(response.body);
-    }catch (e){
-      debugPrint("err charging user : $e");
-    }
+  createPaymentIntent(String amount, String currency) async {
+    // await dotenv.load(fileName: ".env");
+    // final String secretKey = dotenv.get("stripePublishKey");
+    //
+    // try {
+    //   Map<String, dynamic> body = {
+    //     "amount": calculateAmount(amount),
+    //     "currency": currency
+    //   };
+    //
+    //   var response = await http.post(
+    //       Uri.parse("https://api.stripe.com/v1/payment_intents"),
+    //       body: body,
+    //       headers: {
+    //         "Authorization": "Bearer $secretKey",
+    //         "Content-Type": "application/x-www-form-urlencoded"
+    //       });
+    //
+    //   return jsonDecode(response.body);
+    // }catch (e){
+    //   debugPrint("err charging user : $e");
+    // }
   }
 
   Future<void> initPaymentSheet() async {
-    try {
-      paymentIntent = await createPaymentIntent("100" , "USD");
-      await Stripe.instance.initPaymentSheet(
-        paymentSheetParameters: SetupPaymentSheetParameters(
-          customFlow: true,
-          merchantDisplayName: 'Flutter Stripe Demo',
-          paymentIntentClientSecret: paymentIntent!["client_secret"],
-          // customerEphemeralKeySecret: "",
-          // customerId: "",
-          // setupIntentClientSecret: "",
-          style: ThemeMode.light,
-        ),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
-      rethrow;
-    }
+    // try {
+    //   paymentIntent = await createPaymentIntent("100" , "USD");
+    //   await Stripe.instance.initPaymentSheet(
+    //     paymentSheetParameters: SetupPaymentSheetParameters(
+    //       customFlow: true,
+    //       merchantDisplayName: 'Flutter Stripe Demo',
+    //       paymentIntentClientSecret: paymentIntent!["client_secret"],
+    //       // customerEphemeralKeySecret: "",
+    //       // customerId: "",
+    //       // setupIntentClientSecret: "",
+    //       style: ThemeMode.light,
+    //     ),
+    //   );
+    // } catch (e) {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     SnackBar(content: Text('Error: $e')),
+    //   );
+    //   rethrow;
+    // }
   }
 
   Future<void> _displayPaymentSheet() async {
-    try {
-      await Stripe.instance.presentPaymentSheet(
-          options: const PaymentSheetPresentOptions(timeout: 1200000));
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Payment successfully completed'),
-        ),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('$e'),
-        ),
-      );
-    }
+    // try {
+    //   await Stripe.instance.presentPaymentSheet(
+    //       options: const PaymentSheetPresentOptions(timeout: 1200000));
+    //
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(
+    //       content: Text('Payment successfully completed'),
+    //     ),
+    //   );
+    // } catch (e) {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     SnackBar(
+    //       content: Text('$e'),
+    //     ),
+    //   );
+    // }
   }
 }
