@@ -24,9 +24,9 @@ import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/models/chat_mes
 import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/models/chat_user.dart';
 import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/ui/chat_screen.dart';
 import 'package:food_delivery_app/utils/app_config.dart';
-import 'package:food_delivery_app/utils/card/card_type.dart';
 import 'package:food_delivery_app/utils/card/card_utilis.dart';
 import 'package:food_delivery_app/utils/card/input_formatters.dart';
+import 'package:food_delivery_app/utils/enums.dart';
 import 'package:food_delivery_app/utils/extension/responsive_extension.dart';
 import 'package:food_delivery_app/utils/extension/string_extensions.dart';
 import 'package:food_delivery_app/utils/extension/validate_extension.dart';
@@ -51,7 +51,6 @@ part 'entry/auth_pages/on_boarding_page.dart';
 part 'entry/auth_pages/splash_page.dart';
 part 'entry/auth_pages/starter_page.dart';
 part 'entry/cart_page/cart_page.dart';
-part 'entry/cart_page/payment_page.dart';
 part 'entry/home_pages//home_page.dart';
 part 'entry/home_pages//main_page.dart';
 part 'entry/home_pages/offers_page.dart';
@@ -62,4 +61,7 @@ part 'entry/more_pages/about_as_page.dart';
 part 'entry/more_pages/chat/ui/chat_home_screen.dart';
 part 'entry/more_pages/chat/widgets/chat_item_widget.dart';
 part 'entry/more_pages/orders_page.dart';
+part 'entry/payment_pages/add_payment_page.dart';
+part 'entry/payment_pages/payment_details.dart';
+part 'entry/cart_page/checkout_page.dart';
 

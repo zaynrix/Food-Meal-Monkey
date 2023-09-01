@@ -23,6 +23,7 @@ class RouteGenerator {
   static const String addPaymentPage = '/addPaymentPage';
   static const String paymentDetailsPage = '/paymentDetailsPage';
   static const String search = '/search';
+  static const String checkoutPage = '/checkoutPage';
 
   RouteGenerator._();
 }

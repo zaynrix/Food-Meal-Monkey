@@ -10,7 +10,6 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Provider.of<CartController>(context, listen: false).fetchCartItems();
     initPaymentSheet();
@@ -25,68 +24,85 @@ class _CartPageState extends State<CartPage> {
       appBar: AppBar(
         title: const Text('Your Cart'),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: AppPadding.p20.paddingHorizontal,
-          child: Consumer<CartController>(
-            builder: (context, value, child) => Column(
-              children: [
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: value.cartItems.length,
-                  itemBuilder: (context, index) {
-                    final food = value.cartItems[index];
-
-                    return value.cartItems.isNotEmpty
-                        ? Column(
-                            children: [
-                              CartCard(
-                                food: food,
-                                onIncrement: () async {
-                                  value.incrementProduct(food);
-                                  await value.updateCartItemQuantity(food);
-                                },
-                                onDecrement: () async {
-                                  value.decrementProduct(food);
-                                  await value.updateCartItemQuantity(food);
-                                },
-                              ),
-                              5.addVerticalSpace,
-                              Divider(
-                                color: secondaryFontColor,
-                              ),
-                            ],
-                          )
-                        : Center(
-                            child: Text(
-                              "No Item In Card",
-                              style: TextStyle(color: Colors.black),
-                            ),
-                          );
-                  },
-                ),
-                50.addVerticalSpace,
-                20.addVerticalSpace,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Consumer<CartController>(
+        builder: (context , controller , child) => Stack(
+          children: [
+            SingleChildScrollView(
+              child: Padding(
+                padding: AppPadding.p20.paddingHorizontal,
+                child: Column(
                   children: [
-                    Text(
-                      'Subtotal',
-                      style:
-                          textTheme.titleMedium!.copyWith(color: Colors.black),
+
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: controller.cartItems.length,
+                      itemBuilder: (context, index) {
+                        final food = controller.cartItems[index];
+
+                        return controller.cartItems.isNotEmpty
+                            ? Column(
+                                children: [
+                                  CartCard(
+                                    food: food,
+                                    onIncrement: () async {
+                                      controller.incrementProduct(food);
+                                      await controller.updateCartItemQuantity(food);
+                                    },
+                                    onDecrement: () async {
+                                      controller.decrementProduct(food);
+                                      await controller.updateCartItemQuantity(food);
+                                    },
+                                  ),
+                                  5.addVerticalSpace,
+                                  Divider(
+                                    color: secondaryFontColor,
+                                  ),
+                                ],
+                              )
+                            : Center(
+                                child: Text(
+                                  "No Item In Card",
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              );
+                      },
                     ),
-                    Text(
-                      '\$${calculateSubtotal(value.cartItems).toStringAsFixed(2)}',
+                    50.addVerticalSpace,
+                    20.addVerticalSpace,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Subtotal',
+                          style:
+                              textTheme.titleMedium!.copyWith(color: Colors.black),
+                        ),
+                        Text(
+                          '\$${calculateSubtotal(controller.cartItems).toStringAsFixed(2)}',
+                        ),
+                      ],
                     ),
+                    SizedBox(
+                      height: FlutterSizes.screenDeviceHeight.height * 0.35,
+                    )
                   ],
                 ),
-                SizedBox(
-                  height: FlutterSizes.screenDeviceHeight.height * 0.35,
-                )
-              ],
+              ),
             ),
-          ),
+            Visibility(
+              visible: controller.isLoading,
+              child: Container(
+                height: FlutterSizes.screenDeviceHeight,
+                width: FlutterSizes.screenDeviceWidth,
+                color: secondaryFontColor.withOpacity(0.3),
+                child: const LoadingStatusWidget(
+                  loadingStatus: LoadingStatusOption.loading,
+                ),
+              ),
+            )
+
+          ],
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -94,7 +110,7 @@ class _CartPageState extends State<CartPage> {
         builder: (context, instance, child) => Padding(
           padding: AppPadding.p24.paddingHorizontal,
           child: ElevatedButton(onPressed: (){
-            ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.addPaymentPage);
+            ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.checkoutPage);
           }, child: Text("Checkout")),
 
         ),

@@ -49,6 +49,8 @@ dependencies:
   flutter_stripe: ^9.3.0
   flutter_dotenv: ^5.1.0
   http:
+  lottie: ^2.3.2
+
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +75,7 @@ flutter:
     - assets/icons/more/
     - assets/icons/
     - .env
+    - assets/json_animation/
   fonts:
     - family: Metropolis
       fonts:

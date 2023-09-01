@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:food_delivery_app/core/model/payment_card.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
-import 'package:food_delivery_app/routing/router.dart';
 import 'package:food_delivery_app/utils/card/card_type.dart';
 import 'package:food_delivery_app/utils/card/card_utilis.dart';
 import 'package:food_delivery_app/utils/helper.dart';
@@ -29,6 +28,7 @@ class PaymentController extends ChangeNotifier {
   }
 
   List<PaymentCard> paymentCards = [];
+
 
   String getUserId() {
     return sharedPreferences.getString("userId") ?? "null id";
