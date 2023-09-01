@@ -5,9 +5,14 @@ import 'custom_button.dart';
 import 'head_txt.dart';
 
 class NumOfPortions extends StatelessWidget {
-  final int count = 1;
+  final int count;
+  final void Function()? onIncrement;
+  final void Function()? onDecrement;
 
   const NumOfPortions({
+    this.count = 1,
+    required this.onDecrement,
+    required this.onIncrement,
     Key? key,
   }) : super(key: key);
 
@@ -21,14 +26,14 @@ class NumOfPortions extends StatelessWidget {
           const Expanded(child: HeadTex(str: 'Number of Portions')),
           CustomButtonDetails(
             str: '-',
-            count: count,
+            count: count, onPressed: onDecrement,
           ),
           ShowResultDet(
             count: count,
           ),
           CustomButtonDetails(
             str: '+',
-            count: count,
+            count: count, onPressed: onIncrement,
           ),
         ],
       ),

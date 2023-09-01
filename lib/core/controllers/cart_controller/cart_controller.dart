@@ -122,6 +122,18 @@ class CartController extends ChangeNotifier {
     }
   }
 
+  incrementUiItem(ProductModel product){
+    product.cartQuantity++;
+    notifyListeners();
+  }
+
+  decrementUiItem(ProductModel product){
+    if (product.cartQuantity+1 > 1) {
+      product.cartQuantity --;
+      notifyListeners();
+    }
+  }
+
   Future<void> deleteProduct(ProductModel product) async {
     try {
       debugPrint("This is inside delete function");
