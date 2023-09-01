@@ -64,6 +64,8 @@ class RoutsGenerate {
 
       case RouteGenerator.ordersPage:
         return MaterialPageRoute(builder: (_) => OrdersPage());
+      case RouteGenerator.checkoutPage:
+        return MaterialPageRoute(builder: (_) => CheckoutPage());
       // case RouteGenerator.paymentPage:
       //   return MaterialPageRoute(builder: (_) => PaymentPage());
 

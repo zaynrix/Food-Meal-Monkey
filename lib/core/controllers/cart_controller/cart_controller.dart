@@ -1,8 +1,11 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:food_delivery_app/core/controllers/auth_controller/auth_controller.dart';
 import 'package:food_delivery_app/core/model/models.dart';
+import 'package:food_delivery_app/routing/navigations.dart';
 import 'package:food_delivery_app/service_locator.dart';
+import 'package:food_delivery_app/utils/enums.dart';
 import 'package:food_delivery_app/utils/helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,21 +14,52 @@ class CartController extends ChangeNotifier {
 
   final SharedPreferences sharedPreferences;
   List<ProductModel> cartItems = [];
+  bool isLoading = false;
+
+  startDialogLoading(){
+    isLoading = true;
+    notifyListeners();
+    debugPrint("This is inside start loading");
+    Helpers.showLoadingDialog(message: "Loading...", status: LoadingStatusOption.loading);
+  }
+
+  stopDialogLoading(){
+    isLoading = false;
+    notifyListeners();
+    ServiceNavigation.serviceNavi.back();
+  }
+
+  startLoading(){
+    isLoading = true;
+    notifyListeners();
+  }
+
+  stopLoading(){
+    isLoading = false;
+    notifyListeners();
+  }
 
   String getUserId() {
+    debugPrint("This is inside stop loading");
     return sl<AuthController>().auth.currentUser!.uid;
   }
 
   Future<void> fetchCartItems() async {
     try {
+      isLoading = true;
       final cartItemsSnapshot = await _getCartItemsSnapshot();
       if (cartItemsSnapshot.docs.isNotEmpty) {
         cartItems = _mapCartItemsData(cartItemsSnapshot.docs);
+        isLoading = false;
         notifyListeners();
       } else {
+        isLoading = false;
+        notifyListeners();
         print("Cart items not found");
       }
     } catch (error) {
+      isLoading = false;
+      notifyListeners();
       print('Error fetching cart items: $error');
     }
   }
@@ -34,6 +68,7 @@ class CartController extends ChangeNotifier {
   Future<void> addItemToCart({required ProductModel product}) async {
     print("add item to cart");
     try {
+      startDialogLoading();
       product.inCart = true;
       product.cartQuantity++;
       final jsonProduct = product.toJson();
@@ -41,16 +76,19 @@ class CartController extends ChangeNotifier {
       final productSnapshot = await _getCartItemQuerySnapshot(product);
       if (productSnapshot.docs.isEmpty) {
         await _addProductToFirestore(product.id, jsonProduct);
-
+        product.cartQuantity = 0;
         print("Item added to cart");
+        stopDialogLoading();
         notifyListeners();
         Helpers.showSnackBar(
             message: "Product Added successfully", isSuccess: true);
       } else {
+        stopDialogLoading();
         Helpers.showSnackBar(
             message: "This Product is already added", isSuccess: false);
       }
     } catch (error) {
+      stopDialogLoading();
       debugPrint('Error adding item to Firestore: $error');
     }
   }
@@ -58,15 +96,19 @@ class CartController extends ChangeNotifier {
   // Update cart item's quantity
   Future<void> updateCartItemQuantity(ProductModel product) async {
     try {
+      startLoading();
       final querySnapshot = await _getCartItemQuerySnapshot(product);
       if (querySnapshot.size == 1) {
         await _updateCartItemQuantity(
             product.id, product.cartQuantity as double);
+        stopLoading();
         notifyListeners();
       } else {
+        stopLoading();
         print('Product not found or not unique');
       }
     } catch (error) {
+      stopLoading();
       print('Error updating product in Firestore: $error');
     }
   }

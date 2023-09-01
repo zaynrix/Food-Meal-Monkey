@@ -1,15 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:food_delivery_app/resources/styles.dart';
+import 'package:food_delivery_app/resources/values_manager.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
+import 'package:food_delivery_app/ui/widgets/widgets.dart';
+import 'package:food_delivery_app/utils/enums.dart';
+import 'package:food_delivery_app/utils/extension/responsive_extension.dart';
 
 class Helpers {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  static showLoadingDialog(
+      {required String message, required LoadingStatusOption status}) {
+    showDialog(
+      barrierDismissible: false,
+      context: ServiceNavigation.serviceNavi.navKey.currentState!.context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(borderRadius: 16.circularRadius),
+          backgroundColor: whiteColor,
+          child: Padding(
+            padding: AppPadding.p24.paddingAll,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                LoadingStatusWidget(
+                  loadingStatus: status,
+                ),
+                Text(message)
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   static showSnackBar({required String message, required bool isSuccess}) {
     print("ssss $message");
     ServiceNavigation.scaffoldKey.currentState?.showSnackBar(SnackBar(
       content: Text(message),
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 1),
       backgroundColor: isSuccess == true ? Colors.blue : Colors.red,
       elevation: 10,
       margin: EdgeInsets.symmetric(horizontal: 30.w, vertical: 40.h),
@@ -26,7 +57,8 @@ class alertDialog extends StatelessWidget {
 
   final String title;
   final String content;
-  dynamic Function() onPressed;
+  final dynamic Function() onPressed;
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
