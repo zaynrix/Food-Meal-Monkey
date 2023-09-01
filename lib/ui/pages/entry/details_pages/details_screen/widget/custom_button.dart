@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/utils/constant.dart';
 
-class CustomButtonDetails extends StatefulWidget {
+class CustomButtonDetails extends StatelessWidget {
   final String str;
-  int count;
+  final int count;
+  final void Function()? onPressed;
 
-  CustomButtonDetails({super.key, required this.count, required this.str});
+  CustomButtonDetails(
+      {required this.onPressed,
+      super.key,
+      required this.count,
+      required this.str});
 
-  @override
-  State<CustomButtonDetails> createState() => _CustomButtonDetailsState();
-}
-
-class _CustomButtonDetailsState extends State<CustomButtonDetails> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -27,13 +27,9 @@ class _CustomButtonDetailsState extends State<CustomButtonDetails> {
             backgroundColor:
                 MaterialStateProperty.all(const Color(primaryColor)),
           ),
-          onPressed: () {
-            setState(() {
-              widget.str == '+' ? widget.count++ : widget.count--;
-            });
-          },
+          onPressed: onPressed,
           child: Text(
-            widget.str,
+            str,
             style: const TextStyle(fontSize: 18),
           )),
     );

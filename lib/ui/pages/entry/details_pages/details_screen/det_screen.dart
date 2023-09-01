@@ -70,7 +70,16 @@ class DetailsScreen extends StatelessWidget {
               BoxOptions(str: '- Select the size of portion -'),
               BoxOptions(str: '- Select the ingredients -'),
               SizedBox(height: 15),
-              NumOfPortions(),
+              Consumer<CartController>(
+                builder: (context , controller , child) => NumOfPortions(
+                  count: product.cartQuantity.toInt() +1,
+                  onDecrement: () { 
+                    controller.decrementUiItem(product);
+                  },
+                  onIncrement: () {
+                    controller.incrementUiItem(product);
+                  },),
+              ),
               SizedBox(height: 35),
               Consumer<CartController>(
                 builder: (context , controller , child) => TotalPrice(
