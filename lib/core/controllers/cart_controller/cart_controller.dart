@@ -3,11 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:food_delivery_app/core/controllers/auth_controller/auth_controller.dart';
 import 'package:food_delivery_app/core/model/models.dart';
+import 'package:food_delivery_app/core/model/order_model.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
 import 'package:food_delivery_app/service_locator.dart';
 import 'package:food_delivery_app/utils/enums.dart';
 import 'package:food_delivery_app/utils/helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 class CartController extends ChangeNotifier {
   CartController({required this.sharedPreferences});
@@ -214,6 +216,17 @@ class CartController extends ChangeNotifier {
         .set(jsonProduct);
   }
 
+  Future<void> _addOrderToFirestore(
+      String orderId, Map<String, dynamic> jsonOrder) {
+    final userId = getUserId();
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection("orders")
+        .doc(orderId)
+        .set(jsonOrder);
+  }
+
   Future<QuerySnapshot> _getCartItemQuerySnapshot(ProductModel product) {
     final userId = getUserId();
 
@@ -233,6 +246,29 @@ class CartController extends ChangeNotifier {
         .collection("cartItems")
         .doc(docId)
         .update({'cartQuantity': quantity});
+  }
+
+  Future<void> makeOrder() async {
+    try{
+      startDialogLoading();
+      final String randomId = Uuid().v4();
+      final OrderModel order =
+      OrderModel(
+        id: randomId,
+          createdAt: DateTime.now().toIso8601String(),
+          status: "Pending",
+          location: "Gaza",
+          products: cartItems);
+      final orderJson = order.toJson();
+      await _addOrderToFirestore(order.id , orderJson);
+      stopDialogLoading();
+      Helpers.showSnackBar(
+          message: "Order Added successfully", isSuccess: true);
+    } catch(e){
+      stopDialogLoading();
+      debugPrint("Error in Make Order : >>> $e");
+    }
+
   }
 
   @override

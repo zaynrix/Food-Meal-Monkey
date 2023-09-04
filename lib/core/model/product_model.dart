@@ -72,6 +72,7 @@ class ProductModel {
       "id" : id
     };
   }
+
   static List<ProductModel> desserts = [
     ProductModel(
       imagePath: ImageAssets.applePie,
