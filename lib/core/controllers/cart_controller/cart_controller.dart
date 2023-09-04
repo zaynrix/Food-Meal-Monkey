@@ -139,17 +139,9 @@ class CartController extends ChangeNotifier {
   Future<void> deleteProduct(ProductModel product) async {
     try {
       debugPrint("This is inside delete function");
-      final userId = getUserId();
       debugPrint("This is querySnapshot inside delete function in controller ");
-      // if (querySnapshot.size == 1) {
       debugPrint("This is docIf ${product.id}");
-
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
-          .collection('cartItems')
-          .doc(product.id)
-          .delete();
+      await _deleteProduct(productId: product.id);
       cartItems.remove(product);
       notifyListeners();
       Helpers.showSnackBar(
@@ -158,6 +150,44 @@ class CartController extends ChangeNotifier {
       debugPrint("Error in delete item >> $e");
     }
   }
+
+  Future<void> _deleteProduct({required String productId}) async {
+    final userId = getUserId();
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('cartItems')
+        .doc(productId)
+        .delete();
+  }
+
+  Future<void> deleteCollection(String collectionPath) async {
+    debugPrint("This is inside deleteCollection");
+    final userId = getUserId();
+    final CollectionReference collectionReference =
+    FirebaseFirestore.instance.collection('users')
+        .doc(userId)
+        .collection(collectionPath);
+
+    final QuerySnapshot querySnapshot = await collectionReference.get();
+
+    for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+      await documentSnapshot.reference.delete();
+    }
+  }
+
+  // Future<void> _deleteAllProducts() async {
+  //   debugPrint("This is inside >>> _deleteAllProducts");
+  //   cartItems.map((item) async {
+  //     debugPrint("This is inside map function in _deleteAllProducts");
+  //     try{
+  //       await _deleteProduct(productId: item.id);
+  //     } catch(e){
+  //       debugPrint("Error in delete all product : >>> $e");
+  //     }
+  //
+  //   });
+  // }
 
   decrementProduct(ProductModel item) {
     debugPrint("This decrementProduct function");
@@ -261,6 +291,7 @@ class CartController extends ChangeNotifier {
           products: cartItems);
       final orderJson = order.toJson();
       await _addOrderToFirestore(order.id , orderJson);
+      await deleteCollection("cartItems");
       stopDialogLoading();
       Helpers.showSnackBar(
           message: "Order Added successfully", isSuccess: true);
