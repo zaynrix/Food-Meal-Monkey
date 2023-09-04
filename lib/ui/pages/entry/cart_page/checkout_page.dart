@@ -17,13 +17,16 @@ class _CheckoutPageState extends State<CheckoutPage> {
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    return Scaffold(
+    return Consumer2<PaymentController , CartController>(
+      builder: (context, payment, cart , child) => Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: SingleChildScrollView(
         child: Padding(
           padding: AppSize.s24.paddingAll,
           child: CustomButton(
-            onPress: () {},
+            onPress: () {
+              cart.makeOrder();
+            },
             text: "Send order",
           ),
         ),
@@ -33,8 +36,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       ),
       body: Padding(
         padding: AppPadding.p24.paddingHorizontal,
-        child: Consumer<PaymentController>(
-          builder: (context, controller, child) => Column(
+        child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
@@ -89,16 +91,16 @@ class _CheckoutPageState extends State<CheckoutPage> {
               ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: controller.paymentCards.length,
+                  itemCount: payment.paymentCards.length,
                   itemBuilder: (context, index) {
-                    final card = controller.paymentCards[index];
+                    final card = payment.paymentCards[index];
                     return ChoosePaymentCard(
                       value: card,
                       cardNumber: card.number,
                       cardType: card.type,
                       isSelected: false,
                       onSelected: (value) {},
-                      currantValue: controller.paymentCards[0],
+                      currantValue: payment.paymentCards[0],
                     );
                   }),
               AppSize.s30.addVerticalSpace,
