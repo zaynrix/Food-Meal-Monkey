@@ -33,7 +33,7 @@ class DessertsWidget extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: Theme.of(context).textTheme.subtitle1,
+                  style: Theme.of(context).textTheme.subtitle1!.copyWith(color: whiteColor),
                 ),
                 vSpace5,
                 Row(
@@ -44,7 +44,7 @@ class DessertsWidget extends StatelessWidget {
                     hSpace14,
                     Text(
                       "label",
-                      style: Theme.of(context).textTheme.bodyText1,
+                      style: Theme.of(context).textTheme.bodyText1!.copyWith(color: whiteColor),
                     ),
                   ],
                 )
