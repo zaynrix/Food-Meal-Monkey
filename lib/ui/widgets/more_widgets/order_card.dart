@@ -31,6 +31,12 @@ class OrdersItem extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: AppSize.s16.circularRadius,
           color: whiteColor,
+          boxShadow: [BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            // spreadRadius: 1,
+            blurRadius: 15,
+            offset: const Offset(0, 3), // changes position of shadow
+          )]
         ),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Container(
@@ -139,7 +145,7 @@ class OrdersItem extends StatelessWidget {
           Row(
             children: [
               Text(
-                "90",
+                order.price,
                 style: textTheme.bodyLarge,
               ),
               const Spacer(),
@@ -165,6 +171,7 @@ class OrdersItem extends StatelessWidget {
       'Shipped': const Color(0xFFC3E4F2),
       'Completed': const Color(0xFFD3EFC3),
       'Canceled': const Color(0xFFFF9D97),
+      'In Processing': const Color(0xFFC3E4F2),
     };
 
     if (statusColors.containsKey(status)) {

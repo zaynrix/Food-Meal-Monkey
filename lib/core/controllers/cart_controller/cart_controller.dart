@@ -274,13 +274,14 @@ class CartController extends ChangeNotifier {
       OrderModel(
         id: randomId,
           createdAt: DateTime.now().toIso8601String(),
-          status: "Pending",
+          status: "In Processing",
           location: "Gaza",
           products: cartItems,
           price: calculateSubtotal());
       final orderJson = order.toJson();
       await _addOrderToFirestore(order.id , orderJson);
       await deleteCollection("cartItems");
+      cartItems = [];
       stopDialogLoading();
       ServiceNavigation.serviceNavi.back();
       Helpers.showSnackBar(
