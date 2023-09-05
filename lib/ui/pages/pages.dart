@@ -2,6 +2,7 @@ library pages;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,6 +16,7 @@ import 'package:food_delivery_app/core/controllers/payment_controller/payment_co
 import 'package:food_delivery_app/core/controllers/profile_controllers/profile_controller.dart';
 import 'package:food_delivery_app/core/model/menu_model.dart';
 import 'package:food_delivery_app/core/model/models.dart';
+import 'package:food_delivery_app/core/model/order_model.dart';
 import 'package:food_delivery_app/resources/strings_manager.dart';
 import 'package:food_delivery_app/resources/values_manager.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
@@ -32,6 +34,7 @@ import 'package:food_delivery_app/utils/enums.dart';
 import 'package:food_delivery_app/utils/extension/responsive_extension.dart';
 import 'package:food_delivery_app/utils/extension/string_extensions.dart';
 import 'package:food_delivery_app/utils/extension/validate_extension.dart';
+import 'package:food_delivery_app/utils/helper.dart';
 import 'package:food_delivery_app/utils/keyboard_utils.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
@@ -66,4 +69,5 @@ part 'entry/more_pages/orders_page.dart';
 part 'entry/payment_pages/add_payment_page.dart';
 part 'entry/payment_pages/payment_details.dart';
 part 'entry/cart_page/checkout_page.dart';
+part 'entry/more_pages/order_details.dart';
 

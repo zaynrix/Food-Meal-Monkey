@@ -24,7 +24,7 @@ class OrdersItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     final String status = order.status;
-    final Color? statusColor = getStatusColor(status);
+    final Color? statusColor = Helpers().getStatusColor(status);
 
     return Container(
         padding: AppPadding.p16.paddingAll,
@@ -111,7 +111,6 @@ class OrdersItem extends StatelessWidget {
                             errorWidget: (context, url, error) =>
                                 Icon(Icons.error),
                           ),
-                          // Image.network(order.products[index].imagePath),
                         ),
                       );
                   },
@@ -166,18 +165,5 @@ class OrdersItem extends StatelessWidget {
         ]));
   }
 
-  Color? getStatusColor(String status) {
-    final Map<String, Color> statusColors = {
-      'Shipped': const Color(0xFFC3E4F2),
-      'Completed': const Color(0xFFD3EFC3),
-      'Canceled': const Color(0xFFFF9D97),
-      'In Processing': const Color(0xFFC3E4F2),
-    };
 
-    if (statusColors.containsKey(status)) {
-      return statusColors[status];
-    }
-    // Return a default color if the status is not recognized
-    return Colors.transparent;
-  }
 }

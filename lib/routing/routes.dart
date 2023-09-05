@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/core/controllers/order_controller/order_controller.dart';
 import 'package:food_delivery_app/core/model/models.dart';
+import 'package:food_delivery_app/core/model/order_model.dart';
 import 'package:food_delivery_app/routing/router.dart';
 import 'package:food_delivery_app/service_locator.dart';
 import 'package:food_delivery_app/ui/pages/entry/auth_pages/sign_up_screen.dart';
@@ -70,6 +71,10 @@ class RoutsGenerate {
       case RouteGenerator.checkoutPage:
         return MaterialPageRoute(
             builder: (_) =>  CheckoutPage());
+
+      case RouteGenerator.orderDetailsPage:
+        return MaterialPageRoute(
+            builder: (_) =>  OrderDetailScreen(order: args as OrderModel));
 
       default:
         throw const FormatException("Route not found");

@@ -14,6 +14,7 @@ class IconAssets {
   static const String cvvIcon = '$iconPath/Cvv.svg';
   static const String scanIcon = '$iconPath/scan.svg';
   static const String userIcon = '$iconPath/user.svg';
+  static const String rightBack = '$iconPath/right_back.svg';
 }
 
 const String svgPath = 'assets/svg';
