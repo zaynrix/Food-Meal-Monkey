@@ -8,13 +8,15 @@ class OrderModel {
       required this.createdAt,
       required this.status,
       required this.location,
-      required this.products});
+      required this.products,
+      required this.price});
 
   final String id;
   final String createdAt;
   final List<ProductModel> products;
   final String location;
   final String status;
+  final String price;
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {
     final List<dynamic> productJsonList = json['products'];
@@ -28,6 +30,7 @@ class OrderModel {
       status: json['status'],
       location: json['location'],
       products: productList,
+      price: json["price"]
     );
   }
 
@@ -37,7 +40,9 @@ class OrderModel {
         createdAt: doc["createdAt"],
         status: doc["status"],
         location: doc["location"],
-        products: doc["products"]);
+        products: doc["products"],
+        price: doc["price"]);
+
   }
 
   Map<String, dynamic> toJson() {
@@ -47,6 +52,7 @@ class OrderModel {
       'status': status,
       'location': location,
       'products': products.map((product) => product.toJson()).toList(),
+      'price' : price,
     };
   }
 }

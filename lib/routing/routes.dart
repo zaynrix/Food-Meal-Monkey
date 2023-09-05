@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/core/controllers/order_controller/order_controller.dart';
 import 'package:food_delivery_app/core/model/models.dart';
 import 'package:food_delivery_app/routing/router.dart';
+import 'package:food_delivery_app/service_locator.dart';
 import 'package:food_delivery_app/ui/pages/entry/auth_pages/sign_up_screen.dart';
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/det_screen.dart';
 import 'package:food_delivery_app/ui/pages/entry/more_pages/chat/ui/chat_screen.dart';
 import 'package:food_delivery_app/ui/pages/entry/profile_pages/profile_page.dart';
+import 'package:provider/provider.dart';
 
 import '../ui/pages/pages.dart';
 
@@ -54,8 +57,8 @@ class RoutsGenerate {
         return MaterialPageRoute(builder: (_) => ProfilePage());
       case RouteGenerator.cartPage:
         return MaterialPageRoute(builder: (_) => CartPage());
-      case RouteGenerator.ordersPage:
-        return MaterialPageRoute(builder: (_) => OrdersPage());
+      // case RouteGenerator.ordersPage:
+      //   return MaterialPageRoute(builder: (_) => OrdersPage());
 
       case RouteGenerator.addPaymentPage:
         return MaterialPageRoute(builder: (_) => PaymentPage());
@@ -63,11 +66,10 @@ class RoutsGenerate {
         return MaterialPageRoute(builder: (_) => PaymentDetailsPage());
 
       case RouteGenerator.ordersPage:
-        return MaterialPageRoute(builder: (_) => OrdersPage());
+        return MaterialPageRoute(builder: (_) => ChangeNotifierProvider.value(value: sl<OrderController>(), child: OrdersPage() ,));
       case RouteGenerator.checkoutPage:
-        return MaterialPageRoute(builder: (_) => CheckoutPage());
-      // case RouteGenerator.paymentPage:
-      //   return MaterialPageRoute(builder: (_) => PaymentPage());
+        return MaterialPageRoute(
+            builder: (_) =>  CheckoutPage());
 
       default:
         throw const FormatException("Route not found");

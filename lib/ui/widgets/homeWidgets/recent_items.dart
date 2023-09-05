@@ -33,8 +33,6 @@ class RecentItems extends StatelessWidget {
               onTap: () {
                 ServiceNavigation.serviceNavi
                     .pushNamedWidget(RouteGenerator.detailsPage , args: product);
-                // Provider.of<HomeController>(context, listen: false)
-                //     .navigateToDetailsPage(context, doc);
               },
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,

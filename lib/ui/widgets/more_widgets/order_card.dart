@@ -17,13 +17,13 @@ extension CustomBorderSide on BorderSide {
 }
 
 class OrdersItem extends StatelessWidget {
-  const OrdersItem({Key? key, this.element}) : super(key: key);
-  final dynamic element;
+  const OrdersItem({Key? key, required this.order}) : super(key: key);
+  final OrderModel order;
 
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final String status = element['status'];
+    final String status = order.status;
     final Color? statusColor = getStatusColor(status);
 
     return Container(
@@ -57,11 +57,11 @@ class OrdersItem extends StatelessWidget {
                   ],
                 ),
                 Text(
-                  element['date'],
+                  order.createdAt.convertToFullDate()!,
                   style: textTheme.bodySmall,
                 ),
                 Text(
-                  element['address'],
+                  order.location,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: textTheme.bodySmall!.copyWith(color: secondaryFontColor),
@@ -79,9 +79,9 @@ class OrdersItem extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
-                  itemCount: element['elements'].length > 3
+                  itemCount: order.products.length > 3
                       ? 3
-                      : element['elements'].length,
+                      : order.products.length,
                   itemBuilder: (context, index) {
                     return
                       Transform.translate(
@@ -95,15 +95,25 @@ class OrdersItem extends StatelessWidget {
                             shape: BoxShape.circle,
                             border: Border.all(color: secondaryFontColor),
                           ),
-                          child: Image.asset(element['elements'][index]['url']),
+                          child: CachedNetworkImage(
+                            imageUrl: order.products[index].imagePath,
+                            // height: 80.h,
+                            // width: 80.w,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) =>
+                                Center(child: Image.asset(ImageAssets.app_icon)),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                          ),
+                          // Image.network(order.products[index].imagePath),
                         ),
                       );
                   },
                 ),
               ),
-              if (element['elements'].length > 3) ...[
+              if (order.products.length > 3) ...[
                 Transform.translate(
-                  offset: Offset(((element['elements'].length - 3) * -30.0),
+                  offset: Offset(((order.products.length - 3) * -30.0),
                       0), // Update the offset here
                   child: Container(
 
@@ -116,7 +126,7 @@ class OrdersItem extends StatelessWidget {
                     child: Padding(
                       padding: 6.paddingAll,
                       child: Text(
-                        '+${element['elements'].length - 3}',
+                        '+${order.products.length - 3}',
                         style: textTheme.bodySmall!.copyWith(color: whiteColor , fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -129,7 +139,7 @@ class OrdersItem extends StatelessWidget {
           Row(
             children: [
               Text(
-                element['price'],
+                "90",
                 style: textTheme.bodyLarge,
               ),
               const Spacer(),
