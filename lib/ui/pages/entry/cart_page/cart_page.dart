@@ -79,7 +79,7 @@ class _CartPageState extends State<CartPage> {
                               textTheme.titleMedium!.copyWith(color: Colors.black),
                         ),
                         Text(
-                          '\$${calculateSubtotal(controller.cartItems).toStringAsFixed(2)}',
+                          controller.calculateSubtotal(),
                         ),
                       ],
                     ),
@@ -118,15 +118,6 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
-  double calculateSubtotal(List<ProductModel> cartList) {
-    double subtotal = 0.0;
-    for (var product in cartList) {
-      num price = product.price;
-      num cartQuantity = product.cartQuantity;
-      subtotal += price * cartQuantity;
-    }
-    return subtotal;
-  }
 
   calculateAmount(String amount) {
     final calculatedAmount = (int.parse(amount) * 100);

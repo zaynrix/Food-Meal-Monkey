@@ -112,7 +112,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     style: textTheme.titleSmall,
                   ),
                   Text(
-                    "\$90",
+                    cart.calculateSubtotal(),
                     style: textTheme.titleMedium,
                   )
                 ],

@@ -176,18 +176,16 @@ class CartController extends ChangeNotifier {
     }
   }
 
-  // Future<void> _deleteAllProducts() async {
-  //   debugPrint("This is inside >>> _deleteAllProducts");
-  //   cartItems.map((item) async {
-  //     debugPrint("This is inside map function in _deleteAllProducts");
-  //     try{
-  //       await _deleteProduct(productId: item.id);
-  //     } catch(e){
-  //       debugPrint("Error in delete all product : >>> $e");
-  //     }
-  //
-  //   });
-  // }
+
+  String calculateSubtotal() {
+    double subtotal = 0.0;
+    for (var product in cartItems) {
+      num price = product.price;
+      num cartQuantity = product.cartQuantity;
+      subtotal += price * cartQuantity;
+    }
+    return subtotal.toStringAsFixed(2);
+  }
 
   decrementProduct(ProductModel item) {
     debugPrint("This decrementProduct function");
@@ -219,18 +217,8 @@ class CartController extends ChangeNotifier {
 
   List<ProductModel> _mapCartItemsData(List<QueryDocumentSnapshot> docs) {
     return docs.map((itemData) {
-      final data = itemData.data() as Map;
-      return ProductModel(
-          name: data['name'],
-          imagePath: data['imagePath'],
-          price: data['price'],
-          rating: data['rating'],
-          ratingCount: data["ratingCount"],
-          inCart: data["inCart"],
-          cartQuantity: data["cartQuantity"],
-          description: data["description"],
-          resName: data["resName"],
-          id: data["id"]);
+      final data = itemData.data() as Map<String , dynamic>;
+      return ProductModel.fromJson(data);
     }).toList();
   }
 
@@ -288,11 +276,13 @@ class CartController extends ChangeNotifier {
           createdAt: DateTime.now().toIso8601String(),
           status: "Pending",
           location: "Gaza",
-          products: cartItems);
+          products: cartItems,
+          price: calculateSubtotal());
       final orderJson = order.toJson();
       await _addOrderToFirestore(order.id , orderJson);
       await deleteCollection("cartItems");
       stopDialogLoading();
+      ServiceNavigation.serviceNavi.back();
       Helpers.showSnackBar(
           message: "Order Added successfully", isSuccess: true);
     } catch(e){
