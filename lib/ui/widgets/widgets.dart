@@ -18,6 +18,7 @@ import 'package:food_delivery_app/routing/router.dart';
 import 'package:food_delivery_app/utils/enums.dart';
 import 'package:food_delivery_app/utils/extension/responsive_extension.dart';
 import 'package:food_delivery_app/utils/extension/string_extensions.dart';
+import 'package:food_delivery_app/utils/helper.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
@@ -43,3 +44,4 @@ part 'text_field.dart';
 part 'payment_widgets/payment_card_widget.dart';
 part 'payment_widgets/choose_payment_card.dart';
 part 'loading_status_widget.dart';
+part 'more_widgets/order_detail_card.dart';

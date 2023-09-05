@@ -51,7 +51,9 @@ class _OrdersPageState extends State<OrdersPage> {
               itemBuilder: (context, element) => Column(
                 children: [
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.orderDetailsPage, args: element);
+                    },
                     child: Padding(
                       padding: AppPadding.p24.paddingHorizontal,
                       child: OrdersItem(

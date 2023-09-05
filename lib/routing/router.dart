@@ -24,6 +24,7 @@ class RouteGenerator {
   static const String paymentDetailsPage = '/paymentDetailsPage';
   static const String search = '/search';
   static const String checkoutPage = '/checkoutPage';
+  static const String orderDetailsPage = '/orderDetailsPage';
 
   RouteGenerator._();
 }
