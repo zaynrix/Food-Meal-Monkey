@@ -14,6 +14,12 @@ class HomeController extends ChangeNotifier {
 
   Stream<QuerySnapshot> getMostPopularFoodStream() {
     return FirebaseFirestore.instance
+        .collection('most_popular_food').limit(2)
+        .snapshots();
+  }
+
+  Stream<QuerySnapshot> getAllPopularFoodStream() {
+    return FirebaseFirestore.instance
         .collection('most_popular_food')
         .snapshots();
   }
@@ -43,22 +49,4 @@ class HomeController extends ChangeNotifier {
   String getPrice(DocumentSnapshot doc) {
     return doc['price'].toString();
   }
-}
-
-class DetailsScreenArguments {
-  final String title;
-  final String rating;
-  final String description;
-  final String imagePath;
-  final String ratingCount;
-  final String prices;
-
-  DetailsScreenArguments({
-    required this.title,
-    required this.rating,
-    required this.description,
-    required this.imagePath,
-    required this.ratingCount,
-    required this.prices,
-  });
 }

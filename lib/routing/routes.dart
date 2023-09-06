@@ -75,6 +75,12 @@ class RoutsGenerate {
       case RouteGenerator.orderDetailsPage:
         return MaterialPageRoute(
             builder: (_) =>  OrderDetailScreen(order: args as OrderModel));
+      case RouteGenerator.allRecentItemPage:
+        return MaterialPageRoute(
+            builder: (_) =>  AllRecentItemPage());
+      case RouteGenerator.mostPopularPage:
+        return MaterialPageRoute(
+            builder: (_) =>  MostPopularPage());
 
       default:
         throw const FormatException("Route not found");

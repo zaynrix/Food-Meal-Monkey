@@ -1,27 +1,32 @@
 part of widgets;
 
 class HeaderList extends StatelessWidget {
-  const HeaderList({Key? key, required this.title}) : super(key: key);
+  const HeaderList(
+      {
+        required this.onPressed,
+        Key? key,
+        required this.title}) : super(key: key);
 
   final String title;
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           title,
-          style: Theme.of(context)
-              .textTheme
+          style: textTheme
               .headlineSmall!
               .copyWith(color: primaryFontColor),
         ),
         TextButton(
-          onPressed: () {},
-          child: const Text(
+          onPressed: onPressed,
+          child: Text(
             "View all",
-            style: TextStyle(color: Colors.grey),
+            style: textTheme.bodyMedium!.copyWith(color: orangeColor),
           ),
         )
       ],

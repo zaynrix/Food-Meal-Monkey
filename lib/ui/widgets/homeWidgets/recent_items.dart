@@ -4,7 +4,7 @@ class RecentItems extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-      stream: FirebaseFirestore.instance.collection('recent_items').snapshots(),
+      stream: FirebaseFirestore.instance.collection('recent_items').limit(2).snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(

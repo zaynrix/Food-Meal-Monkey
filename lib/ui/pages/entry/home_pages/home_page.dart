@@ -59,11 +59,25 @@ class _HomePageState extends State<HomePage> {
               : Column(
                   children: [
                     SizedBox(height: 100, child: const HomeCategory()),
-                    HeaderList(title: AppStrings.popularRestaurant),
+                    HeaderList(
+                      title: AppStrings.popularRestaurant,
+                      onPressed: () {},
+                    ),
                     const PupularResturent(),
-                    const HeaderList(title: AppStrings.mostPopular),
+                    HeaderList(
+                      title: AppStrings.mostPopular,
+                      onPressed: () {
+                        ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.mostPopularPage);
+                      },
+                    ),
                     buildMostPopularSection(value),
-                    HeaderList(title: AppStrings.recentItems),
+                    HeaderList(
+                      title: AppStrings.recentItems,
+                      onPressed: () {
+                        ServiceNavigation.serviceNavi
+                            .pushNamedWidget(RouteGenerator.allRecentItemPage);
+                      },
+                    ),
                     RecentItems(),
                   ],
                 ),
