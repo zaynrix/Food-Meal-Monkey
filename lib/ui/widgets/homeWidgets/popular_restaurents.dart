@@ -6,7 +6,7 @@ class PupularResturent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<QuerySnapshot>(
-      future: FirebaseFirestore.instance.collection('restaurants').get(),
+      future: FirebaseFirestore.instance.collection('restaurants').limit(2).get(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
