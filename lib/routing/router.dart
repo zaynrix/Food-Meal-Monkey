@@ -27,6 +27,7 @@ class RouteGenerator {
   static const String orderDetailsPage = '/orderDetailsPage';
   static const String allRecentItemPage = '/allRecentItemPage';
   static const String mostPopularPage = '/mostPopularPage';
+  static const String popularRestaurantScreen = '/popularRestaurantScreen';
 
   RouteGenerator._();
 }

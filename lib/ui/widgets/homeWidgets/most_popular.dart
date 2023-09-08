@@ -15,7 +15,6 @@ class _MostPopularState extends State<MostPopular> {
     return StreamBuilder<QuerySnapshot>(
       stream: widget.homeController.getMostPopularFoodStream(),
       builder: (context, snapshot) {
-
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -27,6 +26,7 @@ class _MostPopularState extends State<MostPopular> {
         final docs = snapshot.data!.docs;
         debugPrint("This is docs for most pobular >>> $docs");
         return ListView.builder(
+          padding: EdgeInsets.zero,
           shrinkWrap: true,
           scrollDirection: Axis.horizontal,
           itemCount: snapshot.data!.docs.length,
@@ -37,11 +37,10 @@ class _MostPopularState extends State<MostPopular> {
             return GestureDetector(
               onTap: () {
                 ServiceNavigation.serviceNavi
-                    .pushNamedWidget(RouteGenerator.detailsPage , args: product);
+                    .pushNamedWidget(RouteGenerator.detailsPage, args: product);
               },
               child: Container(
                 padding: EdgeInsetsDirectional.only(start: AppPadding.p20.w),
-                // width: 200.w,
                 height: 185.h,
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
@@ -56,6 +55,7 @@ class _MostPopularState extends State<MostPopular> {
                           child: CachedNetworkImage(
                             imageUrl: product.imagePath,
                             height: 135.h,
+                            width: 135.w,
                             fit: BoxFit.cover,
                             placeholder: (context, url) => Center(
                                 child: Image.asset(ImageAssets.app_icon)),
@@ -80,10 +80,10 @@ class _MostPopularState extends State<MostPopular> {
                           width: 3.h,
                         ),
                         Text(
-                          product.ratingCount.toString(),
+                          "(${product.ratingCount.toString()})",
                           style: const TextStyle(
                             color: Colors.grey,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.normal,
                           ),
                         ),
                       ],

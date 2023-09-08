@@ -156,6 +156,7 @@ class AuthController extends ChangeNotifier {
       print('Error: $e');
     } finally {
       stopLoading();
+      stopGoogleLoading();
     }
   }
 

@@ -48,8 +48,8 @@ class _HomePageState extends State<HomePage> {
   Widget buildHomePageBody() {
     return Consumer<ProfileController>(
       builder: (context, value, child) => ListView(
+        padding: EdgeInsets.zero,
         children: [
-          buildCurrentLocation(),
           const CustomSearchBar(),
           value.searchWord.isEmpty
               ? SizedBox.shrink()
@@ -57,20 +57,35 @@ class _HomePageState extends State<HomePage> {
           value.searchWord.isNotEmpty
               ? SizedBox.shrink()
               : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    10.addVerticalSpace,
                     SizedBox(height: 100, child: const HomeCategory()),
                     HeaderList(
                       title: AppStrings.popularRestaurant,
-                      onPressed: () {},
+                      onPressed: () {
+                        ServiceNavigation.serviceNavi.pushNamedWidget(
+                            RouteGenerator.popularRestaurantScreen);
+                      },
                     ),
                     const PupularResturent(),
+                    10.addVerticalSpace,
                     HeaderList(
                       title: AppStrings.mostPopular,
                       onPressed: () {
-                        ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.mostPopularPage);
+                        ServiceNavigation.serviceNavi
+                            .pushNamedWidget(RouteGenerator.mostPopularPage);
                       },
                     ),
-                    buildMostPopularSection(value),
+                    SizedBox(
+                      height: 185.h,
+                      child: Consumer<HomeController>(
+                        builder: (context, controller, child) => MostPopular(
+                          homeController: controller,
+                        ),
+                      ),
+                    ),
+                    10.addVerticalSpace,
                     HeaderList(
                       title: AppStrings.recentItems,
                       onPressed: () {
@@ -228,16 +243,5 @@ class _HomePageState extends State<HomePage> {
       },
     );
     // Build search results UI
-  }
-
-  Widget buildMostPopularSection(ProfileController value) {
-    return SizedBox(
-      height: 185.h,
-      child: Consumer<HomeController>(
-        builder: (context, controller, child) => MostPopular(
-          homeController: controller,
-        ),
-      ),
-    );
   }
 }
