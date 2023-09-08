@@ -1,13 +1,15 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:food_delivery_app/core/controllers/auth_controller/auth_controller.dart';
+import 'package:food_delivery_app/core/controllers/payment_controller/payment_controller.dart';
 import 'package:food_delivery_app/core/model/models.dart';
 import 'package:food_delivery_app/core/model/order_model.dart';
+import 'package:food_delivery_app/core/model/payment_card.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
 import 'package:food_delivery_app/service_locator.dart';
 import 'package:food_delivery_app/utils/enums.dart';
 import 'package:food_delivery_app/utils/helper.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
@@ -18,25 +20,26 @@ class CartController extends ChangeNotifier {
   List<ProductModel> cartItems = [];
   bool isLoading = false;
 
-  startDialogLoading(){
+  startDialogLoading() {
     isLoading = true;
     notifyListeners();
     debugPrint("This is inside start loading");
-    Helpers.showLoadingDialog(message: "Loading...", status: LoadingStatusOption.loading);
+    Helpers.showLoadingDialog(
+        message: "Loading...", status: LoadingStatusOption.loading);
   }
 
-  stopDialogLoading(){
+  stopDialogLoading() {
     isLoading = false;
     notifyListeners();
     ServiceNavigation.serviceNavi.back();
   }
 
-  startLoading(){
+  startLoading() {
     isLoading = true;
     notifyListeners();
   }
 
-  stopLoading(){
+  stopLoading() {
     isLoading = false;
     notifyListeners();
   }
@@ -124,14 +127,14 @@ class CartController extends ChangeNotifier {
     }
   }
 
-  incrementUiItem(ProductModel product){
+  incrementUiItem(ProductModel product) {
     product.cartQuantity++;
     notifyListeners();
   }
 
-  decrementUiItem(ProductModel product){
-    if (product.cartQuantity+1 > 1) {
-      product.cartQuantity --;
+  decrementUiItem(ProductModel product) {
+    if (product.cartQuantity + 1 > 1) {
+      product.cartQuantity--;
       notifyListeners();
     }
   }
@@ -164,8 +167,8 @@ class CartController extends ChangeNotifier {
   Future<void> deleteCollection(String collectionPath) async {
     debugPrint("This is inside deleteCollection");
     final userId = getUserId();
-    final CollectionReference collectionReference =
-    FirebaseFirestore.instance.collection('users')
+    final CollectionReference collectionReference = FirebaseFirestore.instance
+        .collection('users')
         .doc(userId)
         .collection(collectionPath);
 
@@ -175,7 +178,6 @@ class CartController extends ChangeNotifier {
       await documentSnapshot.reference.delete();
     }
   }
-
 
   String calculateSubtotal() {
     double subtotal = 0.0;
@@ -217,7 +219,7 @@ class CartController extends ChangeNotifier {
 
   List<ProductModel> _mapCartItemsData(List<QueryDocumentSnapshot> docs) {
     return docs.map((itemData) {
-      final data = itemData.data() as Map<String , dynamic>;
+      final data = itemData.data() as Map<String, dynamic>;
       return ProductModel.fromJson(data);
     }).toList();
   }
@@ -267,30 +269,38 @@ class CartController extends ChangeNotifier {
   }
 
   Future<void> makeOrder() async {
-    try{
+    PaymentCard? currantCard = Provider.of<PaymentController>(
+        ServiceNavigation.scaffoldKey.currentState!.context,
+        listen: false)
+        .currantCard;
+    try {
       startDialogLoading();
-      final String randomId = Uuid().v4();
-      final OrderModel order =
-      OrderModel(
-        id: randomId,
-          createdAt: DateTime.now().toIso8601String(),
-          status: "In Processing",
-          location: "Gaza",
-          products: cartItems,
-          price: calculateSubtotal());
-      final orderJson = order.toJson();
-      await _addOrderToFirestore(order.id , orderJson);
-      await deleteCollection("cartItems");
-      cartItems = [];
-      stopDialogLoading();
-      ServiceNavigation.serviceNavi.back();
-      Helpers.showSnackBar(
-          message: "Order Added successfully", isSuccess: true);
-    } catch(e){
+      if (currantCard ==
+          null) {
+        Helpers.showSnackBar(message: "Pleas Select Card", isSuccess: false);
+        stopDialogLoading();
+      } else {
+        final String randomId = Uuid().v4();
+        final OrderModel order = OrderModel(
+            id: randomId,
+            createdAt: DateTime.now().toIso8601String(),
+            status: "In Processing",
+            location: "Gaza",
+            products: cartItems,
+            price: calculateSubtotal());
+        final orderJson = order.toJson();
+        await _addOrderToFirestore(order.id, orderJson);
+        await deleteCollection("cartItems");
+        cartItems = [];
+        stopDialogLoading();
+        ServiceNavigation.serviceNavi.back();
+        Helpers.showSnackBar(
+            message: "Order Added successfully", isSuccess: true);
+      }
+    } catch (e) {
       stopDialogLoading();
       debugPrint("Error in Make Order : >>> $e");
     }
-
   }
 
   @override

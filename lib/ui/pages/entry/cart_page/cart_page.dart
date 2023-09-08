@@ -110,7 +110,12 @@ class _CartPageState extends State<CartPage> {
         builder: (context, instance, child) => Padding(
           padding: AppPadding.p24.paddingHorizontal,
           child: ElevatedButton(onPressed: (){
-            ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.checkoutPage);
+            if (instance.cartItems.isEmpty) {
+              Helpers.showSnackBar(message: "Please Add Item In Cart", isSuccess: false);
+            }  else {
+              ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.checkoutPage);
+            }
+
           }, child: Text("Checkout")),
 
         ),
