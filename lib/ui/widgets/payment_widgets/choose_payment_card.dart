@@ -16,7 +16,7 @@ class ChoosePaymentCard extends StatelessWidget {
   final bool isSelected;
   final void Function(Object?)? onSelected;
   final PaymentCard value;
-  final PaymentCard currantValue;
+  final PaymentCard? currantValue;
   @override
   Widget build(BuildContext context) {
     return Container(

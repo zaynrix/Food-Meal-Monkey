@@ -99,8 +99,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       cardNumber: card.number,
                       cardType: card.type,
                       isSelected: false,
-                      onSelected: (value) {},
-                      currantValue: payment.paymentCards[0],
+                      onSelected: (value){
+                        payment.onSelectedCard(card: value as PaymentCard);
+                      },
+                      currantValue: payment.currantCard,
                     );
                   }),
               AppSize.s30.addVerticalSpace,

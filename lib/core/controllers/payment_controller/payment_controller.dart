@@ -15,6 +15,7 @@ class PaymentController extends ChangeNotifier {
 
   CardType cardType = CardType.Invalid;
 
+
   void getCardTypeFrmNum({required String cardNumber}) {
     if (cardNumber.length <= 6) {
       String cardNum = CardUtils.getCleanedNumber(cardNumber);
@@ -29,6 +30,12 @@ class PaymentController extends ChangeNotifier {
 
   List<PaymentCard> paymentCards = [];
 
+  PaymentCard? currantCard;
+  onSelectedCard({required PaymentCard card}){
+    currantCard = card;
+    debugPrint("This is currantCard : >>> $currantCard");
+    notifyListeners();
+  }
 
   String getUserId() {
     return sharedPreferences.getString("userId") ?? "null id";
