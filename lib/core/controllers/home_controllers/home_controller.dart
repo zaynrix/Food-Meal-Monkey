@@ -14,7 +14,8 @@ class HomeController extends ChangeNotifier {
 
   Stream<QuerySnapshot> getMostPopularFoodStream() {
     return FirebaseFirestore.instance
-        .collection('most_popular_food').limit(2)
+        .collection('most_popular_food')
+        .limit(2)
         .snapshots();
   }
 

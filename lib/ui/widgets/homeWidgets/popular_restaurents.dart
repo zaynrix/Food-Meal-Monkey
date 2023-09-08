@@ -6,7 +6,8 @@ class PupularResturent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<QuerySnapshot>(
-      future: FirebaseFirestore.instance.collection('restaurants').limit(2).get(),
+      future:
+          FirebaseFirestore.instance.collection('restaurants').limit(2).get(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
@@ -18,7 +19,12 @@ class PupularResturent extends StatelessWidget {
 
         List<DocumentSnapshot> restaurantDocs = snapshot.data!.docs;
 
-        return ListView.builder(
+        return ListView.separated(
+          padding: EdgeInsets.zero,
+          separatorBuilder: (context, index) => Divider(
+            color: Colors.transparent,
+            height: 16,
+          ),
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: restaurantDocs.length,
@@ -27,7 +33,7 @@ class PupularResturent extends StatelessWidget {
                 restaurantDocs[index].data() as Map<String, dynamic>);
 
             return Column(
-              mainAxisSize: MainAxisSize.max,
+              // mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -65,7 +71,6 @@ class PupularResturent extends StatelessWidget {
                     ],
                   ),
                 ),
-                addVerticalSpace(AppSize.s30.h)
               ],
             );
           },

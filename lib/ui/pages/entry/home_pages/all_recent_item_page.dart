@@ -10,8 +10,9 @@ class AllRecentItemPage extends StatelessWidget {
         title: Text("Recent Item"),
       ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream:
-            FirebaseFirestore.instance.collection('recent_items').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection(FirestoreConstants.recent_items)
+            .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -46,16 +47,16 @@ class AllRecentItemPage extends StatelessWidget {
                   },
                   child: Container(
                     decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
                         color: whiteColor,
                         boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        // spreadRadius: 1,
-                        blurRadius: 15,
-                        offset:
-                            const Offset(0, 3), // changes position of shadow
-                      )
-                    ]),
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            blurRadius: 15,
+                            offset: const Offset(
+                                0, 3), // changes position of shadow
+                          )
+                        ]),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -68,7 +69,7 @@ class AllRecentItemPage extends StatelessWidget {
                               tag: product.imagePath,
                               child: CachedNetworkImage(
                                 imageUrl: product.imagePath,
-                                height: 80.h,
+                                height: 90.h,
                                 width: 80.w,
                                 fit: BoxFit.cover,
                                 placeholder: (context, url) => Center(
@@ -90,34 +91,12 @@ class AllRecentItemPage extends StatelessWidget {
                                   product.name,
                                   style: Theme.of(context)
                                       .textTheme
-                                      .headlineMedium!
+                                      .headlineSmall!
                                       .copyWith(color: Colors.black),
                                 ),
-                                Row(
-                                  children: [
-                                    const Text("Cafe"),
-                                    SizedBox(
-                                      width: 5.w,
-                                    ),
-                                    const Padding(
-                                      padding: EdgeInsets.only(bottom: 5.0),
-                                      child: Text(
-                                        ".",
-                                        style: TextStyle(
-                                          color: orangeColor,
-                                          fontWeight: FontWeight.w900,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 5.w,
-                                    ),
-                                    Text(product.resName ?? ""),
-                                    SizedBox(
-                                      width: 20.w,
-                                    ),
-                                  ],
-                                ),
+                                10.addVerticalSpace,
+                                Text(product.resName ?? ""),
+                                10.addVerticalSpace,
                                 Row(
                                   children: [
                                     ItemRating(
@@ -133,7 +112,7 @@ class AllRecentItemPage extends StatelessWidget {
                                           .bodySmall!
                                           .copyWith(
                                               color: secondaryFontColor,
-                                              fontWeight: FontWeight.bold),
+                                              fontWeight: FontWeight.normal),
                                     ),
                                   ],
                                 ),

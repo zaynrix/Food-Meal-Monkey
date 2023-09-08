@@ -22,7 +22,6 @@ class MostPopularPage extends StatelessWidget {
             }
 
             final docs = snapshot.data!.docs;
-            debugPrint("This is docs for most pobular >>> $docs");
             return Padding(
               padding: AppSize.s5.paddingHorizontal,
               child: GridView.builder(
@@ -45,22 +44,21 @@ class MostPopularPage extends StatelessWidget {
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        boxShadow: [BoxShadow(
-                      color: Colors.grey.withOpacity(0.3),
-                      // spreadRadius: 1,
-                      blurRadius: 15,
-                      offset: const Offset(0, 3), // changes position of shadow
-                    )],
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            blurRadius: 15,
+                            offset: const Offset(
+                                0, 3), // changes position of shadow
+                          )
+                        ],
                       ),
-                      // width: 200.w,
-                      height: 180.h,
                       child: Card(
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15.0),
                         ),
                         child: Column(
-                          mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -72,9 +70,11 @@ class MostPopularPage extends StatelessWidget {
                                   child: CachedNetworkImage(
                                     imageUrl: product.imagePath,
                                     height: 135.h,
+                                    width: double.infinity,
                                     fit: BoxFit.cover,
                                     placeholder: (context, url) => Center(
-                                        child: Image.asset(ImageAssets.app_icon)),
+                                        child:
+                                            Image.asset(ImageAssets.app_icon)),
                                     errorWidget: (context, url, error) =>
                                         Icon(Icons.error),
                                   ),
@@ -86,26 +86,27 @@ class MostPopularPage extends StatelessWidget {
                               padding: AppPadding.p8.paddingHorizontal,
                               child: Text(
                                 product.name,
-                                style:
-                                    Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .copyWith(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                               ),
                             ),
+                            10.addVerticalSpace,
                             Padding(
-                              padding: AppPadding.p8.paddingHorizontal,
+                              padding: 8.paddingHorizontal,
                               child: Row(
                                 children: [
                                   ItemRating(rating: product.rating.toString()),
-                                  SizedBox(
-                                    width: 3.h,
-                                  ),
+                                  5.addHorizontalSpace,
                                   Text(
-                                    product.ratingCount.toString(),
+                                    "(${product.ratingCount.toString()})",
                                     style: const TextStyle(
                                       color: Colors.grey,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.normal,
                                     ),
                                   ),
                                 ],

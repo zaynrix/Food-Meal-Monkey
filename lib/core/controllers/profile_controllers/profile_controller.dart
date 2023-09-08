@@ -26,7 +26,7 @@ class ProfileController extends ChangeNotifier {
   Future<List<FoodItem>> fetchFoodItemsFromFirestore() async {
     try {
       final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection(FirestoreConstants.latest_offers)
+          .collection(FirestoreConstants.recent_items)
           .get();
 
       final restaurants = querySnapshot.docs
