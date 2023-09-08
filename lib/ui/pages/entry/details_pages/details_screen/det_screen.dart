@@ -5,7 +5,6 @@ import 'package:food_delivery_app/core/model/models.dart';
 import 'package:food_delivery_app/routing/router.dart';
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/DivLine.dart';
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/Rating_pos.dart';
-import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/box_options.dart';
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/decrip_det.dart';
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/head_txt.dart';
 import 'package:food_delivery_app/ui/pages/entry/details_pages/details_screen/widget/image_det.dart';
@@ -38,7 +37,8 @@ class DetailsScreen extends StatelessWidget {
             actions: [
               IconButton(
                   onPressed: () {
-                    ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.cartPage);
+                    ServiceNavigation.serviceNavi
+                        .pushNamedWidget(RouteGenerator.cartPage);
                   },
                   icon: const Icon(
                     Icons.shopping_cart,
@@ -56,7 +56,7 @@ class DetailsScreen extends StatelessWidget {
           SliverList(
             delegate: SliverChildListDelegate([
               RatingPos(
-                prices: "30",
+                prices: "${product.price}",
                 rating: product.rating.toString(),
                 title: product.name,
               ),
@@ -65,29 +65,30 @@ class DetailsScreen extends StatelessWidget {
               DescriptionDet(description: product.description),
               DevLine(),
               SizedBox(height: 15),
-              HeadTex(str: 'Customize your Order'),
-              SizedBox(height: 15),
-              BoxOptions(str: '- Select the size of portion -'),
-              BoxOptions(str: '- Select the ingredients -'),
-              SizedBox(height: 15),
+              // HeadTex(str: 'Customize your Order'),
+              // SizedBox(height: 15),
+              // BoxOptions(str: '- Select the size of portion -'),
+              // BoxOptions(str: '- Select the ingredients -'),
+              // SizedBox(height: 15),
               Consumer<CartController>(
-                builder: (context , controller , child) => NumOfPortions(
-                  count: product.cartQuantity.toInt() +1,
-                  onDecrement: () { 
+                builder: (context, controller, child) => NumOfPortions(
+                  count: product.cartQuantity.toInt() + 1,
+                  onDecrement: () {
                     controller.decrementUiItem(product);
                   },
                   onIncrement: () {
                     controller.incrementUiItem(product);
-                  },),
+                  },
+                ),
               ),
               SizedBox(height: 35),
               Consumer<CartController>(
-                builder: (context , controller , child) => TotalPrice(
+                builder: (context, controller, child) => TotalPrice(
                   price: product.price.toDouble(),
-                  onPressed: (){
+                  onPressed: () {
                     debugPrint("This is inside ui");
                     controller.addItemToCart(product: product);
-                    },
+                  },
                 ),
               ),
             ]),
