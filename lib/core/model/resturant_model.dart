@@ -5,7 +5,7 @@ class FoodItem {
   final String imagePath;
   final double rating;
   final int ratingCount;
-  final int price;
+  final num price;
   final bool inCart;
   final int cartQuantity;
 

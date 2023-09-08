@@ -39,7 +39,6 @@ class RatingPos extends StatelessWidget {
                       BoxShadow(color: Colors.black12, offset: Offset(1, 1)),
                       BoxShadow(color: Colors.black12, offset: Offset(-1, -1)),
                     ]),
-                // child: SvgPicture.asset(''),
                 child: IconButton(
                   onPressed: () {},
                   icon: const Icon(
