@@ -56,3 +56,10 @@ class ImageAssets {
   static const String verveIcon = '$imagePath/card_images/verve.png';
   static const String visaIcon = '$imagePath/card_images/visa.png';
 }
+
+
+const String jsonPath = 'assets/json';
+
+class JsonAssets {
+  static const mapStyle = "$jsonPath/map_style.json";
+}

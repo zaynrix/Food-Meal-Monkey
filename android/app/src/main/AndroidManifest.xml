@@ -1,6 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.food_delivery_app">
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
    <application
         android:label="Meal Monkey"
         android:name="${applicationName}"
@@ -37,6 +42,9 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+       <meta-data
+           android:name="com.google.android.geo.API_KEY"
+           android:value="AIzaSyCtFTKLDioQYDHZRAmIsL6iksSLvTTzoYQ"/>
 <!--       <meta-data-->
 <!--           android:name="com.google.firebase.messaging.default_notification_channel_id"-->
 <!--           android:value="Basic_Notifications" />-->

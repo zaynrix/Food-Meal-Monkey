@@ -19,6 +19,8 @@ class CartController extends ChangeNotifier {
   final SharedPreferences sharedPreferences;
   List<ProductModel> cartItems = [];
   bool isLoading = false;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
 
   startDialogLoading() {
     isLoading = true;
@@ -156,7 +158,7 @@ class CartController extends ChangeNotifier {
 
   Future<void> _deleteProduct({required String productId}) async {
     final userId = getUserId();
-    await FirebaseFirestore.instance
+    await _firestore
         .collection('users')
         .doc(userId)
         .collection('cartItems')
@@ -210,7 +212,7 @@ class CartController extends ChangeNotifier {
   Future<QuerySnapshot> _getCartItemsSnapshot() {
     final userId = getUserId();
 
-    return FirebaseFirestore.instance
+    return _firestore
         .collection('users')
         .doc(userId)
         .collection("cartItems")
@@ -228,7 +230,7 @@ class CartController extends ChangeNotifier {
       String productId, Map<String, dynamic> jsonProduct) {
     final userId = getUserId();
 
-    return FirebaseFirestore.instance
+    return _firestore
         .collection('users')
         .doc(userId)
         .collection("cartItems")
@@ -239,7 +241,7 @@ class CartController extends ChangeNotifier {
   Future<void> _addOrderToFirestore(
       String orderId, Map<String, dynamic> jsonOrder) {
     final userId = getUserId();
-    return FirebaseFirestore.instance
+    return _firestore
         .collection('users')
         .doc(userId)
         .collection("orders")
@@ -250,7 +252,7 @@ class CartController extends ChangeNotifier {
   Future<QuerySnapshot> _getCartItemQuerySnapshot(ProductModel product) {
     final userId = getUserId();
 
-    return FirebaseFirestore.instance
+    return _firestore
         .collection('users')
         .doc(userId)
         .collection("cartItems")
@@ -260,13 +262,15 @@ class CartController extends ChangeNotifier {
 
   Future<void> _updateCartItemQuantity(String docId, double quantity) {
     final userId = getUserId();
-    return FirebaseFirestore.instance
+    return _firestore
         .collection('users')
         .doc(userId)
         .collection("cartItems")
         .doc(docId)
         .update({'cartQuantity': quantity});
   }
+
+
 
   Future<void> makeOrder() async {
     PaymentCard? currantCard = Provider.of<PaymentController>(

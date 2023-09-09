@@ -12,13 +12,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
   void initState() {
     super.initState();
     Provider.of<PaymentController>(context, listen: false).fetchPaymentCards();
+    Provider.of<LocationController>(context, listen: false).getUserLocation();
   }
 
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    return Consumer2<PaymentController , CartController>(
-      builder: (context, payment, cart , child) => Scaffold(
+    return Consumer3<PaymentController , CartController , LocationController>(
+      builder: (context, payment, cart , location , child) => Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: SingleChildScrollView(
         child: Padding(
@@ -50,14 +51,16 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   SizedBox(
                     width: FlutterSizes.screenDeviceHeight * 0.2,
                     child: Text(
-                      "653 Nostrand Ave., Brooklyn, NY 11216",
+                      location.userAddress,
                       style: textTheme.titleMedium!.copyWith(fontSize: 15),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      ServiceNavigation.serviceNavi.pushNamedWidget(RouteGenerator.changeLocationScreen);
+                    },
                     child: Text("Change",
                         style: textTheme.headlineSmall!
                             .copyWith(color: orangeColor)),
