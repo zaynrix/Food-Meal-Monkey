@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/core/controllers/location_controller/location_controller.dart';
 import 'package:food_delivery_app/core/controllers/order_controller/order_controller.dart';
 import 'package:food_delivery_app/core/model/models.dart';
 import 'package:food_delivery_app/core/model/order_model.dart';
@@ -73,7 +74,7 @@ class RoutsGenerate {
                   child: OrdersPage(),
                 ));
       case RouteGenerator.checkoutPage:
-        return MaterialPageRoute(builder: (_) => CheckoutPage());
+        return MaterialPageRoute(builder: (_) => ChangeNotifierProvider.value(value: sl<LocationController>(),child: CheckoutPage()));
 
       case RouteGenerator.orderDetailsPage:
         return MaterialPageRoute(
@@ -84,6 +85,10 @@ class RoutsGenerate {
         return MaterialPageRoute(builder: (_) => MostPopularPage());
       case RouteGenerator.popularRestaurantScreen:
         return MaterialPageRoute(builder: (_) => PopularRestaurantScreen());
+      case RouteGenerator.changeLocationScreen:
+        return MaterialPageRoute(builder: (_) => ChangeNotifierProvider.value(
+          value: sl<LocationController>(),
+            child: ChangeLocationPage()));
 
       default:
         throw const FormatException("Route not found");
