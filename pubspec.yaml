@@ -81,6 +81,7 @@ flutter:
     - .env
     - assets/json_animation/
     - assets/json/
+    - assets/svg/
   fonts:
     - family: Metropolis
       fonts:

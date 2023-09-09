@@ -6,6 +6,7 @@ import 'package:food_delivery_app/core/model/models.dart';
 import 'package:food_delivery_app/core/model/order_model.dart';
 import 'package:food_delivery_app/core/model/payment_card.dart';
 import 'package:food_delivery_app/routing/navigations.dart';
+import 'package:food_delivery_app/routing/router.dart';
 import 'package:food_delivery_app/service_locator.dart';
 import 'package:food_delivery_app/utils/enums.dart';
 import 'package:food_delivery_app/utils/helper.dart';
@@ -297,7 +298,7 @@ class CartController extends ChangeNotifier {
         await deleteCollection("cartItems");
         cartItems = [];
         stopDialogLoading();
-        ServiceNavigation.serviceNavi.back();
+        ServiceNavigation.serviceNavi.pushNamedReplacement(RouteGenerator.successOrderScreen);
         Helpers.showSnackBar(
             message: "Order Added successfully", isSuccess: true);
       }
