@@ -75,3 +75,4 @@ part 'entry/more_pages/orders_page.dart';
 part 'entry/payment_pages/add_payment_page.dart';
 part 'entry/payment_pages/payment_details.dart';
 part 'entry/location_pages/change_location_page.dart';
+part 'entry/cart_page/success_order_paeg.dart';

@@ -74,7 +74,9 @@ class RoutsGenerate {
                   child: OrdersPage(),
                 ));
       case RouteGenerator.checkoutPage:
-        return MaterialPageRoute(builder: (_) => ChangeNotifierProvider.value(value: sl<LocationController>(),child: CheckoutPage()));
+        return MaterialPageRoute(
+            builder: (_) => ChangeNotifierProvider.value(
+                value: sl<LocationController>(), child: CheckoutPage()));
 
       case RouteGenerator.orderDetailsPage:
         return MaterialPageRoute(
@@ -86,10 +88,11 @@ class RoutsGenerate {
       case RouteGenerator.popularRestaurantScreen:
         return MaterialPageRoute(builder: (_) => PopularRestaurantScreen());
       case RouteGenerator.changeLocationScreen:
-        return MaterialPageRoute(builder: (_) => ChangeNotifierProvider.value(
-          value: sl<LocationController>(),
-            child: ChangeLocationPage()));
-
+        return MaterialPageRoute(
+            builder: (_) => ChangeNotifierProvider.value(
+                value: sl<LocationController>(), child: ChangeLocationPage()));
+      case RouteGenerator.successOrderScreen:
+        return MaterialPageRoute(builder: (_) => SuccessOrderPage());
       default:
         throw const FormatException("Route not found");
     }

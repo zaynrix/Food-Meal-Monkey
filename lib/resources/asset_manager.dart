@@ -19,8 +19,9 @@ class IconAssets {
 
 const String svgPath = 'assets/svg';
 
-class SvgAssets {
+ class SvgAssets {
   static const String splashSvg = '$svgPath/logos_jquery-mobile.svg';
+  static const String successOrder = '$svgPath/success_order.svg';
 }
 
 const String imagePath = 'assets/images';
