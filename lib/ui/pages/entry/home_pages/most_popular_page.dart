@@ -81,7 +81,7 @@ class MostPopularPage extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            addVerticalSpace(AppSize.s12.h),
+                            // addVerticalSpace(AppSize.s12.h),
                             Padding(
                               padding: AppPadding.p8.paddingHorizontal,
                               child: Text(
@@ -95,7 +95,7 @@ class MostPopularPage extends StatelessWidget {
                                     ),
                               ),
                             ),
-                            10.addVerticalSpace,
+                            // 10.addVerticalSpace,
                             Padding(
                               padding: 8.paddingHorizontal,
                               child: Row(
