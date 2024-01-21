@@ -66,8 +66,9 @@ class AuthController extends ChangeNotifier {
       _setEmailUser(auth.currentUser?.uid ?? "null id");
       _navigateToMainPage();
     } catch (e) {
-      stopLoading();
       AuthExceptionHandler.handleException(e);
+    } finally {
+      stopLoading();
     }
   }
 
