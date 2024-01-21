@@ -124,6 +124,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                 prefs: widget.prefs),
           ),
         ],
+        //
         child: ScreenUtilInit(
           designSize: const Size(375, 812),
           builder: (context, child) => MaterialApp(
