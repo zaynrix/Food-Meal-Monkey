@@ -73,6 +73,8 @@ class _LoginPageState extends State<LoginPage> {
                 text: 'Login',
                 onPress: () {
                   if (formKye.currentState!.validate()) {
+                    FocusScope.of(context).requestFocus(FocusNode());
+
                     provider.signInWithEmailAndPassword(
                         email: emailController.text,
                         password: passwordController.text);
